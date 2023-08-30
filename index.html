@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>The Bridge</title>
+	<script type="text/javascript" src="jq.js"></script>
+	<script type="text/javascript">
+
+
+		let thrustForward = 1/100;
+		let thrustRoll = 1/100;
+		let bThrust = false;
+		let dirRoll = 0;
+
+		$(function(){
+
+			let timeStart = new Date().getTime();
+			let timeWas = timeStart;
+
+			
+			let progressForward = 0; 
+
+
+			let speedSpin = 0; // target is -1;
+			let totalSpin = 0;
+
+			let maxScale = 6;
+
+			function tick(){
+
+				let timeNow = new Date().getTime();
+				let timeStep = timeNow - timeWas;
+				let timeElapsed = timeNow - timeStart;
+
+				$('stationlayer').css('transform','rotate('+timeElapsed*0.02+'deg)');
+		
+
+				if(bThrust) progressForward += thrustForward*timeStep;
+
+				if(progressForward>100) progressForward = 100;
+
+				let p = progressForward/100;
+
+
+				let pScaled = p*p;
+				let scale = maxScale * pScaled;
+
+				console.log(scale/maxScale);
+
+				$('station').css('transform','scale('+(1+scale)+')');
+				$('reticule.target').css('transform','rotate('+((timeElapsed+totalSpin)*0.02-7)+'deg)');
+				$('reticule.target').css('width', (1/6 + (scale/maxScale)*5/6 )*500 );
+				$('reticule.target').css('height', (1/6 + (scale/maxScale)*5/6 )*150 );
+
+
+				speedSpin += thrustRoll*dirRoll;
+				totalSpin += speedSpin*timeStep;
+
+				
+
+				$('world').css('transform','rotate('+totalSpin*0.02+'deg)');
+
+				$('hud p').eq(1).text(((100-progressForward)*10).toFixed(2) + ' m');
+				$('hud p').eq(3).text((bThrust?(thrustForward*10000):0) + ' m/s');
+				$('hud p').eq(5).text(speedSpin.toFixed(2) + ' m/s');
+
+				timeWas = timeNow;
+			}
+
+			
+
+			setInterval(tick,50);
+		});
+
+
+		function thrust(b){
+			bThrust = b;
+		}
+
+		function roll(dir){
+			dirRoll = dir;
+		}
+
+	</script>
+	<style type="text/css">
+
+		@font-face {
+		  font-family: BodyFont;
+		  src: url(apple-2-pro.otf);
+		}
+
+		body{
+			padding: 0px;
+			margin: 0px;
+			overflow: hidden;
+			width: 100vw;
+			height: 100vh;
+			display: block;
+			color: #00ff00;
+			font-family: BodyFont;
+		}
+
+		container{
+			display: block;
+			width: 1px;
+			height: 1px;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			bottom: 0px;
+			margin: auto;
+		}
+
+		world{
+			display: block;
+			width: 120vw;
+			height: 120vw;
+			position: absolute;
+			top: -60vw;
+			left: -60vw;
+			bottom: -60vw;
+			right: -60vw;
+		}
+
+		layer{
+			display: block;
+			width: 100%;
+			height: 100%;
+			top: 0px;
+			left: 0px;
+			position: absolute;
+			background-size: cover;
+			background-color: transparent;
+		}
+
+		layer.stars{
+			background-image: url(./stars.jpeg);
+		}
+
+		station{
+			display: block;
+			width: 1000px;
+			height: 1000px;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			bottom: 0px;
+			margin: auto;
+		}
+
+		stationlayers{
+			display: block;
+			width: 100%;
+			height: 100%;
+			transform: scale(0.5, 0.51) rotate(-5deg);
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			bottom: 0px;
+			margin: auto;
+		}
+
+		stationlayer{
+			position: absolute;
+			display: block;
+			width: 100%;
+			height: 100%;
+			left: 0px;
+			top: 0px;
+			background-size: cover;
+			background-image: url(./space-station.png);
+		}
+
+		hud p{
+			background: rgba(0,0,0,0.5);
+			display: inline-block;
+			padding: 10px;
+			margin: 0px;
+
+			width: 80px;
+			font-size: 10px;
+			margin: 1px;
+			backdrop-filter: blur(5px);
+		}
+
+		hud p:nth-of-type(odd){
+			text-align: right;
+		}
+
+		stationlayer:nth-of-type(1){ left: -100px; top:30px; filter: contrast(0%) brightness(0.2); }
+		stationlayer:nth-of-type(2){ left: -80px; top:20px; filter: contrast(50%) brightness(0.5); }
+		stationlayer:nth-of-type(3){ left: -20px; top:10px; filter: contrast(0%) brightness(0.2); }
+		stationlayer:nth-of-type(4){ left: 0px; }
+
+		reticule{
+			width: 500px;
+			height: 150px;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			bottom: 0px;
+			margin: auto;
+			display: block;
+		}
+
+		reticule:before{
+			content: "";
+			position: absolute;
+			display: block;
+			width: 10px;
+			height: 100%;
+			left: 0px;
+			top: 0px;
+
+
+			border-width: 2px;
+			border-color: #00ff00;
+			border-style: solid;
+			border-right: 0px;
+		}
+
+		reticule:after{
+			content: "";
+			position: absolute;
+			display: block;
+			width: 10px;
+			height: 100%;
+			right: 0px;
+			top: 0px;
+
+
+			border-width: 2px;
+			border-color: #00ff00;
+			border-style: solid;
+			border-left: 0px;
+		}
+
+
+		reticule.target:before, reticule.target:after{
+
+		 
+			border-color: red;
+
+		}
+
+		hud{
+			display: block;
+			position: absolute;
+			bottom: 0px;
+			left: 0px;
+			right: 0px;
+			top: 0px;
+			margin: auto;
+
+			width: 500px;
+			height: 150px;
+			transform: translateY(160px);
+		}
+
+		controls{
+			position: absolute;
+			bottom: 10px;
+			right: 10px;
+		}
+
+		button{
+			font: inherit;
+			background: black;
+			color: inherit;
+			border: 1px solid #00ff00;
+			width: 100px;
+			height: 100px;
+			vertical-align: top;
+		}
+
+		button:active{
+			background: red;
+		}
+
+	</style>
+</head>
+<body>
+	<container>
+		<world>
+			<layer class=stars></layer>
+			<layer>
+				<station>
+					<stationlayers>
+						<stationlayer></stationlayer>
+						<stationlayer></stationlayer>
+						<stationlayer></stationlayer>
+						<stationlayer></stationlayer>
+					</stationlayers>
+					
+				<station>
+				
+			</layer>
+		</world>
+	</container>
+	<layer>
+		
+	</layer>
+	<layer>
+		<reticule class='target'>
+			
+		</reticule>
+		<reticule>
+			
+		</reticule>
+
+		<hud>
+			<p>Distance</p><p>2,132,456 metres</p><br>
+			<p>Speed</p><p>1.5 m/s</p><br>
+			<p>Rotation</p><p>0 m/s</p>
+		</hud>
+		<controls>
+			<button onmousedown="thrust(true)" onmouseup="thrust(false)">Thrust</button>
+			<button onmousedown="roll(-1)" onmouseup="roll(0)">Roll left</button>
+			<button onmousedown="roll(1)" onmouseup="roll(0)">Roll right</button>
+		</controls>
+	</layer>
+</body>
+</html>

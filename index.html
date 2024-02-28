@@ -4,101 +4,64 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>The Bridge</title>
-	<script type="text/javascript" src="jq.js"></script>
-	<script type="text/javascript">
+	<script type="text/javascript" src="./jq.js"></script>
+	<script type="text/javascript" src="./Tone.js"></script>
+	<script type="text/javascript" src="./modules/Jin.js"></script>
+	
+	<script type="text/javascript" src="./modules/App.js"></script>
 
+	<script type="text/javascript" src="./modules/FrequencyChart.js"></script>
 
-		let thrustForward = 1/100;
-		let thrustRoll = 1/100;
-		let bThrust = false;
-		let dirRoll = 0;
+	<script type="text/javascript" src="./modules/Sequencer.js"></script>
+	<script type="text/javascript" src="./modules/Fourier.js"></script>
+	<script type="text/javascript" src="./modules/SingStar.js"></script>
 
-		$(function(){
-
-			let timeStart = new Date().getTime();
-			let timeWas = timeStart;
-
-			
-			let progressForward = 0; 
-
-
-			let speedSpin = 0; // target is -1;
-			let totalSpin = 0;
-
-			let maxScale = 6;
-
-			function tick(){
-
-				let timeNow = new Date().getTime();
-				let timeStep = timeNow - timeWas;
-				let timeElapsed = timeNow - timeStart;
-
-				$('stationlayer').css('transform','rotate('+timeElapsed*0.02+'deg)');
-		
-
-				if(bThrust) progressForward += thrustForward*timeStep;
-
-				if(progressForward>100) progressForward = 100;
-
-				let p = progressForward/100;
-
-
-				let pScaled = p*p;
-				let scale = maxScale * pScaled;
-
-				console.log(scale/maxScale);
-
-				$('station').css('transform','scale('+(1+scale)+')');
-				$('reticule.target').css('transform','rotate('+((timeElapsed+totalSpin)*0.02-7)+'deg)');
-				$('reticule.target').css('width', (1/6 + (scale/maxScale)*5/6 )*500 );
-				$('reticule.target').css('height', (1/6 + (scale/maxScale)*5/6 )*150 );
-
-
-				speedSpin += thrustRoll*dirRoll;
-				totalSpin += speedSpin*timeStep;
-
-				
-
-				$('world').css('transform','rotate('+totalSpin*0.02+'deg)');
-
-				$('hud p').eq(1).text(((100-progressForward)*10).toFixed(2) + ' m');
-				$('hud p').eq(3).text((bThrust?(thrustForward*10000):0) + ' m/s');
-				$('hud p').eq(5).text(speedSpin.toFixed(2) + ' m/s');
-
-				timeWas = timeNow;
-			}
-
-			
-
-			setInterval(tick,50);
-		});
-
-
-		function thrust(b){
-			bThrust = b;
-		}
-
-		function roll(dir){
-			dirRoll = dir;
-		}
-
-	</script>
+	
 	<style type="text/css">
 
+		@import url('https://fonts.googleapis.com/css2?family=Zen+Dots&family=Major+Mono+Display&family=Oxanium&display=swap');
+	
+
 		@font-face {
-		  font-family: BodyFont;
-		  src: url(apple-2-pro.otf);
+		  font-family: "Zen Dots", sans-serif;
+		  font-weight: 400;
+		  font-style: normal;
+		}
+
+		@font-face {
+		  font-family: "Major Mono Display", sans-serif;
+		  font-weight: 400;
+		  font-style: normal;
+		}
+
+		@font-face {
+		  font-family: "Oxanium", sans-serif;
+		  font-weight: 200;
+		  font-style: normal;
 		}
 
 		body{
-			padding: 0px;
+
+			--red: #FF7B7B;
+			--orange: #FF9A74;
+			--yellow: #FFFA6F;
+			--green: #93FE88;
+			--blue: #59B0F1;
+			--purple: #9999FF;
+			--pink: rgb(255, 153, 253);
+			--pink-opaque: rgba(255, 153, 253, 0.5);
+			
 			margin: 0px;
 			overflow: hidden;
 			width: 100vw;
 			height: 100vh;
 			display: block;
-			color: #00ff00;
-			font-family: BodyFont;
+			color: white;
+			background: var(--blue);
+			font-family: "Oxanium";
+
+
+
 		}
 
 		container{
@@ -132,13 +95,64 @@
 			left: 0px;
 			position: absolute;
 			background-size: cover;
-			background-color: transparent;
+			background-color: transparent;padding: 50px;
 		}
 
-		layer.stars{
-			background-image: url(./stars.jpeg);
+		layer.bg{
+
+
+			background: url('https://i.makeagif.com/media/1-13-2021/bzqNMj.gif');
+			background: url('https://64.media.tumblr.com/81267977753eb63f4c1d4dbcc5db7a5a/b06f96fe037fe9c4-df/s500x750/b5868a58076339f7699ea64bd33c8d351e9996fa.gif');
+			
+			background-size: 110%;
+			background-position: center;
+
+			opacity: 1;
+
 		}
 
+		layer.bg:before{
+			content: "";
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			bottom: 0px;
+			background: black;
+			opacity: 0.8;
+			display: block;
+		}
+
+		layer.bg:after{
+			content: "";
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			bottom: 0px;
+			background: var(--green);
+			opacity: 0;
+			display: block;
+		}
+
+		
+
+		layer.overlay{
+
+
+			background: url('https://images.pond5.com/rgb-bad-tv-signal-screen-footage-127602246_iconl.jpeg');
+			
+			background-size: 110%;
+			background-position: center;
+
+			opacity: 0.05;
+			pointer-events: none;
+
+
+		}
+
+
+		
 		station{
 			display: block;
 			width: 1000px;
@@ -282,13 +296,340 @@
 			background: red;
 		}
 
+		whale{
+			display: block;
+			width: 40vw;
+			height: 38vw;
+			
+			margin: auto;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			bottom: 0px;
+			white-space: nowrap;
+
+		}
+
+		whaleslice{
+			display: inline-block;
+			width: 1%;
+			height: 100%;
+			background-size: 10000%;
+			background-position-y:center;
+			background-repeat: no-repeat;
+			background-position-x: 0%;
+			background-image: url('./space-whale.webp');
+
+			animation-duration: 5s;
+			animation-name: downup;
+			animation-iteration-count: infinite;
+			animation-timing-function: ease-in-out;
+			position: relative;
+		}
+
+		launchpad{
+			width: 16vw;
+			height: 16vw;
+			display: block;
+		}
+
+		launchpad button{
+			width: 2vw;
+			height: 2vw;
+		}
+
+		launchpad button.active{
+			background: red;
+		}
+
+		launchpad button.on{
+			background: limegreen;
+		}
+
+		launchpad button.active.on{
+			background: white;
+		}
+
+		fourier, singstar{
+			height: 200px;
+			position: relative;
+			display: inline-block;
+			
+			
+			transform: scaleY(-1);
+			
+			padding: 10px;
+			
+		}
+
+		fourier-c, singstarbit{
+			display: inline-block;
+			width: 10px;
+			background: #CF6A67;
+			vertical-align: top;
+			
+		}
+
+		@keyframes downup{
+			0%{
+				top:-5%;
+			}
+
+			50%{
+				top: 10%;
+			}
+
+			100%{
+				top: -5%;
+			}
+		}
+
+		whales{
+			width: 600px;
+			height: 300px;
+			display: block;
+			
+			background: url(flying-whales.gif);
+			background-size: cover;
+
+			
+
+		}
+
+
+		label{
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			padding: 5px 10px;
+			
+		}
+
+		.yellow{
+			border-color: var(--yellow);
+			color: #FECF68;
+		}
+
+		oscategory{
+			color: black;
+			display: inline-block;
+			text-align: left;
+			border-left: 2px solid var(--purple);
+			
+			overflow: hidden;
+			position: relative;
+			backdrop-filter: blur(10px);
+			box-shadow: 0px 0px 20px rgba(0,0,0,0.1);
+			margin: 10px;
+
+			background: rgba(255,255,255,0.1);
+
+			clip-path: polygon(
+			    0 20px,
+			    20px 0,
+			    calc(100% - 20px) 0,
+			    100% 20px,
+			    100% calc(100% - 20px),
+			    calc(100% - 20px) 100%,
+			    20px 100%,
+			    0% calc(100% - 20px),
+			    0% 20px
+			  );
+
+			clip-path: polygon(
+			    0 15px,
+			    15px 0,
+			    100% 0,
+			    100% 100%,
+			    0 100%,
+			    0 20px
+			  );
+		}
+
+		
+
+		oscategory h1, oswindow h1{
+			font-size: 1em;
+			background: var(--purple);
+			margin: 0px;
+			margin-bottom: 2px;
+			
+			
+			padding: 10px 0px 5px 15px;	
+		}
+
+		ul{
+			list-style-type: none;
+			margin: 0px;
+			padding: 0px;
+			display: block;
+		}
+
+		li{
+			display: block;
+			
+			background: var(--purple);
+			
+			width: 200px;
+			
+			margin-bottom: 1px;
+			padding: 10px 15px;
+			color: white;
+
+			background: rgba(255,255,255,0.2);
+			
+	
+
+		}
+
+		li:after{
+			content: "→";
+			position: absolute;
+			right: 15px;
+		}
+
+		header{
+			position: fixed;
+			bottom: 0px;
+			right: 0px;
+			padding: 30px;
+			font-size: 30px;
+			color:white;
+			display: block;
+			
+		}
+
+		footer{
+			position: fixed;
+			bottom: 0px;
+			left: 0px;
+			padding: 30px;
+			font-size: 30px;
+			color:white;
+			display: block;
+			font-weight: thinner;
+			
+		}
+
+		b{
+			color: var(--blue);
+		}
+
+		oscategory[color='red']{ border-color: var(--red); }
+		oscategory[color='red'] h1, [bg='red']{ background-color: var(--red); }
+
+		oscategory[color='orange']{ border-color: var(--orange); }
+		oscategory[color='orange'] h1, [bg='orange']{ background-color: var(--orange); }
+
+		oscategory[color='yellow']{ border-color: var(--yellow); }
+		oscategory[color='yellow'] h1, [bg='yellow']{ background-color: var(--yellow); }
+
+		oscategory[color='green']{ border-color: var(--green); }
+		oscategory[color='green'] h1, [bg='green']{ background-color: var(--green); }
+
+		oscategory[color='blue']{ border-color: var(--blue); }
+		oscategory[color='blue'] h1, [bg='blue']{ background-color: var(--blue); }
+
+		oscategory[color='purple']{ border-color: var(--purple); }
+		oscategory[color='purple'] h1, [bg='purple']{ background-color: var(--purple); }
+
+		oscategory[color='pink']{ border-color: var(--pink-opaque); }
+		oscategory[color='pink'] h1, [bg='pink']{ background-color: var(--pink-opaque); }
+
+		loader{
+			display: inline-block;
+			width: 500px;
+			height: 5px;
+			background: white;
+			margin-top:50px;
+			position: relative;
+		}
+
+		loaderspot{
+			
+			width: 5px;
+			height: 5px;
+			position: absolute;
+			display: block;
+			animation-name: backandforth;
+			animation-iteration-count: infinite;
+	
+			animation-duration: 3s;
+
+		}
+
+		loaderspot:after{
+			content: "";
+			width: 25px;
+			height: 25px;
+			position: absolute;
+			
+			background: white;
+			display: block;
+			position: absolute;
+			top: -10px;
+			left: -10px;
+			
+		}
+
+
+
+		seq{
+			padding: 20px;
+			display: block;
+		}
+
+		seq-r{
+			display: block;
+			line-height: 0px;
+		}
+
+		seq-c{
+			width: 20px;
+			height: 20px;
+			margin: 1px;
+			background: var(--purple);
+			display: inline-block;
+		}
+
+		seq-c.selected{
+			background: var(--green);
+		}
+
+		@keyframes backandforth{
+			0%{
+				left:0%;
+			}
+
+			40%{
+				left: 100%;
+				transform: rotate(90deg);
+			}
+
+			50%{
+				left: 100%;
+				transform: rotate(90deg);
+			}
+
+			90%{
+				left: 0%;
+				transform: rotate(180deg);
+			}
+
+			100%{
+				left: 0%;
+				transform: rotate(180deg);
+			}
+		}
+
 	</style>
 </head>
 <body>
 	<container>
 		<world>
 			<layer class=stars></layer>
-			<layer>
+			<layer module=docking>
 				<station>
 					<stationlayers>
 						<stationlayer></stationlayer>
@@ -296,20 +637,38 @@
 						<stationlayer></stationlayer>
 						<stationlayer></stationlayer>
 					</stationlayers>
-					
 				<station>
-				
+			</layer>
+			<layer module=whale>
+				<whale></whale>
 			</layer>
 		</world>
 	</container>
-	<layer>
-		
+	<layer class=bg></layer>
+	
+	<layer module='intro' style='text-align: center;padding: 200px 0px;'>
+		<footer>ATLAS<b>OS</b></footer>
+		<h1 style="line-height:250px;font-size: 350px;margin:0px;padding:0px;">CTE</h1> 
+		<h1 style="margin:0px;padding:0px;"><b>Communications Translation Encryption</b></h1>
+		<loader>
+			<loaderspot></loaderspot>
+		</loader>
 	</layer>
-	<layer>
+	<layer module='whale'>
+		<controls>
+			<button trigger=listen>Listen</button><br><br>
+			<button trigger=connect>Connect</button><br><br>
+			<launchpad></launchpad>
+		</controls>
+
+	</layer>
+
+	<layer module=docking>
+
 		<reticule class='target'>
 			
 		</reticule>
-		<reticule>
+		<reticule >
 			
 		</reticule>
 
@@ -319,10 +678,48 @@
 			<p>Rotation</p><p>0 m/s</p>
 		</hud>
 		<controls>
-			<button onmousedown="thrust(true)" onmouseup="thrust(false)">Thrust</button>
-			<button onmousedown="roll(-1)" onmouseup="roll(0)">Roll left</button>
-			<button onmousedown="roll(1)" onmouseup="roll(0)">Roll right</button>
+			<button onmousedown="moduleLive.thrust(true)" onmouseup="moduleLive.thrust(false)">Thrust</button>
+			<button onmousedown="moduleLive.roll(-1)" onmouseup="moduleLive.roll(0)">Roll left</button>
+			<button onmousedown="moduleLive.roll(1)" onmouseup="rmoduleLive.oll(0)">Roll right</button>
 		</controls>
 	</layer>
+
+	<layer module='audiomash'>
+		<footer>ATLAS<b>OS</b></footer>
+		<header>CTE <b>Communications Translation Encryption</b></header>
+		<oscategory color='green'>
+			<h1>Optical Sensors</h1>
+
+			<ul>
+				<li>Port</li>
+				<li>Starboard</li>
+				<li>Bow</li>
+				<li>Stern</li>
+			</ul>
+		</oscategory>
+		<oscategory>
+			<h1>Audio Analysis</h1>
+			<ul>
+				<li id='tonify'>Fourier</li>
+				<li>Waveform</li>
+				<li>Translation</li>
+				<li>Decryption</li>
+			</ul>
+		</oscategory>
+		<oscategory color='blue'>
+			<h1>Transmission</h1>
+			<ul>
+				<li>Recording</li>
+				<li>Transmission</li>
+				<li>Encryption</li>
+			</ul>
+		</oscategory>
+		<oscategory color='yellow'>
+			<h1>Optical Sensors | Port</h1>
+			<whales></whales>
+		</oscategory>
+		
+	</layer>
+	<layer class='overlay'></layer>
 </body>
 </html>

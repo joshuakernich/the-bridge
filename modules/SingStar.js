@@ -19,7 +19,7 @@ window.SingStar = function(){
 		if(f==high) isInRange = false;
 	}
 
-	this.$el = $('<fourier>');
+	self.$el = $('<fourier>').addClass('disabled');
 
 	for(var i=0; i<range; i++){
 		$('<fourier-c>').appendTo(this.$el).css({height:'1%'});
@@ -38,6 +38,7 @@ window.SingStar = function(){
 
 
 		mic.open().then(() => {
+			self.$el.removeClass('disabled');
 			// promise resolves when input is available
 			console.log("mic open");
 			// print the incoming mic levels in decibels

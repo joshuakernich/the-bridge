@@ -5,10 +5,11 @@ window.Fourier = function(){
 	let fft;
 	let meter;
 
-	this.$el = $('<fourier>');
+	let self = this;
+	self.$el = $('<fourier>').addClass('disabled');
 
 	for(var i=0; i<range; i++){
-		$('<fourier-c>').appendTo(this.$el).css({height:i/range*100+'%'});
+		$('<fourier-c>').appendTo(this.$el).css({height:1+'%'});
 	}
 
 	this.$el.on('mousedown',async function(){
@@ -24,6 +25,7 @@ window.Fourier = function(){
 
 
 		mic.open().then(() => {
+			self.$el.removeClass('disabled');
 			// promise resolves when input is available
 			console.log("mic open");
 			// print the incoming mic levels in decibels

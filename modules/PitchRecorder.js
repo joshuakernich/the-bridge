@@ -53,6 +53,8 @@ window.PitchRecorder = function(){
 			while(history.length>30) history.shift();
 		}
 
+		history[history.length-1] = iFreq;
+
 		self.$el.find('fourier-c').each(function(n){
 			let amt = (history[n]/chart.length);
 			$(this).height(amt*100+'%').attr('bg',colors[Math.floor(amt*colors.length)]);

@@ -28,7 +28,7 @@ window.Fourier = function(){
 	function pulse(){
 
 		let freqs = fft.getValue();
-		$('fourier-c').each(function(n){
+		self.$el.find('fourier-c').each(function(n){
 			let amt = (128+freqs[n])/128;
 			$(this).height(amt*100+'%').attr('bg',colors[Math.floor(amt*colors.length)]);
 		})

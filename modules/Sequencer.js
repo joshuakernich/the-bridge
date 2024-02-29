@@ -4,7 +4,7 @@ window.Sequencer = function(){
 	synth.envelope.attack = 0.1;
 	synth.envelope.release = 1;
 
-	const pitchLibrary = ['C2','D2','E2','G2','A2','C3','D3','E3','G3','A3','C4','D4','E4','G4','A4','C5','D5','E5','G5'];
+	const pitchLibrary = ['D3','E3','G3','A3','C4','D4','E4','G4','A4'];
 	const timePerBeat = 0.5;
 
 	const self = this;
@@ -25,9 +25,11 @@ window.Sequencer = function(){
 		self.$el.find('seq-c').attr('bg','purple');
 		self.$el.find('seq-c:nth-of-type('+(1+nBeat%8)+')').attr('bg','yellow');
 
-		let pitch = pitchLibrary[ 6 + 8-map[nBeat%8]]
+		let pitch = pitchLibrary[ 8-map[nBeat%8]]
 
 		if(pitch) synth.triggerAttackRelease(pitch, 0.5);
+
+
 	}
 
 	self.$el.find('seq-c').click(function(){

@@ -14,7 +14,9 @@
 
 	<script type="text/javascript" src="./modules/Sequencer.js"></script>
 	<script type="text/javascript" src="./modules/Fourier.js"></script>
-	<script type="text/javascript" src="./modules/SingStar.js"></script>
+	<script type="text/javascript" src="./modules/PitchRecorder.js"></script>
+	<script type="text/javascript" src="./modules/OpticalSensor.js"></script>
+	<script type="text/javascript" src="./modules/SignalLooper.js"></script>
 
 	
 	<style type="text/css">
@@ -49,7 +51,6 @@
 			--blue: #59B0F1;
 			--purple: #9999FF;
 			--pink: rgb(255, 153, 253);
-			--pink-opaque: rgba(255, 153, 253, 0.5);
 			
 			margin: 0px;
 			overflow: hidden;
@@ -351,14 +352,11 @@
 			background: white;
 		}
 
-		fourier, singstar{
+		fourier{
 			height: 200px;
 			position: relative;
 			display: inline-block;
-			
-			
 			transform: scaleY(-1);
-			
 			padding: 10px;
 			
 		}
@@ -377,12 +375,11 @@
 
 		}
 
-		fourier-c, singstarbit{
+		fourier-c{
 			display: inline-block;
 			width: 10px;
 			background: #CF6A67;
 			vertical-align: top;
-			
 		}
 
 		@keyframes downup{
@@ -398,19 +395,6 @@
 				top: -5%;
 			}
 		}
-
-		whales{
-			width: 600px;
-			height: 300px;
-			display: block;
-			
-			background: url(flying-whales.gif);
-			background-size: cover;
-
-			
-
-		}
-
 
 		label{
 			position: absolute;
@@ -440,18 +424,6 @@
 			background: rgba(255,255,255,0.1);
 
 			clip-path: polygon(
-			    0 20px,
-			    20px 0,
-			    calc(100% - 20px) 0,
-			    100% 20px,
-			    100% calc(100% - 20px),
-			    calc(100% - 20px) 100%,
-			    20px 100%,
-			    0% calc(100% - 20px),
-			    0% 20px
-			  );
-
-			clip-path: polygon(
 			    0 15px,
 			    15px 0,
 			    100% 0,
@@ -461,15 +433,12 @@
 			  );
 		}
 
-		
-
+	
 		oscategory h1, oswindow h1{
 			font-size: 1em;
 			background: var(--purple);
 			margin: 0px;
 			margin-bottom: 2px;
-			
-			
 			padding: 10px 0px 5px 15px;	
 		}
 
@@ -482,19 +451,12 @@
 
 		li{
 			display: block;
-			
 			background: var(--purple);
-			
 			width: 200px;
-			
 			margin-bottom: 1px;
 			padding: 10px 15px;
 			color: white;
-
 			background: rgba(255,255,255,0.2);
-			
-	
-
 		}
 
 		li:after{
@@ -523,11 +485,10 @@
 			color:white;
 			display: block;
 			font-weight: thinner;
-			
 		}
 
 		b{
-			color: var(--blue);
+			color: var(--pink);
 		}
 
 		oscategory[color='red']{ border-color: var(--red); }
@@ -548,8 +509,8 @@
 		oscategory[color='purple']{ border-color: var(--purple); }
 		oscategory[color='purple'] h1, [bg='purple']{ background-color: var(--purple); }
 
-		oscategory[color='pink']{ border-color: var(--pink-opaque); }
-		oscategory[color='pink'] h1, [bg='pink']{ background-color: var(--pink-opaque); }
+		oscategory[color='pink']{ border-color: var(--pink); }
+		oscategory[color='pink'] h1, [bg='pink']{ background-color: var(--pink); }
 
 		loader{
 			display: inline-block;
@@ -561,16 +522,13 @@
 		}
 
 		loaderspot{
-			
 			width: 5px;
 			height: 5px;
 			position: absolute;
 			display: block;
 			animation-name: backandforth;
 			animation-iteration-count: infinite;
-	
 			animation-duration: 3s;
-
 		}
 
 		loaderspot:after{
@@ -584,10 +542,7 @@
 			position: absolute;
 			top: -10px;
 			left: -10px;
-			
 		}
-
-
 
 		seq{
 			padding: 20px;
@@ -606,6 +561,10 @@
 			background: var(--purple);
 			display: inline-block;
 		}
+
+		seq.looper seq-c{
+			border-radius: 100px;
+		}	
 
 		seq-c.selected{
 			background: var(--green);
@@ -701,37 +660,8 @@
 	<layer module='audiomash'>
 		<footer>ATLAS<b>OS</b></footer>
 		<header>CTE <b>Communications Translation Encryption</b></header>
-		<oscategory color='green'>
-			<h1>Optical Sensors</h1>
-
-			<ul>
-				<li>Port</li>
-				<li>Starboard</li>
-				<li>Bow</li>
-				<li>Stern</li>
-			</ul>
-		</oscategory>
-		<oscategory>
-			<h1>Audio Analysis</h1>
-			<ul>
-				<li id='tonify'>Fourier</li>
-				<li>Waveform</li>
-				<li>Translation</li>
-				<li>Decryption</li>
-			</ul>
-		</oscategory>
-		<oscategory color='blue'>
-			<h1>Transmission</h1>
-			<ul>
-				<li>Recording</li>
-				<li>Transmission</li>
-				<li>Encryption</li>
-			</ul>
-		</oscategory>
-		<oscategory color='yellow'>
-			<h1>Optical Sensors | Port</h1>
-			<whales></whales>
-		</oscategory>
+		
+		
 		
 	</layer>
 	<layer class='overlay'></layer>

@@ -6,36 +6,20 @@ window.Fourier = function(){
 	let meter;
 
 	let self = this;
-	self.$el = $('<fourier>').addClass('disabled');
+	self.$el = $('<fourier>');
 
 	for(var i=0; i<range; i++){
 		$('<fourier-c>').appendTo(this.$el).css({height:1+'%'});
 	}
 
-	this.$el.on('mousedown',async function(){
+	
+	sampleRate = Tone.getContext().sampleRate;
+	meter = new Tone.Meter();
+	fft = new Tone.FFT(range);
 
-		await Tone.start()
-
-		sampleRate = Tone.getContext().sampleRate;
-
-		meter = new Tone.Meter();
-		fft = new Tone.FFT(range);
-
-		const mic = new Tone.UserMedia().connect(meter).connect(fft);
-
-
-		mic.open().then(() => {
-			self.$el.removeClass('disabled');
-			// promise resolves when input is available
-			console.log("mic open");
-			// print the incoming mic levels in decibels
-			beginMonitoring();
-			
-		}).catch(e => {
-			// promise is rejected when the user doesn't have or allow mic access
-			console.log("mic not open");
-		});
-	});
+	mic.connect(meter).connect(fft);
+	beginMonitoring();
+	
 
 	function beginMonitoring(){
 		setInterval(pulse, 100);

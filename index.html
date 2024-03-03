@@ -12,11 +12,13 @@
 
 	<script type="text/javascript" src="./modules/FrequencyChart.js"></script>
 
+	<script type="text/javascript" src="./modules/launchpadController.js"></script>
 	<script type="text/javascript" src="./modules/Sequencer.js"></script>
 	<script type="text/javascript" src="./modules/Fourier.js"></script>
 	<script type="text/javascript" src="./modules/PitchRecorder.js"></script>
 	<script type="text/javascript" src="./modules/OpticalSensor.js"></script>
 	<script type="text/javascript" src="./modules/SignalLooper.js"></script>
+	<script type="text/javascript" src="./modules/Mastermind.js"></script>
 
 	
 	<style type="text/css">
@@ -285,16 +287,10 @@
 
 		button{
 			font: inherit;
-			background: black;
+			background: var(--purple);
 			color: inherit;
-			border: 1px solid #00ff00;
-			width: 100px;
-			height: 100px;
-			vertical-align: top;
-		}
-
-		button:active{
-			background: red;
+			border: none;
+			
 		}
 
 		whale{
@@ -327,29 +323,6 @@
 			animation-iteration-count: infinite;
 			animation-timing-function: ease-in-out;
 			position: relative;
-		}
-
-		launchpad{
-			width: 16vw;
-			height: 16vw;
-			display: block;
-		}
-
-		launchpad button{
-			width: 2vw;
-			height: 2vw;
-		}
-
-		launchpad button.active{
-			background: red;
-		}
-
-		launchpad button.on{
-			background: limegreen;
-		}
-
-		launchpad button.active.on{
-			background: white;
 		}
 
 		fourier{
@@ -422,6 +395,7 @@
 			margin: 10px;
 
 			background: rgba(255,255,255,0.1);
+			vertical-align: top;
 
 			clip-path: polygon(
 			    0 15px,
@@ -435,7 +409,9 @@
 
 	
 		oscategory h1, oswindow h1{
-			font-size: 1em;
+
+			font-size: 1.3em;
+			font-weight: 100;
 			background: var(--purple);
 			margin: 0px;
 			margin-bottom: 2px;
@@ -555,11 +531,12 @@
 		}
 
 		seq-c{
-			width: 20px;
-			height: 20px;
+			width: 40px;
+			height: 40px;
 			margin: 1px;
 			background: var(--purple);
 			display: inline-block;
+			position: relative;
 		}
 
 		seq.looper seq-c{
@@ -594,6 +571,51 @@
 				left: 0%;
 				transform: rotate(180deg);
 			}
+		}
+
+		mastermind{
+			padding: 20px;
+			text-align: center;
+			display: block;
+		}
+
+		mastermind button{
+			margin-top: 20px;
+			display: block;
+			width: 100%;
+			padding: 10px;
+		}
+
+		seq-c[correctness]{
+			overflow: hidden;
+		}
+
+		[correctness]:after{
+			content: "";
+			width: 20px;
+			height: 20px;
+			position: absolute;
+			bottom: -11px;
+			left: 0px;
+			right: 0px;
+			position: absolute;
+			display: block;
+			background: 5px solid var(--purple);
+			border: 1px solid black;
+			margin: auto;
+			transform: rotate(45deg);
+		}
+
+		[correctness='0']:after{
+			display: none;
+		}
+
+		[correctness='1']:after{
+			background: var(--yellow);
+		}
+
+		[correctness='2']:after{
+			background: var(--green);
 		}
 
 	</style>

@@ -78,7 +78,7 @@ window.SignalLooper = function(){
 
 	}
 
-	self.$el.find('seq-c').click(function(){
+	self.$el.find('seq-c').on('mousedown',function(){
 
 		let r = $(this).attr('r');
 		let c = $(this).attr('c');

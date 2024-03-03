@@ -17,19 +17,29 @@ window.Sequencer = function(){
 		}
 	}
 
+	function redrawLaunchpad(){
+		//Paint all of it
+		for(var r=0; r<8; r++){
+			for(var c=0; c<8; c++){
+				window.launchpad.set(''+c+''+r,map[c]==r?'green':(cBeat==c?'orange':'off'));
+			}
+		}
+	}
+
 
 	let map = [];
 	let nBeat = -1;
+	let cBeat;
 	function tick(){
 		nBeat++;
+		cBeat = nBeat%8;
 		self.$el.find('seq-c').attr('bg','purple');
-		self.$el.find('seq-c:nth-of-type('+(1+nBeat%8)+')').attr('bg','yellow');
+		self.$el.find('seq-c:nth-of-type('+(1+cBeat)+')').attr('bg','yellow');
+
+		redrawLaunchpad();
 
 		let pitch = pitchLibrary[ 8-map[nBeat%8]]
-
 		if(pitch) synth.triggerAttackRelease(pitch, 0.5);
-
-
 	}
 
 	self.$el.find('seq-c').click(function(){
@@ -42,6 +52,12 @@ window.Sequencer = function(){
 		if(!b) $(this).addClass('selected');
 
 		map[c] = b?undefined:r;
+
+		redrawLaunchpad();
+	})
+
+	window.launchpad.listen(function(coord){
+		self.$el.find('seq-c[c='+coord[0]+'][r='+coord[1]+']').click();
 	})
 
 	setInterval(tick,timePerBeat*1000);

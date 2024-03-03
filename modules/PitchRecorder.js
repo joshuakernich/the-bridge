@@ -43,7 +43,7 @@ window.PitchRecorder = function(){
 
 		let min = 9999;
 		let iFreq = 0;
-		while(freq > (chart[iFreq].freq + chart[iFreq+1].freq)/2) iFreq++;
+		while(iFreq<chart.length-1 && freq > (chart[iFreq].freq + chart[iFreq+1].freq)/2) iFreq++;
 
 		if(!history.length) history.push(iFreq);
 

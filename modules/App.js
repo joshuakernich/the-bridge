@@ -94,26 +94,19 @@ $(function(){
 	function begin(){
 		$('[module]').hide();
 		$('[module=audiomash]').show();
+
+		window.launchpad = new LaunchpadController();
 		
 		new OSWindow('Optical Sensors','yellow')
 			.addLink('Port',new OpticalSensor('https://i.makeagif.com/media/6-01-2015/nDkCVx.gif'))
 			.addLink('Bow',new OpticalSensor('flying-whales.gif'));
 		new OSWindow('Audio Analysis','pink')
 			.addLink('Fourier Analysis',new Fourier())
+			.addLink('Mastermind',new Mastermind())
 		new OSWindow('Transmission','blue')
 			.addLink('Digital Sequencer',new Sequencer())
 			.addLink('Pitch Recorder',new PitchRecorder())
 			.addLink('Signal Looper',new SignalLooper())
-
-		/*new Sequencer().$el.appendTo( new OSWindow('Digital Sequencer','blue').$el );
-		new Fourier().$el.appendTo( new OSWindow('Fourier Analysis','pink').$el );
-		new PitchRecorder().$el.appendTo( new OSWindow('Pitch Recorder','blue').$el );
-		new SignalLooper().$el.appendTo( new OSWindow('Signal Looper','blue').$el );
-		new OpticalSensor('flying-whales.gif').$el.appendTo( new OSWindow('Optical Sensor | Port','yellow').$el );
-		new OpticalSensor('https://i.makeagif.com/media/6-01-2015/nDkCVx.gif').$el.appendTo( new OSWindow('Optical Sensor | Bow','yellow').$el );
-		*/
-
-		
 	}
 
 	

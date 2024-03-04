@@ -19,6 +19,7 @@
 	<script type="text/javascript" src="./modules/OpticalSensor.js"></script>
 	<script type="text/javascript" src="./modules/SignalLooper.js"></script>
 	<script type="text/javascript" src="./modules/Mastermind.js"></script>
+	<script type="text/javascript" src="./modules/Unscramble.js"></script>
 
 	
 	<style type="text/css">
@@ -537,6 +538,11 @@
 			background: var(--purple);
 			display: inline-block;
 			position: relative;
+			line-height: 40px;
+			text-align: center;
+			vertical-align: top;
+			color:black;
+			cursor: pointer;
 		}
 
 		seq.looper seq-c{
@@ -573,7 +579,7 @@
 			}
 		}
 
-		mastermind{
+		mastermind, unscramble{
 			padding: 20px;
 			text-align: center;
 			display: block;

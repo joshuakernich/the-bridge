@@ -1,5 +1,7 @@
 $(function(){
 
+	
+
 	window.pulse = new function(){
 
 		
@@ -103,6 +105,7 @@ $(function(){
 		new OSWindow('Audio Analysis','pink')
 			.addLink('Fourier Analysis',new Fourier())
 			.addLink('Mastermind',new Mastermind())
+			.addLink('Unscramble',new Unscramble())
 		new OSWindow('Transmission','blue')
 			.addLink('Digital Sequencer',new Sequencer())
 			.addLink('Pitch Recorder',new PitchRecorder())

@@ -68,7 +68,6 @@ $(function(){
 	function launchToy(toy,color,h) {
 
 		if(!toy.$el.parent().length){
-
 			let panel = new OSWindow(h,color);
 			panel.$el.css({position:'fixed',top:20,left:20});
 			panel.addToy(toy);

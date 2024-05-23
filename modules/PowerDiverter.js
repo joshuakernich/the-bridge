@@ -1,6 +1,6 @@
 window.PowerDiverter = function(){
 
-	return;
+	
 	let self = this;
 
 	self.$el = $('<power>');
@@ -320,12 +320,12 @@ window.PowerDiverter = function(){
 
 				let actor = $(this).data('actor');
 				if(actor.type=='diverter' || actor.type=='power'){
-					//actor.dir = (actor.dir + 1)%dirs.length;
+					actor.dir = (actor.dir + 1)%dirs.length;
 
 					actorSelected = actor;
 					actor.$el.addClass('selected');
 				}
-				//redraw();
+				redraw();
 			})
 
 

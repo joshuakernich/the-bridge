@@ -1,5 +1,6 @@
 window.Sequencer = function(){
 
+
 	const synth = new Tone.Synth().toDestination();
 	synth.envelope.attack = 0.1;
 	synth.envelope.release = 1;
@@ -9,6 +10,12 @@ window.Sequencer = function(){
 
 	const self = this;
 	self.$el = $('<seq>');
+
+	let isOn = false;
+
+	self.turnOnOff = function(b){
+		isOn = b;
+	}
 
 	for(var r = 0; r < 8; r++){
 		let $r = $('<seq-r>').appendTo(self.$el);
@@ -21,7 +28,7 @@ window.Sequencer = function(){
 		//Paint all of it
 		for(var r=0; r<8; r++){
 			for(var c=0; c<8; c++){
-				window.launchpad.set(''+c+''+r,map[c]==r?'green':(cBeat==c?'orange':'off'));
+				window.launchpad.set(''+c+''+r,map[c]==r?'blue':(cBeat==c?'yellow':'off'));
 			}
 		}
 	}
@@ -31,6 +38,7 @@ window.Sequencer = function(){
 	let nBeat = -1;
 	let cBeat;
 	function tick(){
+		if(!isOn) return;
 		nBeat++;
 		cBeat = nBeat%8;
 		self.$el.find('seq-c').attr('bg','purple');
@@ -57,6 +65,7 @@ window.Sequencer = function(){
 	})
 
 	window.launchpad.listen(function(coord){
+		if(!isOn) return;
 		self.$el.find('seq-c[c='+coord[0]+'][r='+coord[1]+']').click();
 	})
 

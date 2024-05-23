@@ -1,10 +1,7 @@
 $(function(){
 
-	
-
 	window.pulse = new function(){
 
-		
 		let start = new Date().getTime();
 		let now = start;
 		let elapseWas;
@@ -47,6 +44,12 @@ $(function(){
 			return self;
 		}
 
+		self.addToy = function(toy){
+			self.toy = toy;
+			toy.$el.appendTo( self.$el );
+			if(toy.turnOnOff) toy.turnOnOff(true);
+		}
+
 		self.$el.find('h1').on('mousedown',function(e){
 			z++;
 			$dragging = self.$el.css({'z-index':z})
@@ -54,15 +57,21 @@ $(function(){
 			offset.left -= e.pageX;
 			offset.top -= e.pageY;
 		});
+
+		$('<button type=close>').appendTo(self.$el).on('click',function(){
+			self.$el.children().detach();
+			self.$el.remove();
+			if(self.toy.turnOnOff) self.toy.turnOnOff(false);
+		});
 	}
 
 	function launchToy(toy,color,h) {
+
 		if(!toy.$el.parent().length){
 
 			let panel = new OSWindow(h,color);
-			//panel.$el.css({position:'absolute',top:Math.random()*500,left:Math.random()*500});
-			toy.$el.appendTo( panel.$el );
-			
+			panel.$el.css({position:'fixed',top:20,left:20});
+			panel.addToy(toy);
 		}
 	}
 		
@@ -70,12 +79,13 @@ $(function(){
 	$('[module=intro]').show();
 
 
-
 	let $dragging;
 	let offset;
 	let z = 1;
 
 	$('[module=intro]').click(async function(){
+
+
 
 		await Tone.start()
 
@@ -98,14 +108,18 @@ $(function(){
 		$('[module=audiomash]').show();
 
 		window.launchpad = new LaunchpadController();
+
+		
 		
 		new OSWindow('Optical Sensors','yellow')
 			.addLink('Port',new OpticalSensor('https://i.makeagif.com/media/6-01-2015/nDkCVx.gif'))
 			.addLink('Bow',new OpticalSensor('flying-whales.gif'));
-		new OSWindow('Audio Analysis','pink')
-			.addLink('Fourier Analysis',new Fourier())
-			.addLink('Mastermind',new Mastermind())
-			.addLink('Unscramble',new Unscramble())
+		new OSWindow('Operations','orange')
+			.addLink('Power Distribution', new PowerDiverter());
+		new OSWindow('Communications','pink')
+			.addLink('Frequency Analysis',new Fourier())
+			.addLink('Signal Decoder',new Mastermind())
+			.addLink('Trasmission Decryption',new Unscramble())
 		new OSWindow('Transmission','blue')
 			.addLink('Digital Sequencer',new Sequencer())
 			.addLink('Pitch Recorder',new PitchRecorder())

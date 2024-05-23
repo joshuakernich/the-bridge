@@ -1,6 +1,27 @@
 window.Unscramble = function(){
 
 	let colors = ['red','orange','yellow','green','blue','pink','purple'];
+	let levels = [
+		{
+			name:'Duotronic Encryption Matrix',
+			pattern : '00 10 11 01',
+			message: 'YOU ARE ALL |GOING TO DIE',
+			patternWidth:2,
+		},
+		{
+			name:'Triotonic Encryption Matrix',
+			pattern: '00 10 20 21 22 12 02 01',
+			message: ' EVERYONE|IS GOING |  TO DIE ',
+			patternWidth:3,
+		},
+		{
+			name:'Duotrionic Encryption Matrix',
+			pattern: '00 10 11 12 02 01',
+			message: 'TAKE ME |TO YOUR | LEADER ',
+			patternWidth:2,
+		}
+		
+	]
 
 	function toArrays(m){
 		let out = [];
@@ -18,28 +39,46 @@ window.Unscramble = function(){
 		return out;
 	}
 
-	let message = 'YOU ARE ALL |GOING TO DIE';
-	let messageTarget = toArrays(message);
-	let messageLive = toArrays(message);
-
 	const self = this;
 	self.$el = $('<unscramble>');
 
-	for(var r = 0; r < messageLive.length; r++){
-		$r = $('<seq-r>').appendTo(self.$el);
-		for(var c = 0; c < messageLive[r].length; c++){
-			$('<seq-c>')
-			.appendTo($r)
-			.attr('c',c)
-			.attr('r',r)
-			.attr('bg',colors[Math.floor(c/2)])
-			.text(messageLive[r][c])
-			.on('mousedown',onCell);
-		}
-	}
+	let level = undefined;
+	let iLevel = 0;
+	let messageTarget;
+	let messageLive;
+	let group;
+	let anims;
+	let patternWidth = 0;
+	function doLevel(){
 
-	let group = '00 10 11 01'.split(' ');
-	let anims = [];
+		level = levels[iLevel];
+		anims = [];
+
+		messageTarget = toArrays(level.message);
+		messageLive = toArrays(level.message);
+
+		self.$el.empty();
+
+		$('<p>').appendTo(self.$el).text(level.name);
+
+		for(var r = 0; r < messageLive.length; r++){
+			$r = $('<seq-r>').appendTo(self.$el);
+			for(var c = 0; c < messageLive[r].length; c++){
+				$('<seq-c>')
+				.appendTo($r)
+				.attr('c',c)
+				.attr('r',r)
+				.attr('bg',colors[Math.floor(c/level.patternWidth)])
+				.text(messageLive[r][c])
+				.on('mousedown',onCell);
+			}
+		}
+
+		group = level.pattern.split(' ');
+		for(let n=0; n<messageTarget[0].length/level.patternWidth; n++) randomScramble(n*level.patternWidth,0);
+	}
+	doLevel();
+
 
 	function onCell(){
 		let c = $(this).attr('c');
@@ -48,7 +87,9 @@ window.Unscramble = function(){
 		scramble(c,r);
 
 		self.$el.css({'pointer-events':'none'});
-		for(let a in anims) anims[a].$el.offset(anims[a].o).animate({top:0,left:0},300,validate);
+
+		for(let a in anims) anims[a].$el.offset(anims[a].o).animate({top:0,left:0},300);
+		setTimeout(validate,300);
 	}
 
 	function validate() {
@@ -58,12 +99,17 @@ window.Unscramble = function(){
 		
 		if(isCorrect){
 			self.$el.find('seq-c').off('mousedown').attr('bg','yellow');
+			setTimeout(function(){
+				iLevel++;
+				doLevel();
+			},1000)
 		}
 
 		self.$el.css({'pointer-events':'auto'});
 	}
 
 	function randomScramble(c,r){
+
 		let n = 1 + Math.floor(Math.random()*3);
 
 		while(n--) scramble(c,r);
@@ -71,7 +117,7 @@ window.Unscramble = function(){
 
 	function scramble(c,r){
 		let messageWas = clone(messageLive);
-		let anchor = [Math.floor(c/2)*2,0];
+		let anchor = [Math.floor(c/level.patternWidth)*level.patternWidth,0];
 		anims = []; 
 		
 		for(let g in group){
@@ -96,10 +142,7 @@ window.Unscramble = function(){
 		}
 	}
 
-	randomScramble(0,0);
-	randomScramble(2,0);
-	randomScramble(4,0);
-	randomScramble(6,0);
-	randomScramble(8,0);
-	randomScramble(10,0);
+	
+
+	
 }

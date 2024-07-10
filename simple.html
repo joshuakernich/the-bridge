@@ -7,17 +7,31 @@
 	<script type="text/javascript" src="./Tone.js"></script>
 
 	<script type="text/javascript" src="./modules/PowerDiverter.js"></script>
+	<script type="text/javascript" src="./modules/Sequencer.js"></script>
 	<link rel="stylesheet" href="./modules/PowerDiverter.css">
+	<link rel="stylesheet" href="./modules/Sequencer.css">
 
 	<script type="text/javascript" src="./modules/LaunchpadController.js"></script>
 
 	<script type="text/javascript">
 		$(function () {
 
+			window.launchpad = new LaunchpadController();
+
+			let colors = ['orange','yellow','green','blue','purple','pink','red'];
+
+			let toys = [
+				{ title:"DIVERT POWER", toy:new PowerDiverter() },
+				{ title:"SEND SIGNAL", toy:new Sequencer() },
+
+			]
+
 			let OSBox = function(){
+				
+				let self = this;
 				let w = 12;
 				let h = 12;
-				let color = 'orange';
+				let color = 'red';
 
 				let $el = $('<osbox>').appendTo('body');
 				let $t = $('<table>').appendTo($el);
@@ -30,7 +44,15 @@
 					}
 				}
 
-				$(`[c=0], [r=0], [c=${w-1}], [r=${h-1}]`).attr('bg',color);
+				let paint = [
+					''
+				]
+
+				$el.find(`[c=0], [r=0], [c=${w-1}], [r=${h-1}],
+					[c=1][r=1],
+					[c=${w-2}][r=1], 
+					[c=${w-2}][r=${h-2}],
+					[c=1][r=${h-2}]`).attr('paint','true');
 
 				//outer corners
 				$(`[c=0][r=0]`).attr('corner','tl');
@@ -39,28 +61,76 @@
 				$(`[c=0][r=${h-1}]`).attr('corner','bl');
 
 				//inner corners
-				$(`[c=1][r=1]`).attr('cornice','tl').attr('bg',color);
-				$(`[c=${w-2}][r=1]`).attr('cornice','tr').attr('bg',color);
-				$(`[c=${w-2}][r=${h-2}]`).attr('cornice','br').attr('bg',color);
-				$(`[c=1][r=${h-2}]`).attr('cornice','bl').attr('bg',color);
+				$(`[c=1][r=1]`).attr('cornice','tl');
+				$(`[c=${w-2}][r=1]`).attr('cornice','tr');
+				$(`[c=${w-2}][r=${h-2}]`).attr('cornice','br');
+				$(`[c=1][r=${h-2}]`).attr('cornice','bl');
 
 				$(`[c=0]`).attr('thick',3);
 
-				$('<h1>').appendTo('[c=2][r=0]').text('POWER DIVERSION').attr('color',color);
+				$('<h1>').appendTo('[c=2][r=0]').text('SELECT FUNCTION')
 
-				$(`[r=2][c=0]`).attr('bg','blue').attr('bordered','vert');
-				$(`[r=3][c=0]`).attr('bg','purple').attr('bordered','vert');
-				$(`[r=4][c=0]`).attr('bg','pink').attr('bordered','vert');
+				for(var i=0; i<toys.length; i++){
+					$(`[r=${2+i}][c=0]`).removeAttr('paint').attr('bg',colors[i]).attr('bordered','vert').text(toys[i].title).attr('toy',i).click(onLaunchToy);
+				}
+
+				
+				
 				$(`[r=6][c=${w-1}]`).attr('bordered','vert');
 				$(`[r=7][c=${w-1}]`).attr('bordered','vert');
+
+				self.recolor = function(iToy){
+					$el.find('[paint]').attr('bg',colors[iToy]);
+
+					$el.find('h1').attr('color',colors[iToy]);
+
+					console.log(iToy,colors[iToy]);
+				}
+
+				self.recolor(colors.length-1);
 			}
 
-			window.launchpad = new LaunchpadController();
-
-			new OSBox();
+			let os = new OSBox();
 
 			let $toy = $('<toy>').appendTo('[r=2][c=2]');
-			new PowerDiverter().$el.appendTo($toy);
+
+			let isStarted = false;
+			let iToy = -1;
+			async function onLaunchToy(){
+
+				if(!isStarted){
+					await Tone.start()
+
+					let meter = new Tone.Meter();
+					window.mic = new Tone.UserMedia().connect(meter);
+
+					mic.open().then(() => {
+						console.log("mic open");
+						begin();
+						
+					}).catch(e => {
+						console.log("mic not open",e);
+					});
+
+					isStarted = true;
+				}
+
+				if(iToy>-1){
+					toys[iToy].toy.turnOnOff(false);
+					$toy.empty();
+				}
+
+				iToy = $(this).attr('toy');
+				toys[iToy].toy.turnOnOff(true);
+				toys[iToy].toy.$el.appendTo($toy);
+
+				$('h1').text(toys[iToy].title);
+
+				os.recolor(iToy);
+			}
+
+
+			
 
 		})
 	</script>
@@ -88,6 +158,7 @@
 			--pink: rgb(255, 153, 253);
 			--black: black;
 			--grid: 50px;
+		
 
 			--orange-opaque: rgba(255, 154, 116, 0.8);
 			--yellow-opaque: rgb(255, 250, 111, 0.8);
@@ -105,7 +176,8 @@
 			background: var(--black);
 			font-family: "Antonio";
 
-			font-size: 30px;
+			font-size: 20px;
+			font-weight: bold;
 
 
 			user-select: none;
@@ -125,18 +197,28 @@
 			width: var(--grid);
 			height: var(--grid);
 			position: relative;
-			padding: 0px;
+			padding: 0px 10px;
 			box-sizing: border-box;
+			white-space: nowrap;
+			text-align: right;
+
+			
 		}
 
+		[bg=red]{ background: var(--red); }
 		[bg=blue]{ background: var(--blue); }
 		[bg=purple]{ background: var(--purple); }
 		[bg=pink]{ background: var(--pink); }
 		[bg=orange]{ background: var(--orange); }
 		[bg=yellow]{ background: var(--yellow); }
 
+		[color=red]{ color: var(--red); }
 		[color=blue]{ color: var(--blue); }
 		[color=orange]{ color: var(--orange); }
+		[color=purple]{ color: var(--purple); }
+		[color=pink]{ color: var(--pink); }
+		[color=orange]{ color: var(--orange); }
+		[color=yellow]{ color: var(--yellow); }
 
 		[corner=tr]{ border-top-right-radius: var(--grid); }
 		[corner=tl]{ border-top-left-radius: var(--grid); }

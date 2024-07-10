@@ -1,0 +1,96 @@
+power{
+	display: block;
+	line-height: 0px;
+	margin: 0px;
+	position: relative;
+	box-shadow: inset 0px 0px 50px black;
+	transition: 0.5s transform;
+}
+
+power-row{
+	display: block;
+	white-space: nowrap;
+}
+
+power-cell{
+	display: inline-block;
+	width: 50px;
+	height: 50px;
+	
+	position: relative;
+	box-sizing: border-box;
+	line-height: 50px;
+}
+
+power-actor{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	margin: auto;
+
+	
+	
+	display: block;
+	line-height: 50px;
+	color: var(--blue);
+	text-align: center;
+	
+	
+	font-weight: bold;
+	
+	background-size: cover;
+	
+}
+
+power-actor.selected:after{
+	content: "";
+	width: 150%;
+	height: 150%;
+	position: absolute;
+	left: -25%;
+	top:-25%;
+	box-sizing: border-box;
+	border: 1px dashed var(--yellow);
+	border-radius: 100px;
+}
+
+power-actor object{
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	
+}
+
+
+power svg{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+power path{
+	stroke: var(--blue);
+	fill: none;
+}
+
+power path.hull:nth-of-type(1){
+	stroke:var(--purple);
+	fill:rgba(0,0,0,0.5);
+	stroke-width: 10;
+}
+
+power path.hull:nth-of-type(2){
+	stroke:black;
+	stroke-width: 9;
+	
+}
+
+power path.frame{
+	stroke:var(--yellow);
+}
+
+power-cell[type='*']{
+
+}

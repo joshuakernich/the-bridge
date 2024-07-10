@@ -252,7 +252,7 @@ window.PowerDiverter = function(){
 					paths[n][p].x < 8 && 
 					paths[n][p].y >= 0 && 
 					paths[n][p].y < 8 ){
-						window.launchpad.set(''+paths[n][p].x+''+paths[n][p].y,'purple');
+						window.launchpad.setXY(paths[n][p].x,paths[n][p].y,'purple');
 				}
 			}
 		}
@@ -265,13 +265,13 @@ window.PowerDiverter = function(){
 			actors[a].$el.css({transform:'rotate('+actors[a].dir*45+'deg)'});
 
 			let icon = (actors[a].subtype?actors[a].subtype:actors[a].type) + (actors[a].powered?'-powered':'');
-			actors[a].$el.css('background-image','url(icon-'+icon+'.svg)')
+			actors[a].$el.css('background-image','url(./icon-'+icon+'.svg)')
 
 			if(actors[a].powered) countPower++;
 
 			if (actors[a].type == 'system' && actors[a].powered == false) isAllPowered = false;
 
-			window.launchpad.set(''+actors[a].x+''+actors[a].y,(actors[a].type=='power'||actors[a].powered)?'blue':'red');
+			window.launchpad.setXY(actors[a].x,actors[a].y,(actors[a].type=='power'||actors[a].powered)?'blue':'red');
 		}
 
 
@@ -302,7 +302,10 @@ window.PowerDiverter = function(){
 		level = levels[iLevel];
 		actors = levels[iLevel].actors;
 
-		$svg.find('g').attr('transform','translate('+level.x+' '+level.y+')')
+		$svg.find('g').attr('transform','translate('+level.x+' '+level.y+')');
+
+		
+		self.$el.css('transform','translate('+(-level.x*50)+'px,'+(-level.y*50)+'px)');
 
 		for(var a in actors){
 
@@ -362,9 +365,7 @@ window.PowerDiverter = function(){
 		}
 	});
 
-	window.launchpad.listen(function(d){
-		let x = parseInt(d[0]);
-		let y = parseInt(d[1]);
+	window.launchpad.listen(function(x,y){
 		for(var d in dirs) particles.push({x:x,y:y,dir:d,life:3});
 		for(var a in actors) if(actors[a].type != 'system' && actors[a].x == x && actors[a].y == y) actors[a].$el.click();
 	})
@@ -392,13 +393,10 @@ window.PowerDiverter = function(){
 			particles[p].y += dirs[particles[p].dir].y;
 			particles[p].life --;
 			
-
 		}
 
-
-
 		for(var s=0; s<splash.length; s++) console.log(''+(s%8)+''+(Math.floor(s/8)),splash[s]);
-		for(var s=0; s<splash.length; s++) window.launchpad.set(''+(s%8)+''+(Math.floor(s/8)),splash[s]);
+		for(var s=0; s<splash.length; s++) window.launchpad.setXY((s%8),(Math.floor(s/8)),splash[s]);
 	}
 
 	//setInterval(step,150);

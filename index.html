@@ -21,40 +21,58 @@
 	<script type="text/javascript" src="./modules/Mastermind.js"></script>
 	<script type="text/javascript" src="./modules/Unscramble.js"></script>
 	<script type="text/javascript" src="./modules/PowerDiverter.js"></script>
+	<script type="text/javascript" src="./modules/Rubix.js"></script>
 
 	
 	<style type="text/css">
 
-		@import url('https://fonts.googleapis.com/css2?family=Oxanium&display=swap');
+		@import url('https://fonts.googleapis.com/css2?family=Antonio&display=swap');
 	
 
 		@font-face {
-		  font-family: "Oxanium", sans-serif;
-		  font-weight: 200;
+		  font-family: "Antonio", sans-serif;
+		  font-optical-sizing: auto;
+		  font-weight: 400;
 		  font-style: normal;
 		}
 
 		body{
 
 			--red: #FF7B7B;
-			--orange: #FF9A74;
-			--yellow: #FFFA6F;
-			--green: #93FE88;
-			--blue: #59B0F1;
-			--purple: #9999FF;
+			--orange: rgb(255, 154, 116);
+			--yellow: rgb(255, 250, 111);
+			--green: rgb(147, 254, 136);
+			--blue: rgb(89, 176, 241);
+			--purple: rgb(153, 153, 255);
 			--pink: rgb(255, 153, 253);
+			--black: black;
+			--grid: 70px;
+
+			--orange-opaque: rgba(255, 154, 116, 0.8);
+			--yellow-opaque: rgb(255, 250, 111, 0.8);
+			--green-opaque: rgba(147, 254, 136, 0.8);
+			--blue-opaque: rgba(89, 176, 241, 0.8);
+			--purple-opaque: rgba(153, 153, 255, 0.8);
+			--pink-opaque: rgba(255, 153, 253, 0.8);
 			
 			margin: 0px;
 			overflow: hidden;
 			width: 100vw;
 			height: 100vh;
 			display: block;
-			color: white;
+			color: var(--black);
 			background: var(--blue);
-			font-family: "Oxanium";
+			font-family: "Antonio";
+
+			font-size: 30px;
 
 
 			user-select: none;
+		}
+
+		h1{
+			font-size: inherit;
+			font-weight: inherit;
 		}
 
 		container{
@@ -94,8 +112,8 @@
 		layer.bg{
 
 
-			background: url('https://i.makeagif.com/media/1-13-2021/bzqNMj.gif');
-			background: url('https://64.media.tumblr.com/81267977753eb63f4c1d4dbcc5db7a5a/b06f96fe037fe9c4-df/s500x750/b5868a58076339f7699ea64bd33c8d351e9996fa.gif');
+			/*background: url('https://i.makeagif.com/media/1-13-2021/bzqNMj.gif');
+			background: url('https://64.media.tumblr.com/81267977753eb63f4c1d4dbcc5db7a5a/b06f96fe037fe9c4-df/s500x750/b5868a58076339f7699ea64bd33c8d351e9996fa.gif');*/
 			
 			background-size: 110%;
 			background-position: center;
@@ -189,7 +207,7 @@
 			margin: 0px;
 
 			width: 80px;
-			font-size: 10px;
+			
 			margin: 1px;
 			backdrop-filter: blur(5px);
 		}
@@ -376,7 +394,6 @@
 			color: black;
 			display: inline-block;
 			text-align: left;
-			border-left: 2px solid var(--purple);
 			
 			overflow: hidden;
 			position: relative;
@@ -387,25 +404,103 @@
 			background: rgba(255,255,255,0.1);
 			vertical-align: top;
 
-			clip-path: polygon(
-			    0 15px,
-			    15px 0,
-			    100% 0,
-			    100% 100%,
-			    0 100%,
-			    0 20px
-			  );
+			
+
 		}
 
-	
-		oscategory h1, oswindow h1{
+		oswindowheader{
+			margin: 0px;
+			padding: 0px;
+			height: var(--grid);
+			line-height: var(--grid);
+			font-size: var(--grid);
+			display: flex;
+			
+			align-items: stretch;
+			align-content: stretch;
 
-			font-size: 1.3em;
-			font-weight: 100;
+		}
+
+		osh{
+			vertical-align: middle;
+			position: relative;
+			top: -9px;
+			display: block;
+			padding: 0px 3px;
+
+		}
+
+		oshafter{
+			display: flex;
+			flex-grow: 2;
+			vertical-align: middle;
+		}
+
+		oswindow h1{
+			margin: 0px;
+			padding: 0px;
+			height: var(--grid);
+			border-radius: 0px var(--grid) var(--grid) 0px;
+
+
+		}
+
+
+
+		oswindow{
+			position: relative;
+			display: block;
+			
+			padding-left: var(--grid);
+		}
+
+		osborder{
+			display: inline-block;
+			width: var(--grid);
+			height: 100%;
+			vertical-align: top;
+			background: blue;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+
+			border-radius: var(--grid) 0px 0px var(--grid);
+		}
+
+		
+
+		oscolumn{
+			display: inline-block;
+			vertical-align: top;
+		}
+
+		ostoy{
+			display: block;
+			background: rgba(255, 255, 255, 0.2);
+			position: relative;
+			margin: 0px;
+			padding: 0px;
+		}
+
+
+	
+		oscategory h1{
+
+			
+			
 			background: var(--purple);
 			margin: 0px;
-			margin-bottom: 2px;
-			padding: 10px 0px 5px 15px;	
+			
+			padding-left: 15px;
+
+			height: var(--grid);
+
+			
+			text-align: left;
+			box-sizing: border-box;
+			align-content: center;
+			align-items: center;
+			
 		}
 
 		ul{
@@ -425,10 +520,110 @@
 			background: rgba(255,255,255,0.2);
 		}
 
+		ospanel{
+			border-top-left-radius: 50px;
+			display: block;
+			overflow: hidden;
+			border-top: 5px solid white;
+			width: 700px;
+		}
+
+		ospanelheader{
+			height: var(--grid);
+			width: 200px;
+			background: white;
+			display: block;
+		}
+
+
+		osmenu > osmenuprimary, osmenu > osmenu{
+			display: inline-block;
+			vertical-align: top;
+		}
+
 		li:after{
 			content: "→";
 			position: absolute;
 			right: 15px;
+		}
+
+		
+
+		osmenu li, osmenu h1{
+			height: var(--grid);
+			line-height: var(--grid);
+			
+			position: relative;
+			margin: 0px 0px 1px 0px;
+			width: 300px;
+		}
+
+		osli{
+			display: block;
+			margin-top: 5px;
+		}
+
+		pip{
+			content: "";
+			width: 80px;
+			height: 80px;
+			
+			background: white;
+			text-align: center;
+			
+
+
+			display: inline-block;
+			vertical-align: top;
+
+			margin-right: 5px;
+
+		}
+
+		oslabel{
+			display: inline-block;
+			color: var(--black);
+			width: 300px;
+			height: 80px;
+			line-height: 30px;
+			vertical-align: top;
+			padding: 30px 15px 0px;
+			text-align: right;
+			box-sizing: border-box;
+
+
+		}
+
+		osheader{
+			width: 385px;
+			height: 160px;
+			background: white;
+			display: block;
+			border-top-left-radius: 80px;
+			position: relative;
+		}
+
+		osheader oslabel{
+			position: absolute;
+			right: 0px;
+			bottom: 0px;
+		}
+
+		
+
+		osmenu h1{
+			color: var(--black);
+		}
+
+		.launchpadsim{
+			padding: 20px;
+			background: black;
+		}
+
+		.launchpadsim td{
+			width: 20px;
+			height: 20px;
+			background: rgba(255, 255, 255, 0.1);
 		}
 
 		header{
@@ -436,7 +631,6 @@
 			bottom: 0px;
 			right: 0px;
 			padding: 30px;
-			font-size: 30px;
 			color:white;
 			display: block;
 			
@@ -447,7 +641,6 @@
 			bottom: 0px;
 			left: 0px;
 			padding: 30px;
-			font-size: 30px;
 			color:white;
 			display: block;
 			font-weight: thinner;
@@ -457,7 +650,49 @@
 			color: var(--pink);
 		}
 
-		oscategory[color='red']{ border-color: var(--red); }
+		[bg]{
+			box-sizing: border-box;
+
+			border: 4px solid;
+		}
+
+		[bg='red']{ 
+			background-color: var(--red-opaque); 
+			border-color: var(--red);
+
+		}
+		[bg='orange']{ 
+			background-color: var(--orange-opaque); 
+			border-color: var(--orange);
+		}
+		[bg='yellow']{ 
+			background-color: var(--yellow-opaque); 
+			border-color: var(--yellow);
+		}
+		[bg='green']{ 
+			background-color: var(--green-opaque); 
+			border-color: var(--green);
+		}
+		[bg='blue']{ 
+			background-color: var(--blue-opaque);
+			border-color: var(--blue);
+
+		}
+		[bg='purple']{ 
+			background-color: var(--purple-opaque);
+			border-color: var(--purple);
+		}
+
+		[bg='pink']{ 
+			background-color: var(--pink-opaque);
+			border-color: var(--pink);
+		}
+
+		[text='pink']{
+			color: var(--pink);
+		}
+
+		/*oscategory[color='red']{ border-color: var(--red); }
 		oscategory[color='red'] h1, [bg='red']{ background-color: var(--red); }
 
 		oscategory[color='orange']{ border-color: var(--orange); }
@@ -476,11 +711,11 @@
 		oscategory[color='purple'] h1, [bg='purple']{ background-color: var(--purple); }
 
 		oscategory[color='pink']{ border-color: var(--pink); }
-		oscategory[color='pink'] h1, [bg='pink']{ background-color: var(--pink); }
+		oscategory[color='pink'] h1, [bg='pink']{ background-color: var(--pink); }*/
 
 		loader{
 			display: inline-block;
-			width: 500px;
+			width: 400px;
 			height: 5px;
 			background: white;
 			margin-top:50px;
@@ -579,7 +814,7 @@
 		}
 
 		unscramble seq-c{
-			font-size: 20px;
+			
 		}
 
 
@@ -687,7 +922,7 @@
 			color: var(--blue);
 			text-align: center;
 			
-			font-size: 30px;
+			
 			font-weight: bold;
 			
 			background-size: cover;
@@ -800,6 +1035,27 @@
 			opacity: 0.2;
 		}*/
 
+		rubix{
+			display: block;
+			padding: var(--grid);
+			
+		}
+
+		rubix row{
+			display: block;
+			line-height: 0px;
+		}
+
+		rubix cell{
+			display: inline-block;
+			width: var(--grid);
+			height: var(--grid);
+			margin: 1px;
+			vertical-align: middle;
+			line-height: 40px;
+			text-align: center;
+		}
+
 	</style>
 </head>
 <body>
@@ -825,8 +1081,8 @@
 	
 	<layer module='intro' style='text-align: center;padding: 200px 0px;'>
 		<footer>ATLAS<b>OS</b></footer>
-		<h1 style="line-height:250px;font-size: 350px;margin:0px;padding:0px;">CTE</h1> 
-		<h1 style="margin:0px;padding:0px;"><b>Communications Translation Encryption</b></h1>
+		<header>CTE <b>Communications Translation Encryption</b></header>
+		<h1 style="line-height:400px;font-size: 400px;margin:0px;padding:0px;">CTE</h1> 
 		<loader>
 			<loaderspot></loaderspot>
 		</loader>

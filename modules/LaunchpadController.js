@@ -4,6 +4,19 @@ window.LaunchpadController = function(){
 	let self = this;
 	let listeners = [];
 
+	let hex = {
+		red:'red',
+		orange:'orange',
+		green:'limegreen',
+		yellow:'yellow',
+		blue:'cyan',
+		purple:'magenta',
+		pink:'pink',
+		gray:'gray',
+		off:'rgba(255,255,255,0.1)',
+
+	}
+
 	let colors = {
 		red:5,
 		orange:9,
@@ -16,6 +29,19 @@ window.LaunchpadController = function(){
 		off:0,
 		blues:[37,38,39,41,42,43,45,46,47,66,67,79],
 		rainbow:[5,13,21,29,37,45,53,61],
+	}
+
+	let map = [];
+
+	self.$el = $('<table class="launchpadsim">');
+
+	for(var i=0; i<8; i++){
+		let $tr = $('<tr>').appendTo(self.$el);
+		map[i] = [];
+		for(var j=0; j<8; j++){
+			map[i][j] = 0;
+			let $td = $('<td>').appendTo($tr).attr('x',j).attr('y',i);
+		}
 	}
 
 	navigator.requestMIDIAccess({sysex:true}).then(onMIDISuccess, onMIDIFailure);
@@ -35,13 +61,13 @@ window.LaunchpadController = function(){
 				//enter programmer mode
        			launchpad.send([240,0,32,41,2,13,14,1,247]);
 
-       			setTimeout(function(){
+       			/*setTimeout(function(){
        				for(var y=0; y<8; y++){
        					for(var x=0; x<8; x++){
        						launchpad.send([144,11+x+y*10,x+y*8]);
        					}
        				}
-       			},500);
+       			},500);*/
        			
        				
 
@@ -86,7 +112,7 @@ window.LaunchpadController = function(){
   	if(y==-1) return ''+x;
   	if(x==8) return alpha[y];
   	
- 	return ''+x+''+y;
+ 	return {x:x,y:y};
   }
 
   function toData(coord,color){
@@ -111,16 +137,26 @@ window.LaunchpadController = function(){
 
   	if(bTrigger){
   		let coord = toCoord(d);
-  		for(var l in listeners) listeners[l](coord);
+  		for(var l in listeners) listeners[l](coord.x,coord.y);
   	}
   }
 
+
+  self.setXY = function(x,y,color){
+  	map[y][x] = color;
+
+  	if(launchpad) launchpad.send([144,81-y*10+x,color]);
+  	self.$el.find('[x="'+x+'"][y="'+y+'"]').css({'background':hex[color]});
+  }
 
   self.set = function(coord,color){
   	let d = toData(coord,color);
   	
   	if(d[1]<0||d[1]>99) return; //limits of the Launchpad
   	if(launchpad) launchpad.send(d);
+
+  	console.log(coord,'[x="'+coord[0]+'"][y="'+coord[1]+'"]',self.$el.find('[x="'+coord[0]+'"][y="'+coord[1]+'"]'));
+  	self.$el.find('[x="'+coord[0]+'"][y="'+coord[1]+'"]').css({'background':hex[color]});
   }
 
   self.listen = function(fn){

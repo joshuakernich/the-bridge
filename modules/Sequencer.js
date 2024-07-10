@@ -28,7 +28,7 @@ window.Sequencer = function(){
 		//Paint all of it
 		for(var r=0; r<8; r++){
 			for(var c=0; c<8; c++){
-				window.launchpad.set(''+c+''+r,map[c]==r?'blue':(cBeat==c?'yellow':'off'));
+				window.launchpad.setXY(c,r,map[c]==r?'blue':(cBeat==c?'yellow':'off'));
 			}
 		}
 	}
@@ -64,9 +64,9 @@ window.Sequencer = function(){
 		redrawLaunchpad();
 	})
 
-	window.launchpad.listen(function(coord){
+	window.launchpad.listen(function(x,y){
 		if(!isOn) return;
-		self.$el.find('seq-c[c='+coord[0]+'][r='+coord[1]+']').click();
+		self.$el.find('seq-c[c='+x+'][r='+y+']').click();
 	})
 
 	setInterval(tick,timePerBeat*1000);

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script type="text/javascript" src="jq.js"></script>
+	<script type="text/javascript" src="./Tone.js"></script>
+
+	<script type="text/javascript" src="./modules/PowerDiverter.js"></script>
+	<link rel="stylesheet" href="./modules/PowerDiverter.css">
+
+	<script type="text/javascript" src="./modules/LaunchpadController.js"></script>
+
+	<script type="text/javascript">
+		$(function () {
+
+			let OSBox = function(){
+				let w = 12;
+				let h = 12;
+				let color = 'orange';
+
+				let $el = $('<osbox>').appendTo('body');
+				let $t = $('<table>').appendTo($el);
+
+				for(var r=0; r<w; r++ ){
+					let $tr = $('<tr>').appendTo($t);
+					for(let c=0; c<h; c++){
+						let $td = $('<td>').appendTo($tr).attr('c',c).attr('r',r);
+						//if(c>=2&&c<10 && r>=2&&r<10) $td.attr('bg','yellow').attr('bordered','both');
+					}
+				}
+
+				$(`[c=0], [r=0], [c=${w-1}], [r=${h-1}]`).attr('bg',color);
+
+				//outer corners
+				$(`[c=0][r=0]`).attr('corner','tl');
+				$(`[c=${w-1}][r=0]`).attr('corner','tr');
+				$(`[c=${w-1}][r=${h-1}]`).attr('corner','br');
+				$(`[c=0][r=${h-1}]`).attr('corner','bl');
+
+				//inner corners
+				$(`[c=1][r=1]`).attr('cornice','tl').attr('bg',color);
+				$(`[c=${w-2}][r=1]`).attr('cornice','tr').attr('bg',color);
+				$(`[c=${w-2}][r=${h-2}]`).attr('cornice','br').attr('bg',color);
+				$(`[c=1][r=${h-2}]`).attr('cornice','bl').attr('bg',color);
+
+				$(`[c=0]`).attr('thick',3);
+
+				$('<h1>').appendTo('[c=2][r=0]').text('POWER DIVERSION').attr('color',color);
+
+				$(`[r=2][c=0]`).attr('bg','blue').attr('bordered','vert');
+				$(`[r=3][c=0]`).attr('bg','purple').attr('bordered','vert');
+				$(`[r=4][c=0]`).attr('bg','pink').attr('bordered','vert');
+				$(`[r=6][c=${w-1}]`).attr('bordered','vert');
+				$(`[r=7][c=${w-1}]`).attr('bordered','vert');
+			}
+
+			window.launchpad = new LaunchpadController();
+
+			new OSBox();
+
+			let $toy = $('<toy>').appendTo('[r=2][c=2]');
+			new PowerDiverter().$el.appendTo($toy);
+
+		})
+	</script>
+
+
+	<style type="text/css">
+		@import url('https://fonts.googleapis.com/css2?family=Antonio&display=swap');
+	
+
+		@font-face {
+		  font-family: "Antonio", sans-serif;
+		  font-optical-sizing: auto;
+		  font-weight: 400;
+		  font-style: normal;
+		}
+
+		body{
+
+			--red: #FF7B7B;
+			--orange: rgb(255, 154, 116);
+			--yellow: rgb(255, 250, 111);
+			--green: rgb(147, 254, 136);
+			--blue: rgb(89, 176, 241);
+			--purple: rgb(153, 153, 255);
+			--pink: rgb(255, 153, 253);
+			--black: black;
+			--grid: 50px;
+
+			--orange-opaque: rgba(255, 154, 116, 0.8);
+			--yellow-opaque: rgb(255, 250, 111, 0.8);
+			--green-opaque: rgba(147, 254, 136, 0.8);
+			--blue-opaque: rgba(89, 176, 241, 0.8);
+			--purple-opaque: rgba(153, 153, 255, 0.8);
+			--pink-opaque: rgba(255, 153, 253, 0.8);
+			
+			margin: 0px;
+			overflow: hidden;
+			width: 100vw;
+			height: 100vh;
+			display: block;
+			color: var(--black);
+			background: var(--black);
+			font-family: "Antonio";
+
+			font-size: 30px;
+
+
+			user-select: none;
+		}
+
+		table{
+			position: absolute;
+			left: 0px;
+			right: 0px;
+			border-collapse: collapse;
+			top: 0px;
+			bottom: 0px;
+			margin: auto;
+		}
+		td{
+			
+			width: var(--grid);
+			height: var(--grid);
+			position: relative;
+			padding: 0px;
+			box-sizing: border-box;
+		}
+
+		[bg=blue]{ background: var(--blue); }
+		[bg=purple]{ background: var(--purple); }
+		[bg=pink]{ background: var(--pink); }
+		[bg=orange]{ background: var(--orange); }
+		[bg=yellow]{ background: var(--yellow); }
+
+		[color=blue]{ color: var(--blue); }
+		[color=orange]{ color: var(--orange); }
+
+		[corner=tr]{ border-top-right-radius: var(--grid); }
+		[corner=tl]{ border-top-left-radius: var(--grid); }
+		[corner=bl]{ border-bottom-left-radius: var(--grid); }
+		[corner=br]{ border-bottom-right-radius: var(--grid); }
+
+		[cornice]:after{
+			content: "";
+			background: var(--black);
+			position: absolute;
+			display: block;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			bottom: 0px;
+		}
+
+		[cornice=tr]:after{ border-top-right-radius: var(--grid); }
+		[cornice=tl]:after{ border-top-left-radius: var(--grid);; }
+		[cornice=br]:after{ border-bottom-right-radius: var(--grid); }
+		[cornice=bl]:after{ border-bottom-left-radius: var(--grid); }
+
+		[thick='3']{ width: calc(var(--grid) * 3); }
+		[bordered=vert]{ 
+			border-top: 0.4vw solid var(--black);
+			border-bottom: 0.4vw solid var(--black);
+		 }
+
+		 [bordered=horz]{ 
+			border-left: 0.4vw solid var(--black);
+			border-right: 0.4vw solid var(--black);
+		 }
+
+		 [bordered=both]{ 
+			border: 0.4vw solid var(--black);
+		 }
+
+		h1{
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			bottom: 0px;
+			display: inline-block;
+			background: var(--black);
+			color: var(--blue);
+			padding: 0px;
+			margin: 0px;
+			line-height: calc( var(--grid) * 0.9);
+			z-index: 1;
+			padding: 0px 0.5vw;
+			font-size: var(--grid);
+			text-transform: uppercase;
+			white-space: nowrap;
+		}
+
+		toy{
+			display: block;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			z-index: 1;
+			width: calc(var(--grid) * 8);
+			height: calc(var(--grid) * 8);
+			overflow: hidden;
+		}
+
+	</style>
+	<title></title>
+</head>
+<body>
+
+</body>
+</html>

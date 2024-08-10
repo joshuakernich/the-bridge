@@ -6,10 +6,17 @@
 	<script type="text/javascript" src="jq.js"></script>
 	<script type="text/javascript" src="./Tone.js"></script>
 
+	<script type="text/javascript" src="./modules/Jin.js"></script>
+	<script type="text/javascript" src="./modules/FrequencyChart.js"></script>
+	<script type="text/javascript" src="./modules/PitchRecorder.js"></script>
 	<script type="text/javascript" src="./modules/PowerDiverter.js"></script>
 	<script type="text/javascript" src="./modules/Sequencer.js"></script>
+	<script type="text/javascript" src="./modules/Unscramble.js"></script>
+	
+	<link rel="stylesheet" href="./modules/PitchRecorder.css">
 	<link rel="stylesheet" href="./modules/PowerDiverter.css">
 	<link rel="stylesheet" href="./modules/Sequencer.css">
+	<link rel="stylesheet" href="./modules/Unscramble.css">
 
 	<script type="text/javascript" src="./modules/LaunchpadController.js"></script>
 
@@ -18,29 +25,30 @@
 
 			window.launchpad = new LaunchpadController();
 
-			let colors = ['orange','yellow','green','blue','purple','pink','red'];
+			let colors = [
+				'cyan','purple','blue','green','pink','yellow'];
 
 			let toys = [
 				{ title:"DIVERT POWER", toy:new PowerDiverter() },
-				{ title:"SEND SIGNAL", toy:new Sequencer() },
+				{ title:"SYNTH SIGNAL", toy:new Sequencer() },
+				{ title:"VOCAL SIGNAL", toy:new PitchRecorder() },
+				{ title:"DECODER", toy:new Unscramble() },
 
 			]
 
-			let OSBox = function(){
+			let OSBox = function(color,header,icon){
 				
 				let self = this;
 				let w = 12;
 				let h = 12;
-				let color = 'red';
 
-				let $el = $('<osbox>').appendTo('body');
+				let $el = $('<osbox>').appendTo('osstream');
 				let $t = $('<table>').appendTo($el);
 
 				for(var r=0; r<w; r++ ){
 					let $tr = $('<tr>').appendTo($t);
 					for(let c=0; c<h; c++){
 						let $td = $('<td>').appendTo($tr).attr('c',c).attr('r',r);
-						//if(c>=2&&c<10 && r>=2&&r<10) $td.attr('bg','yellow').attr('bordered','both');
 					}
 				}
 
@@ -55,82 +63,103 @@
 					[c=1][r=${h-2}]`).attr('paint','true');
 
 				//outer corners
-				$(`[c=0][r=0]`).attr('corner','tl');
-				$(`[c=${w-1}][r=0]`).attr('corner','tr');
-				$(`[c=${w-1}][r=${h-1}]`).attr('corner','br');
-				$(`[c=0][r=${h-1}]`).attr('corner','bl');
+				$el.find(`[c=0][r=0]`).attr('corner','tl');
+				$el.find(`[c=${w-1}][r=0]`).attr('corner','tr');
+				$el.find(`[c=${w-1}][r=${h-1}]`).attr('corner','br');
+				$el.find(`[c=0][r=${h-1}]`).attr('corner','bl');
 
 				//inner corners
-				$(`[c=1][r=1]`).attr('cornice','tl');
-				$(`[c=${w-2}][r=1]`).attr('cornice','tr');
-				$(`[c=${w-2}][r=${h-2}]`).attr('cornice','br');
-				$(`[c=1][r=${h-2}]`).attr('cornice','bl');
+				$el.find(`[c=1][r=1]`).attr('cornice','tl');
+				$el.find(`[c=${w-2}][r=1]`).attr('cornice','tr');
+				$el.find(`[c=${w-2}][r=${h-2}]`).attr('cornice','br');
+				$el.find(`[c=1][r=${h-2}]`).attr('cornice','bl');
 
-				$(`[c=0]`).attr('thick',3);
+				$el.find(`[c=0]`).attr('thick',3);
 
-				$('<h1>').appendTo('[c=2][r=0]').text('SELECT FUNCTION')
+				$('<h1>').appendTo($el.find('[c=2][r=0]'));
 
-				for(var i=0; i<toys.length; i++){
-					$(`[r=${2+i}][c=0]`).removeAttr('paint').attr('bg',colors[i]).attr('bordered','vert').text(toys[i].title).attr('toy',i).click(onLaunchToy);
-				}
-
-				
 				
 				$(`[r=6][c=${w-1}]`).attr('bordered','vert');
 				$(`[r=7][c=${w-1}]`).attr('bordered','vert');
 
-				self.recolor = function(iToy){
-					$el.find('[paint]').attr('bg',colors[iToy]);
+				let isStarted = false;
+				let iToy = -1;
+				async function onLaunchToy(){
 
-					$el.find('h1').attr('color',colors[iToy]);
+					if(!isStarted){
+						await Tone.start()
 
-					console.log(iToy,colors[iToy]);
-				}
+						let meter = new Tone.Meter();
+						window.mic = new Tone.UserMedia().connect(meter);
 
-				self.recolor(colors.length-1);
-			}
+						mic.open().then(() => {
+							console.log("mic open");
+							
+						}).catch(e => {
+							console.log("mic not open",e);
+						});
 
-			let os = new OSBox();
-
-			let $toy = $('<toy>').appendTo('[r=2][c=2]');
-
-			let isStarted = false;
-			let iToy = -1;
-			async function onLaunchToy(){
-
-				if(!isStarted){
-					await Tone.start()
-
-					let meter = new Tone.Meter();
-					window.mic = new Tone.UserMedia().connect(meter);
-
-					mic.open().then(() => {
-						console.log("mic open");
-						begin();
+						window.synth = new Tone.Synth().toDestination();
+						synth.envelope.attack = 0.05;
+						synth.envelope.release = 0.5;
 						
-					}).catch(e => {
-						console.log("mic not open",e);
-					});
 
-					isStarted = true;
+						isStarted = true;
+					}
+					if(iToy>-1) toys[iToy].toy.turnOnOff(false);
+	
+					os.$toy.empty();
+
+					/*let now = Tone.now();
+					window.synth.triggerAttackRelease('C4',0.1,now);
+					window.synth.triggerAttackRelease('D4',0.1,now+0.1);*/
+
+
+
+					iToy = $(this).attr('toy');
+					toys[iToy].toy.turnOnOff(true);
+					toys[iToy].toy.$el.appendTo(os.$toy);
+
+					self.reskin(toys[iToy].title,colors[iToy]);
+
+
 				}
 
-				if(iToy>-1){
-					toys[iToy].toy.turnOnOff(false);
-					$toy.empty();
+				let toys = [];
+				self.addToy = function(iColor,toy){
+					
+					if(!toys.length){
+						$(`[r=${2+toys.length*2}][c=0]`).attr('bordered','top');
+					}
+
+					$(`[r=${2+toys.length*2}][c=0]`).removeAttr('paint').attr('bg',colors[iColor]).attr('toy',i).click(onLaunchToy);
+					$(`[r=${2+toys.length*2+1}][c=0]`).removeAttr('paint').attr('bg',colors[iColor]).attr('bordered','bottom').text(toy.title).attr('toy',i).click(onLaunchToy);
+					toys.push(toy);
+
+
+
 				}
 
-				iToy = $(this).attr('toy');
-				toys[iToy].toy.turnOnOff(true);
-				toys[iToy].toy.$el.appendTo($toy);
+				self.reskin = function(title,color){
+					$el.find('[paint]').attr('bg',color);
+					$el.find('h1').attr('color',color).text(title);
+				}
 
-				$('h1').text(toys[iToy].title);
+				self.reskin(header,color);
 
-				os.recolor(iToy);
+				self.$toy = $('<toy>').appendTo($el.find('[r=2][c=2]'));
+
+				if(icon) $('<osicon>').appendTo(self.$toy).css('background-image','url('+icon+')');
+
+				
 			}
 
+			let osLeft = new OSBox('yellow');
+			let os = new OSBox('pink','ENGINEERING','./birds/roster.svg');
 
-			
+			for(var i=0; i<toys.length; i++) os.addToy(i,toys[i]);
+
+			let osRight = new OSBox('cyan');
 
 		})
 	</script>
@@ -149,29 +178,32 @@
 
 		body{
 
-			--red: #FF7B7B;
-			--orange: rgb(255, 154, 116);
-			--yellow: rgb(255, 250, 111);
-			--green: rgb(147, 254, 136);
-			--blue: rgb(89, 176, 241);
-			--purple: rgb(153, 153, 255);
-			--pink: rgb(255, 153, 253);
+			--red: #D9297B; /* same as pink */
+			
+			--yellow: #F2C849;
+			--green: #A7C342;
+			--cyan: #10CFDC;
+			--blue: #0098FF;
+			--purple: #A100F7;
+			--pink: #D9297B;
 			--black: black;
+			--white: white;
+
 			--grid: 50px;
 		
 
-			--orange-opaque: rgba(255, 154, 116, 0.8);
-			--yellow-opaque: rgb(255, 250, 111, 0.8);
-			--green-opaque: rgba(147, 254, 136, 0.8);
-			--blue-opaque: rgba(89, 176, 241, 0.8);
-			--purple-opaque: rgba(153, 153, 255, 0.8);
-			--pink-opaque: rgba(255, 153, 253, 0.8);
+			
+			--yellow-opaque: rgb(255, 250, 111, 0.3);
+			--green-opaque: rgba(147, 254, 136, 0.3);
+			--blue-opaque: rgba(89, 176, 241, 0.3);
+			--cyan-opaque: rgba(13, 207, 219, 0.3);
+			--purple-opaque: rgba(153, 153, 255, 0.3);
+			--pink-opaque: rgba(255, 153, 253, 0.3);
 			
 			margin: 0px;
-			overflow: hidden;
-			width: 100vw;
-			height: 100vh;
-			display: block;
+			
+		
+			
 			color: var(--black);
 			background: var(--black);
 			font-family: "Antonio";
@@ -181,15 +213,40 @@
 
 
 			user-select: none;
+			
+
+		}
+
+		container{
+			display: block;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			width: 100vw;
+			height: 100vh;
+			overflow: hidden;
+		}
+
+		osstream{
+			white-space: nowrap;
+		
+			display: block;
+			position: absolute;
+
+			
+			left: 50vw;
+			top: 50vh;
+		
+			transform: translate(-50%, -50%);
+			width: calc(var(--grid)*15*3);
+
 		}
 
 		table{
-			position: absolute;
-			left: 0px;
-			right: 0px;
+			position: relative;
+			
 			border-collapse: collapse;
-			top: 0px;
-			bottom: 0px;
+			
 			margin: auto;
 		}
 		td{
@@ -205,20 +262,26 @@
 			
 		}
 
+		[bg=cyan]{ background: var(--cyan); }
 		[bg=red]{ background: var(--red); }
 		[bg=blue]{ background: var(--blue); }
+		[bg=green]{ background: var(--green); }
 		[bg=purple]{ background: var(--purple); }
 		[bg=pink]{ background: var(--pink); }
 		[bg=orange]{ background: var(--orange); }
 		[bg=yellow]{ background: var(--yellow); }
+		[bg=white]{ background: var(--white); }
 
+		[color=cyan]{ color: var(--cyan); }
 		[color=red]{ color: var(--red); }
 		[color=blue]{ color: var(--blue); }
+		[color=green]{ color: var(--green); }
 		[color=orange]{ color: var(--orange); }
 		[color=purple]{ color: var(--purple); }
 		[color=pink]{ color: var(--pink); }
 		[color=orange]{ color: var(--orange); }
 		[color=yellow]{ color: var(--yellow); }
+		[color=white]{ color: var(--white); }
 
 		[corner=tr]{ border-top-right-radius: var(--grid); }
 		[corner=tl]{ border-top-left-radius: var(--grid); }
@@ -242,6 +305,15 @@
 		[cornice=bl]:after{ border-bottom-left-radius: var(--grid); }
 
 		[thick='3']{ width: calc(var(--grid) * 3); }
+
+		[bordered=top]{ 
+			border-top: 0.4vw solid var(--black);
+		 }
+
+		 [bordered=bottom]{ 
+			border-bottom: 0.4vw solid var(--black);
+		 }
+
 		[bordered=vert]{ 
 			border-top: 0.4vw solid var(--black);
 			border-bottom: 0.4vw solid var(--black);
@@ -274,6 +346,10 @@
 			white-space: nowrap;
 		}
 
+		h1:empty{
+			display: none;
+		}
+
 		toy{
 			display: block;
 			position: absolute;
@@ -285,10 +361,31 @@
 			overflow: hidden;
 		}
 
+		toy osicon{
+			
+			/*background: url('./birds/flamingo.svg');*/
+			background-position: center;
+			background-size: 100%;
+			background-repeat: no-repeat;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			bottom: 0px;
+			display: block;
+		}
+
+		osbox{
+			display: inline-block;
+			margin: calc(var(--grid)/2);
+		}
+
 	</style>
 	<title></title>
 </head>
 <body>
-
+	<container>
+		<osstream></osstream>
+	</container>
 </body>
 </html>

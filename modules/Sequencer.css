@@ -23,6 +23,12 @@ seq-c{
 	box-sizing: border-box;
 }
 
+seq-r:nth-of-type(4) seq-c:nth-of-type(4){ border-bottom-right-radius: 25%; }
+seq-r:nth-of-type(4) seq-c:nth-of-type(5){ border-bottom-left-radius: 25%; }
+seq-r:nth-of-type(5) seq-c:nth-of-type(4){ border-top-right-radius: 25%; }
+seq-r:nth-of-type(5) seq-c:nth-of-type(5){ border-top-left-radius: 25%; }
+
+
 seq.looper seq-c{
 	border-radius: 100px;
 }	

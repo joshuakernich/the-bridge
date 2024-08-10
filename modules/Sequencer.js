@@ -1,10 +1,7 @@
 window.Sequencer = function(){
 
 
-	const synth = new Tone.Synth().toDestination();
-	synth.envelope.attack = 0.1;
-	synth.envelope.release = 1;
-
+	
 	const pitchLibrary = ['D3','E3','G3','A3','C4','D4','E4','G4','A4'];
 	const timePerBeat = 0.5;
 
@@ -15,6 +12,12 @@ window.Sequencer = function(){
 
 	self.turnOnOff = function(b){
 		isOn = b;
+
+		/*if(b && !synth){
+			synth = new Tone.Synth().toDestination();
+			synth.envelope.attack = 0.1;
+			synth.envelope.release = 1;
+		}*/
 	}
 
 	for(var r = 0; r < 8; r++){

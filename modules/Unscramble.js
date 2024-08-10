@@ -1,11 +1,11 @@
 window.Unscramble = function(){
 
-	let colors = ['red','orange','yellow','green','blue','pink','purple'];
+	let colors = ['red','yellow','green','blue','pink','purple'];
 	let levels = [
 		{
 			name:'Duotronic Encryption Matrix',
-			pattern : '00 10 11 01',
-			message: 'YOU ARE ALL |GOING TO DIE',
+			pattern : '00 10 11 12 02 01',
+			message: 'FEAR THE| COMING |  DOOM  ',
 			patternWidth:2,
 		},
 		{
@@ -22,6 +22,8 @@ window.Unscramble = function(){
 		}
 		
 	]
+
+
 
 	function toArrays(m){
 		let out = [];
@@ -42,6 +44,10 @@ window.Unscramble = function(){
 	const self = this;
 	self.$el = $('<unscramble>');
 
+	self.turnOnOff = function(){
+
+	}
+
 	let level = undefined;
 	let iLevel = 0;
 	let messageTarget;
@@ -59,7 +65,7 @@ window.Unscramble = function(){
 
 		self.$el.empty();
 
-		$('<p>').appendTo(self.$el).text(level.name);
+		$('<h2>').appendTo(self.$el).text(level.name);
 
 		for(var r = 0; r < messageLive.length; r++){
 			$r = $('<seq-r>').appendTo(self.$el);
@@ -76,6 +82,8 @@ window.Unscramble = function(){
 
 		group = level.pattern.split(' ');
 		for(let n=0; n<messageTarget[0].length/level.patternWidth; n++) randomScramble(n*level.patternWidth,0);
+
+		$('<button>').appendTo(self.$el).text('VERIFY');
 	}
 	doLevel();
 
@@ -89,7 +97,11 @@ window.Unscramble = function(){
 		self.$el.css({'pointer-events':'none'});
 
 		for(let a in anims) anims[a].$el.offset(anims[a].o).animate({top:0,left:0},300);
-		setTimeout(validate,300);
+		setTimeout(onMove,300);
+	}
+
+	function onMove(){
+		self.$el.css({'pointer-events':'auto'});
 	}
 
 	function validate() {
@@ -105,7 +117,7 @@ window.Unscramble = function(){
 			},1000)
 		}
 
-		self.$el.css({'pointer-events':'auto'});
+		
 	}
 
 	function randomScramble(c,r){

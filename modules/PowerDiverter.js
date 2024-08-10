@@ -5,19 +5,14 @@ window.PowerDiverter = function(){
 
 	self.$el = $('<power>');
 
-	const synth = new Tone.Synth().toDestination();
-	synth.envelope.attack = 0.05;
-	synth.envelope.release = 0.5;
-	synth.volume.value = -100;
-
-	const vibrato = new Tone.Vibrato().toDestination();
-	synth.connect(vibrato);
 
 
 
 	self.turnOnOff = function(b){
-		synth.volume.value = b?0:-100;
+		
 		if(b) redraw();
+		else window.synth.triggerRelease();
+		
 	}
 
 	let $svg = $(`
@@ -284,10 +279,8 @@ window.PowerDiverter = function(){
 			setTimeout(doNextLevel,700);
 		}
 
-		synth.triggerAttack(tones[countPower+(nRedraw%2)+(isAllPowered?2:0)]);
-
-		//synth.triggerAttackRelease(tones[countPower+(nRedraw%2)+(isAllPowered?2:0)], 0.05);
-		if(isAllPowered) synth.triggerAttackRelease(tones[countPower+(nRedraw%2)+4], 0.1, Tone.now()+0.2);
+		if(window.synth) window.synth.triggerAttack(tones[countPower+(nRedraw%2)+(isAllPowered?2:0)]);
+		if(isAllPowered) window.synth.triggerAttackRelease(tones[countPower+(nRedraw%2)+4], 0.1, Tone.now()+0.2);
 	}
 
 	let iLevel = -1;

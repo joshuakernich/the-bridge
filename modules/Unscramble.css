@@ -1,0 +1,31 @@
+unscramble{
+	font-size: calc(var(--grid)/2);
+	font-weight: bold;
+	text-align: center;
+	display: block;
+	line-height: var(--grid);
+}
+
+unscramble seq-c{
+	
+}
+
+unscramble h2{
+	font: inherit;
+	color: var(--pink);
+	text-transform:  uppercase;
+	height: var(--grid);
+	padding: 0px;
+	margin: 0px;
+	text-align: left;
+}
+
+unscramble button{
+	display: block;
+	width: 100%;
+	padding: 0px;
+	margin: 0px;
+	font: inherit;
+
+	border: 2px solid black;
+}

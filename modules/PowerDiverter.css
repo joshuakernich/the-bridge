@@ -3,8 +3,9 @@ power{
 	line-height: 0px;
 	margin: 0px;
 	position: relative;
-	box-shadow: inset 0px 0px 50px black;
+	
 	transition: 0.5s transform;
+	
 }
 
 power-row{
@@ -34,7 +35,7 @@ power-actor{
 	
 	display: block;
 	line-height: 50px;
-	color: var(--blue);
+	color: var(--cyan);
 	text-align: center;
 	
 	
@@ -52,7 +53,7 @@ power-actor.selected:after{
 	left: -25%;
 	top:-25%;
 	box-sizing: border-box;
-	border: 1px dashed var(--yellow);
+	border: 2px dashed var(--yellow);
 	border-radius: 100px;
 }
 
@@ -68,17 +69,19 @@ power svg{
 	position: absolute;
 	top: 0px;
 	left: 0px;
+	background: var(--cyan-opaque);
 }
 
 power path{
-	stroke: var(--blue);
+	stroke: var(--cyan);
+	stroke-width: 2;
 	fill: none;
 }
 
 power path.hull:nth-of-type(1){
 	stroke:var(--purple);
-	fill:rgba(0,0,0,0.5);
-	stroke-width: 10;
+	fill: black;
+	stroke-width: 12;
 }
 
 power path.hull:nth-of-type(2){
@@ -88,6 +91,7 @@ power path.hull:nth-of-type(2){
 }
 
 power path.frame{
+	stroke-width: 2;
 	stroke:var(--yellow);
 }
 

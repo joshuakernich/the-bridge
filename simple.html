@@ -25,8 +25,7 @@
 
 			window.launchpad = new LaunchpadController();
 
-			let colors = [
-				'cyan','purple','blue','green','pink','yellow'];
+			let colors = ['yellow','cyan','purple','pink'];
 
 			let toys = [
 				{ title:"DIVERT POWER", toy:new PowerDiverter() },
@@ -154,12 +153,12 @@
 				
 			}
 
-			let osLeft = new OSBox('yellow');
-			let os = new OSBox('pink','ENGINEERING','./birds/roster.svg');
+			let osLeft = new OSBox('pink');
+			let os = new OSBox('yellow','ENGINEERING','./birds/engineering-duck.svg');
 
 			for(var i=0; i<toys.length; i++) os.addToy(i,toys[i]);
 
-			let osRight = new OSBox('cyan');
+			let osRight = new OSBox('purple');
 
 		})
 	</script>
@@ -365,7 +364,7 @@
 			
 			/*background: url('./birds/flamingo.svg');*/
 			background-position: center;
-			background-size: 100%;
+			background-size: 90%;
 			background-repeat: no-repeat;
 			position: absolute;
 			top: 0px;

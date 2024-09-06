@@ -56,7 +56,7 @@ window.LaunchpadController = function(){
 		//console.log(midiAccess.outputs.values());
 		for (var output of midiAccess.outputs.values()){
 			
-			if(output.name.includes("Launchpad Mini")){
+			if(output.name.includes("Launchpad")){
 				launchpad = output;
 				//enter programmer mode
        			launchpad.send([240,0,32,41,2,13,14,1,247]);

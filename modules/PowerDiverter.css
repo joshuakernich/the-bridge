@@ -53,7 +53,7 @@ power-actor.selected:after{
 	left: -25%;
 	top:-25%;
 	box-sizing: border-box;
-	border: 2px dashed var(--yellow);
+	/*border: 2px dashed var(--yellow);*/
 	border-radius: 100px;
 }
 

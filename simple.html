@@ -105,7 +105,11 @@
 
 						isStarted = true;
 					}
-					if(iToy>-1) toys[iToy].toy.turnOnOff(false);
+					
+					if(iToy>-1){
+						toys[iToy].toy.turnOnOff(false);
+						toys[iToy].toy.$el.detach();
+					}
 	
 					os.$toy.empty();
 

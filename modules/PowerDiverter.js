@@ -238,6 +238,8 @@ window.PowerDiverter = function(){
 			}
 		}*/
 
+		window.launchpad.clear();
+
 		let d = '';
 		for(var n in paths){
 			for(var p in paths[n]){
@@ -310,6 +312,7 @@ window.PowerDiverter = function(){
 			.data('actor',actors[a])
 			.css('background-image','url(icon-'+icon+'.svg)')
 			.click(function(e){
+
 				e.preventDefault();
 
 				$('power-actor').removeClass('selected');
@@ -359,6 +362,7 @@ window.PowerDiverter = function(){
 	});
 
 	window.launchpad.listen(function(x,y){
+
 		for(var d in dirs) particles.push({x:x,y:y,dir:d,life:3});
 		for(var a in actors) if(actors[a].type != 'system' && actors[a].x == x && actors[a].y == y) actors[a].$el.click();
 	})

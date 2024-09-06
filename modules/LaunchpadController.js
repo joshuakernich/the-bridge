@@ -61,37 +61,12 @@ window.LaunchpadController = function(){
 				//enter programmer mode
        			launchpad.send([240,0,32,41,2,13,14,1,247]);
 
-       			/*setTimeout(function(){
-       				for(var y=0; y<8; y++){
-       					for(var x=0; x<8; x++){
-       						launchpad.send([144,11+x+y*10,x+y*8]);
-       					}
-       				}
-       			},500);*/
-       			
-       				
-
-       			/*let n = 0;
-       			 setInterval(function(){
-
-       			 	n++;
-       			 	for(var i=11; i<99; i++){
-       			 		launchpad.send(
-			        		[
-			        			144,
-			        			i,
-			        			colors.rainbow[((i%10)+n)%colors.rainbow.length]
-			        		]
-			        	);
-       			 	}
-
-		        	
-		        },50);*/
+       			//launchpad.send([144,0,color]);
 			}
 		}
 
         for (var input of midiAccess.inputs.values()){
-			if(output.name.includes("Launchpad Mini")){
+			if(output.name.includes("Launchpad")){
 				input.onmidimessage = onLaunchpadMessage;
 			}
         }
@@ -141,11 +116,21 @@ window.LaunchpadController = function(){
   	}
   }
 
+  self.clear = function(){
+  	if(launchpad){
+  		for(var x=0; x<8; x++){
+  			for(var y=0; y<8; y++){
+  				self.setXY(x,y,colors['off'])
+  			}
+  		}
+  	}
+  }
+
 
   self.setXY = function(x,y,color){
   	map[y][x] = color;
 
-  	if(launchpad) launchpad.send([144,81-y*10+x,color]);
+  	if(launchpad) launchpad.send([144,81-y*10+x,colors[color]]);
   	self.$el.find('[x="'+x+'"][y="'+y+'"]').css({'background':hex[color]});
   }
 

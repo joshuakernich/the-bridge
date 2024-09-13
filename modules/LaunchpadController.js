@@ -57,9 +57,17 @@ window.LaunchpadController = function(){
 		for (var output of midiAccess.outputs.values()){
 			
 			if(output.name.includes("Launchpad")){
+
+				let isX = output.name.includes("X");
+
 				launchpad = output;
-				//enter programmer mode
-       			launchpad.send([240,0,32,41,2,13,14,1,247]);
+				
+				// enter programmer mode
+       			// different message depending on type of device
+       			
+       			if(isX) launchpad.send([240,0,32,41,2,12,0,127,247]);
+       			else launchpad.send([240,0,32,41,2,13,14,1,247]);
+       			
 
        			//launchpad.send([144,0,color]);
 			}

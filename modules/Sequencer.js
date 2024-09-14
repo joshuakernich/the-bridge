@@ -44,7 +44,7 @@ window.Sequencer = function(){
 		if(!isOn) return;
 		nBeat++;
 		cBeat = nBeat%8;
-		self.$el.find('seq-c').attr('bg','purple');
+		self.$el.find('seq-c').removeAttr('bg');
 		self.$el.find('seq-c:nth-of-type('+(1+cBeat)+')').attr('bg','yellow');
 
 		redrawLaunchpad();

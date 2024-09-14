@@ -64,12 +64,12 @@ window.LaunchpadController = function(){
 				
 				// enter programmer mode
        			// different message depending on type of device
-       			
+
        			if(isX) launchpad.send([240,0,32,41,2,12,0,127,247]);
        			else launchpad.send([240,0,32,41,2,13,14,1,247]);
        			
 
-       			//launchpad.send([144,0,color]);
+       			$('h1').text(output.name);
 			}
 		}
 

@@ -161,6 +161,7 @@
 			//let os = new OSBox('yellow','ENGINEERING','./birds/engineering-duck.svg');
 			let os = new OSBox('yellow','ENGINEERING','./img/wireframe-top-side.png');
 
+
 			for(var i=0; i<toys.length; i++) os.addToy(i,toys[i]);
 
 			let osRight = new OSBox('purple');
@@ -399,12 +400,24 @@
 			margin: calc(var(--grid)/2);
 		}
 
+		midi-message{
+			display: block;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			color: white;
+			text-transform: uppercase;
+			padding: 20px;
+		}
+
 	</style>
 	<title></title>
 </head>
 <body>
+	
 	<container>
 		<osstream></osstream>
 	</container>
+	<midi-message></midi-message>
 </body>
 </html>

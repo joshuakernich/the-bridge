@@ -3,6 +3,7 @@ window.LaunchpadController = function(){
 	let launchpad;
 	let self = this;
 	let listeners = [];
+	let isX = false;
 
 	let hex = {
 		red:'red',
@@ -50,15 +51,23 @@ window.LaunchpadController = function(){
 		console.log(midiAccess);
 	}
 
-	function onMIDISuccess(midiAccess,b) {
+	let midiAccess;
+	function onMIDISuccess(access,b) {
 
+		midiAccess = access;
+        midiAccess.onstatechange = reviseMidi;
 
-		//console.log(midiAccess.outputs.values());
+        reviseMidi();
+	}
+
+	function reviseMidi() {
+		
+		launchpad = undefined;
 		for (var output of midiAccess.outputs.values()){
 			
 			if(output.name.includes("Launchpad")){
 
-				let isX = output.name.includes("X");
+				isX = output.name.includes("X");
 
 				launchpad = output;
 				
@@ -68,8 +77,7 @@ window.LaunchpadController = function(){
        			if(isX) launchpad.send([240,0,32,41,2,12,0,127,247]);
        			else launchpad.send([240,0,32,41,2,13,14,1,247]);
        			
-
-       			$('h1').text(output.name);
+       			
 			}
 		}
 
@@ -78,7 +86,9 @@ window.LaunchpadController = function(){
 				input.onmidimessage = onLaunchpadMessage;
 			}
         }
-  }
+
+        $('midi-message').text(launchpad?launchpad.name:'no launchpad');
+	}
 
   let alpha = 'ABCDEFGHI';
 
@@ -134,12 +144,30 @@ window.LaunchpadController = function(){
   	}
   }
 
+  self.setXYRGBA = function(x,y,r,g,b,a){
+
+  	map[y][x] = [r,g,b,a];
+
+  	let id = 81-y*10+x;
+  	if(launchpad) launchpad.send([
+  		240,0,32,41,2,isX?12:13,3,
+  		3,id,r*a,g*a,b*a,
+  		247]);
+  }
+
 
   self.setXY = function(x,y,color){
   	map[y][x] = color;
 
-  	if(launchpad) launchpad.send([144,81-y*10+x,colors[color]]);
-  	self.$el.find('[x="'+x+'"][y="'+y+'"]').css({'background':hex[color]});
+  	if(typeof(color)=='string') color = colors[color];
+
+  	let id = 81-y*10+x;
+  	if(launchpad) launchpad.send([144,id,color]);
+
+ 
+
+  	
+  	//self.$el.find('[x="'+x+'"][y="'+y+'"]').css({'background':hex[color]});
   }
 
   self.set = function(coord,color){

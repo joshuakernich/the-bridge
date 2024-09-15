@@ -23,9 +23,15 @@ window.Sequencer = function(){
 	for(var r = 0; r < 8; r++){
 		let $r = $('<seq-r>').appendTo(self.$el);
 		for(var c = 0; c < 8; c++){
-			$('<seq-c>').appendTo($r).attr('c',c).attr('r',r);
+			 $('<seq-c>').appendTo($r).attr('c',c).attr('r',r);
+
+			
 		}
 	}
+
+	let $svg = $(`<svg preserveAspectRatio=none height=800% width=100% viewBox='-1.5 0 3 8'><path d='M-1,0 L2,32'/></svg>`);
+
+	$svg.find('path').attr('d','M0,0 L0,8');
 
 	function redrawLaunchpad(){
 		//Paint all of it
@@ -36,21 +42,49 @@ window.Sequencer = function(){
 		}
 	}
 
-
+	let fps = 30;
 	let map = [];
 	let nBeat = -1;
 	let cBeat;
-	function tick(){
+	let intensity = 1;
+	function step(){
 		if(!isOn) return;
 		nBeat++;
 		cBeat = nBeat%8;
+		intensity = 0.5;
 		self.$el.find('seq-c').removeAttr('bg');
-		self.$el.find('seq-c:nth-of-type('+(1+cBeat)+')').attr('bg','yellow');
+		//self.$el.find('seq-c:nth-of-type('+(1+cBeat)+')').attr('bg','yellow');
+
+		$svg.appendTo(self.$el.find(`seq-c[c=${cBeat}]`).last());
 
 		redrawLaunchpad();
 
 		let pitch = pitchLibrary[ 8-map[nBeat%8]]
 		if(pitch) synth.triggerAttackRelease(pitch, 0.5);
+	}
+
+	let nTick = 0;
+	function tick(){
+		let d = '';
+
+		intensity *= 0.9;
+		
+		nTick++;
+		
+
+		let m = intensity;
+		for(var i=0; i<8; i+= 0.05){
+
+			let iFloor = Math.floor(i);
+
+			let m = (map[cBeat]==iFloor)?6:2;
+			let int = (map[cBeat]==iFloor)?1:intensity;
+
+			d += (i==0?'M':'L')+(Math.sin((i-(nTick/fps))*Math.PI*m)*int)+','+i+' ';
+		}
+
+		
+		$svg.find('path').attr('d',d);
 	}
 
 	self.$el.find('seq-c').click(function(){
@@ -72,6 +106,8 @@ window.Sequencer = function(){
 		self.$el.find('seq-c[c='+x+'][r='+y+']').click();
 	})
 
-	setInterval(tick,timePerBeat*1000);
+	setInterval(step,timePerBeat*1000);
+
 	
+	setInterval(tick,1000/fps);
 }

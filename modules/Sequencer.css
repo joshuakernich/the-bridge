@@ -11,7 +11,7 @@ seq-r{
 seq-c{
 	width: var(--grid);
 	height: var(--grid);
-	border: 2px solid black;
+	
 	background: black;
 	display: inline-block;
 	position: relative;
@@ -21,6 +21,23 @@ seq-c{
 	color:black;
 	cursor: pointer;
 	box-sizing: border-box;
+}
+
+seq-c svg{
+	
+	fill: none;
+	stroke: var(--yellow);
+	stroke-width: 0.05;
+
+	
+	
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	border-top: 1px solid var(--yellow);
+	border-bottom: 1px solid var(--yellow);
+	box-sizing: border-box;
+
 }
 
 /*seq-r:nth-of-type(4) seq-c:nth-of-type(4){ border-bottom-right-radius: 25%; }
@@ -34,5 +51,12 @@ seq.looper seq-c{
 }	
 
 seq-c.selected{
-	background: var(--blue);
+	--s: 10px; /* the size on the corner */
+  
+  border: 1px solid var(--cyan); /* the thickness and color */
+  -webkit-mask:
+    conic-gradient(at var(--s) var(--s),#0000 75%,#000 0)
+    0 0/calc(100% - var(--s)) calc(100% - var(--s)),
+    linear-gradient(#000 0 0) content-box;
 }
+

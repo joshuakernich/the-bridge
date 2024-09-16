@@ -29,7 +29,7 @@ window.Sequencer = function(){
 		}
 	}
 
-	let $svg = $(`<svg preserveAspectRatio=none height=800% width=100% viewBox='-1.5 0 3 8'><path d='M-1,0 L2,32'/></svg>`);
+	let $svg = $(`<svg preserveAspectRatio=none height=800% width=100% viewBox='-1.5 0 3 8'><path vector-effect='non-scaling-stroke' d='M-1,0 L2,32'/></svg>`);
 
 	$svg.find('path').attr('d','M0,0 L0,8');
 

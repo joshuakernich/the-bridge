@@ -4,6 +4,8 @@ unscramble{
 	text-align: center;
 	display: block;
 	line-height: var(--grid);
+	
+	padding: var(--grid);
 }
 
 unscramble seq-c{

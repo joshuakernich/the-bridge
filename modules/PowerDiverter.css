@@ -1,16 +1,26 @@
 power{
 	display: block;
 	line-height: 0px;
-	margin: 0px;
+	margin: var(--grid);
 	position: relative;
 	
 	transition: 0.5s transform;
-	
+	/*background: var(--purple-opaque);*/
+	border: none;
+}
+
+power floorplan{
+	display: block;
+}
+
+power floorplan svg path{
+	stroke: var(--purple);
 }
 
 power-row{
 	display: block;
 	white-space: nowrap;
+	border: none;
 }
 
 power-cell{
@@ -21,6 +31,7 @@ power-cell{
 	position: relative;
 	box-sizing: border-box;
 	line-height: 50px;
+	border: none;
 }
 
 power-actor{
@@ -42,6 +53,7 @@ power-actor{
 	font-weight: bold;
 	
 	background-size: cover;
+	border: none;
 	
 }
 
@@ -53,7 +65,6 @@ power-actor.selected:after{
 	left: -25%;
 	top:-25%;
 	box-sizing: border-box;
-	/*border: 2px dashed var(--yellow);*/
 	border-radius: 100px;
 }
 
@@ -61,40 +72,63 @@ power-actor object{
 	width: 100%;
 	height: 100%;
 	pointer-events: none;
-	
+	border: none;
 }
-
 
 power svg{
 	position: absolute;
 	top: 0px;
 	left: 0px;
-	background: var(--cyan-opaque);
+	border: none;
 }
 
-power path{
+power .power-network path{
 	stroke: var(--cyan);
 	stroke-width: 2;
 	fill: none;
 }
 
-power path.hull:nth-of-type(1){
+power .power-network path.hull:nth-of-type(1){
 	stroke:var(--purple);
 	fill: black;
 	stroke-width: 12;
 }
 
-power path.hull:nth-of-type(2){
+power .power-network path.hull:nth-of-type(2){
 	stroke:black;
 	stroke-width: 9;
 	
 }
 
-power path.frame{
+power .power-network path.frame{
 	stroke-width: 2;
 	stroke:var(--yellow);
 }
 
 power-cell[type='*']{
+	
+}
 
+power-cell[type='o']:before{
+	content: " ";
+	background: var(--purple);
+	width: 5%;
+	height: 5%;
+	
+	border-radius: 100%;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	box-sizing: border-box;
+	
+	transform: translate(-50%,-50%);
+	transition: all 0.2s;
+}
+
+power-cell[type='o'].powered:before{
+	border: 2px solid var(--cyan);
+
+	width: 15%;
+	height: 15%;
+	opacity: 1;
 }

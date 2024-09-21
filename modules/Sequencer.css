@@ -1,6 +1,8 @@
 seq{
 	
 	display: block;
+	
+	padding: var(--grid);
 }
 
 seq-r{

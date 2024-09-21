@@ -7,16 +7,20 @@
 	<script type="text/javascript" src="./Tone.js"></script>
 
 	<script type="text/javascript" src="./modules/Jin.js"></script>
+
 	<script type="text/javascript" src="./modules/FrequencyChart.js"></script>
 	<script type="text/javascript" src="./modules/PitchRecorder.js"></script>
+	<script type="text/javascript" src="./floorplans/FloorplanSVG.js"></script>
 	<script type="text/javascript" src="./modules/PowerDiverter.js"></script>
 	<script type="text/javascript" src="./modules/Sequencer.js"></script>
 	<script type="text/javascript" src="./modules/Unscramble.js"></script>
+	<script type="text/javascript" src="./modules/BrokenChat.js"></script>
 	
 	<link rel="stylesheet" href="./modules/PitchRecorder.css">
 	<link rel="stylesheet" href="./modules/PowerDiverter.css">
 	<link rel="stylesheet" href="./modules/Sequencer.css">
 	<link rel="stylesheet" href="./modules/Unscramble.css">
+	<link rel="stylesheet" href="./modules/BrokenChat.css">
 
 	<script type="text/javascript" src="./modules/LaunchpadController.js"></script>
 
@@ -28,10 +32,11 @@
 			let colors = ['yellow','cyan','purple','pink'];
 
 			let toys = [
-				{ title:"DIVERT POWER", toy:new PowerDiverter() },
-				{ title:"SYNTH SIGNAL", toy:new Sequencer() },
-				{ title:"VOCAL SIGNAL", toy:new PitchRecorder() },
-				{ title:"DECODER", toy:new Unscramble() },
+				{ title:"DIVERT POWER", color:'yellow', toy:new PowerDiverter() },
+				{ title:"DECODER", color:'pink', toy:new Unscramble() },
+				{ title:"SYNTH SIGNAL", color:'pink', toy:new Sequencer() },
+				{ title:"VOCAL SIGNAL", color:'blue', toy:new PitchRecorder() },
+				{ title:"TRANSLATOR", color:'blue', toy:new BrokenChat() },
 
 			]
 
@@ -129,18 +134,17 @@
 				}
 
 				let toys = [];
-				self.addToy = function(iColor,toy){
+				self.addToy = function(toy){
 					
-					if(!toys.length){
-						$(`[r=${2+toys.length*2}][c=0]`).attr('bordered','top');
-					}
+					$(`[r=${2+toys.length}][c=0]`).attr('bordered','top');
+					
 
-					$(`[r=${2+toys.length*2}][c=0]`).removeAttr('paint').attr('bg',colors[iColor]).attr('toy',i).click(onLaunchToy);
-					$(`[r=${2+toys.length*2+1}][c=0]`).removeAttr('paint').attr('bg',colors[iColor]).attr('bordered','bottom').text(toy.title).attr('toy',i).click(onLaunchToy);
+					//$(`[r=${2+toys.length*2}][c=0]`).removeAttr('paint').attr('bg',colors[iColor]).attr('toy',i).click(onLaunchToy);
+					$(`[r=${2+toys.length}][c=0]`).removeAttr('paint').attr('bg',toy.color).attr('bordered','top').text(toy.title).attr('toy',i).click(onLaunchToy);
 					toys.push(toy);
 
 
-
+					$(`[r=${2+toys.length}][c=0]`).attr('bordered','top');
 				}
 
 				self.reskin = function(title,color){
@@ -150,7 +154,7 @@
 
 				self.reskin(header,color);
 
-				self.$toy = $('<toy>').appendTo($el.find('[r=2][c=2]'));
+				self.$toy = $('<toy>').appendTo($el.find('[r=1][c=1]'));
 
 				if(icon) $('<osicon>').appendTo(self.$toy).css('background-image','url('+icon+')');
 
@@ -162,7 +166,7 @@
 			let os = new OSBox('yellow','ENGINEERING','./img/wireframe-top-side.png');
 
 
-			for(var i=0; i<toys.length; i++) os.addToy(i,toys[i]);
+			for(var i=0; i<toys.length; i++) os.addToy(toys[i]);
 
 			let osRight = new OSBox('purple');
 
@@ -176,6 +180,8 @@
 				$('container').css('transform','scale('+scale+')');
 
 			},100);*/
+
+
 
 		})
 	</script>
@@ -376,16 +382,17 @@
 			top: 0px;
 			left: 0px;
 			z-index: 1;
-			width: calc(var(--grid) * 8);
-			height: calc(var(--grid) * 8);
+			width: calc(var(--grid) * 10);
+			height: calc(var(--grid) * 10);
 			overflow: hidden;
+			border-radius: var(--grid);
 		}
 
 		toy osicon{
 			
 			/*background: url('./birds/flamingo.svg');*/
 			background-position: center;
-			background-size: 100%;
+			background-size: 90%;
 			background-repeat: no-repeat;
 			position: absolute;
 			top: 0px;

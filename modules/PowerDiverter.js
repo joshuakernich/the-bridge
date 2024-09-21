@@ -15,10 +15,12 @@ window.PowerDiverter = function(){
 		
 	}
 
+	let $svgMap = $('<floorplan>'+window.FloorplanSVG+'</floorplan>').appendTo(self.$el);
+
+	
+
 	let $svg = $(`
-		<svg viewbox="-0.5 -0.5 16 16" width=800 height=800>
-			<path class="hull" vector-effect="non-scaling-stroke" d="M0,0 L7,7" />
-			<path class="hull" vector-effect="non-scaling-stroke" d="M0,0 L7,7" />
+		<svg class='power-network' viewbox="-0.5 -0.5 16 16" width=800 height=800>
 			<path class="laser" vector-effect="non-scaling-stroke" d="M0,0 L7,7"/>
 			<g class="frame-group" >
 			    <path class="frame" transform="translate(-0.5 -0.5)"vector-effect="non-scaling-stroke" d="M0,0.5 L0,0 L0.5,0 M7.5,0 L8,0 L8,0.5 M 8,7.5 L 8,8 L 7.5,8 M 0,7.5 L 0,8 L 0.5,8"/>
@@ -38,37 +40,40 @@ window.PowerDiverter = function(){
 	]
 
 	let map = [
-		'    ********    ',
-		'   *        *   ',
-		'   *        *   ',
-		'   *        *   ',
-		'    *      *    ',
-		' **  *    *  ** ',
-		'*  * *    * *  *',
-		'*  * *    * *  *',
-		'*   *      *   *',
-		'*              *',
-		'*              *',
-		'*   *      *   *',
-		'*  * *    * *  *',
-		' **  ******  ** ',
-		'                ',
+		'****************',
+		'*******  *******',
+		'*****    *******',
+		'****     *******',
+		'***      *******',
+		'***       ******',
+		'***        *****',
+		'***        *****',
+		'**             *',
+		'***        *****',
+		'***        *****',
+		'***       ******',
+		'***      *******',
+		'****     *******',
+		'*****    *******',
+		'******   *******',
+		'****************',
 	]
 
 
 	let levels = 
 	[
+		
 		{
-			x:4,y:7,
+			x:5,y:7,
 			actors:[
 				{type:'power',dir:0,x:2,y:2},
 				{type:'system',subtype:'engine',dir:0,x:2,y:6},
 			]
 		},
 		{
-			x:4,y:7,
+			x:3,y:7,
 			actors:[
-				{type:'power',dir:0,x:5,y:1},
+				{type:'power',dir:0,x:5,y:2},
 				{type:'system',subtype:'engine',dir:0,x:5,y:6},
 				{type:'power',dir:0,x:6,y:4},
 				{type:'system',subtype:'oxygen',dir:0,x:2,y:4},
@@ -83,7 +88,7 @@ window.PowerDiverter = function(){
 			],
 		},
 		{
-			x:5,y:8,
+			x:3,y:5,
 			actors:[
 				{type:'power',dir:0,x:7,y:1},
 				{type:'power',dir:0,x:1,y:4},
@@ -94,7 +99,7 @@ window.PowerDiverter = function(){
 			],
 		},
 		{
-			x:3,y:6,
+			x:3,y:5,
 			actors:[
 				{type:'power',dir:0,x:0,y:4},
 				{type:'damage',dir:0,x:3,y:3},
@@ -106,7 +111,7 @@ window.PowerDiverter = function(){
 			],
 		},
 		{
-			x:4,y:6,
+			x:4,y:4,
 			actors:[
 				{type:'power',dir:0,x:2,y:0},
 				{type:'power',dir:0,x:3,y:1},
@@ -129,15 +134,14 @@ window.PowerDiverter = function(){
 
 		let tip = path[path.length-1];
 		let next = undefined;
+		let prev = undefined;
 		dir = (dir+4)%dirs.length;
-
 
 		do{
 			dir = (dir+1)%dirs.length;
 			next = map[tip.y+dirs[dir].y]?map[tip.y+dirs[dir].y][tip.x+dirs[dir].x]:undefined;
 		}
 		while( next != '*')
-
 		
 		tip = {x:tip.x + dirs[dir].x, y:tip.y + dirs[dir].y};
 		path.push(tip);
@@ -150,22 +154,23 @@ window.PowerDiverter = function(){
 		let $r = $('<power-row>').appendTo(self.$el);
 
 		for(var c=0; c<map[r].length; c++){
-			let $c = $('<power-cell>').appendTo($r).attr('x',c).attr('y',r).attr('type',map[r][c]);
+			let $c = $('<power-cell>').appendTo($r).attr('x',c).attr('y',r).attr('type',map[r][c]=='*'?'*':'o');
 
-			if(!hull.length && map[r][c] == '*'){
+
+			/*if(!hull.length && map[r][c] == '*'){
 
 				hull.push({x:c,y:r});
 				connect(hull,4);
-			}
+			}*/
 		}
 	}
 
-	let d = '';
+	/*let d = '';
 	for(var n in hull){
 		d += (n==0?'M':'L') + hull[n].x + ',' + hull[n].y;
 	}
 
-	$svg.find('.hull').attr('d',d+'Z');
+	$svg.find('.hull').attr('d',d+'Z');*/
 
 	
 
@@ -218,15 +223,22 @@ window.PowerDiverter = function(){
 								if( actors[b].type == 'system' || actors[b].type == 'diverter') actors[b].powered = true;
 							}
 						} else if( !map[level.y+y] || !map[level.y+y][level.x+x] || map[level.y+y][level.x+x] == '*'){
+							
+							if(!hit) path.pop();
 							hit = true;
 						}
 					}
 					
 				}
 				while(!hit)
+
+					console.log(path);
+
 				paths.push(path);
 			}
 		}
+
+
 
 		//draw the hull
 		/*for(var r=0; r<8; r++){
@@ -240,11 +252,15 @@ window.PowerDiverter = function(){
 
 		window.launchpad.clear();
 
+		self.$el.find('power-cell').removeClass('powered');
+
 		let d = '';
 		for(var n in paths){
 			for(var p in paths[n]){
 				d += (p==0?'M':'L') + (level.x + paths[n][p].x) + ',' + (level.y + paths[n][p].y);
 				
+				self.$el.find('power-cell[x="'+(level.x+paths[n][p].x)+'"][y="'+(level.y+paths[n][p].y)+'"]').addClass('powered');
+
 				if( paths[n][p].x >= 0 && 
 					paths[n][p].x < 8 && 
 					paths[n][p].y >= 0 && 
@@ -281,7 +297,7 @@ window.PowerDiverter = function(){
 			setTimeout(doNextLevel,700);
 		}
 
-		if(window.synth) window.synth.triggerAttack(tones[countPower+(nRedraw%2)+(isAllPowered?2:0)]);
+		//if(window.synth) window.synth.triggerAttack(tones[countPower+(nRedraw%2)+(isAllPowered?2:0)]);
 		if(isAllPowered) window.synth.triggerAttackRelease(tones[countPower+(nRedraw%2)+4], 0.1, Tone.now()+0.2);
 	}
 

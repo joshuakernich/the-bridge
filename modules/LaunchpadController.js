@@ -68,6 +68,7 @@ window.LaunchpadController = function(){
 			if(output.name.includes("Launchpad")){
 
 				isX = output.name.includes("X");
+				isRotate = isX;
 
 				launchpad = output;
 				
@@ -104,6 +105,8 @@ window.LaunchpadController = function(){
 
   	if(y==-1) return ''+x;
   	if(x==8) return alpha[y];
+
+  	if(isRotate) [x, y] = [y, x];
   	
  	return {x:x,y:y};
   }
@@ -153,6 +156,8 @@ window.LaunchpadController = function(){
   		240,0,32,41,2,isX?12:13,3,
   		3,id,r*a,g*a,b*a,
   		247]);
+
+  	self.$el.find('[x="'+x+'"][y="'+y+'"]').css({'background':`rgba(${r},${g},${b},${a}})`});
   }
 
 
@@ -164,10 +169,8 @@ window.LaunchpadController = function(){
   	let id = 81-y*10+x;
   	if(launchpad) launchpad.send([144,id,color]);
 
- 
-
   	
-  	//self.$el.find('[x="'+x+'"][y="'+y+'"]').css({'background':hex[color]});
+  	self.$el.find('[x="'+x+'"][y="'+y+'"]').css({'background':hex[color]});
   }
 
   self.set = function(coord,color){

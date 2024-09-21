@@ -4,8 +4,9 @@ unscramble{
 	text-align: center;
 	display: block;
 	line-height: var(--grid);
-	
-	padding: var(--grid);
+
+	text-align: center;
+	margin-top: var(--grid);
 }
 
 unscramble seq-c{
@@ -19,15 +20,18 @@ unscramble h2{
 	height: var(--grid);
 	padding: 0px;
 	margin: 0px;
-	text-align: left;
 }
 
 unscramble button{
-	display: block;
+	display: inline-block;
 	width: 100%;
 	padding: 0px;
 	margin: 0px;
 	font: inherit;
+	border: none;
+	background: var(--cyan);
+	border-top: 6px solid black;
+	width: 400px;
 
-	border: 2px solid black;
+
 }

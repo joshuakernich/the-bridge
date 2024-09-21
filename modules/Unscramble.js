@@ -83,7 +83,7 @@ window.Unscramble = function(){
 		group = level.pattern.split(' ');
 		for(let n=0; n<messageTarget[0].length/level.patternWidth; n++) randomScramble(n*level.patternWidth,0);
 
-		$('<button>').appendTo(self.$el).text('VERIFY');
+		$('<button>').appendTo(self.$el).text('VERIFY').click(validate);
 	}
 	doLevel();
 

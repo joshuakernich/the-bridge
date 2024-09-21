@@ -11,6 +11,11 @@ power{
 
 power floorplan{
 	display: block;
+
+}
+
+power floorplan svg{
+	background: var(--purple-opaque);
 }
 
 power floorplan svg path{

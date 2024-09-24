@@ -42,19 +42,19 @@ window.PowerDiverter = function(){
 	let map = [
 		'****************',
 		'*******  *******',
-		'*****    *******',
+		'****     *******',
 		'***      *******',
-		'***      *******',
-		'***       ******',
+		'**        ******',
+		'**         *****',
 		'**         *****',
 		'**         *****',
 		'**             *',
 		'**         *****',
 		'**         *****',
-		'***       ******',
+		'**         *****',
+		'**        ******',
 		'***      *******',
-		'***      *******',
-		'*****    *******',
+		'****     *******',
 		'******   *******',
 		'****************',
 	]
@@ -67,7 +67,7 @@ window.PowerDiverter = function(){
 			x:5,y:7,
 			actors:[
 				{type:'power',dir:0,x:2,y:2},
-				{type:'system',subtype:'engine',dir:0,x:2,y:6},
+				{type:'system',subtype:'engine',dir:0,x:2,y:6, link:'.thruster'},
 			]
 		},
 		{
@@ -280,7 +280,10 @@ window.PowerDiverter = function(){
 			let icon = (actors[a].subtype?actors[a].subtype:actors[a].type) + (actors[a].powered?'-powered':'');
 			actors[a].$el.css('background-image','url(./icon-'+icon+'.svg)')
 
-			if(actors[a].powered) countPower++;
+			if(actors[a].powered){
+				if( actors[a].linked ) $svgMap.find(actors[a].linked).addClass('powered');
+				countPower++;
+			}
 
 			if (actors[a].type == 'system' && actors[a].powered == false) isAllPowered = false;
 
@@ -297,7 +300,7 @@ window.PowerDiverter = function(){
 			setTimeout(doNextLevel,700);
 		}
 
-		if(window.synth) window.synth.triggerAttack(tones[countPower+(nRedraw%2)+(isAllPowered?2:0)]);
+		//if(window.synth) window.synth.triggerAttack(tones[countPower+(nRedraw%2)+(isAllPowered?2:0)]);
 		if(isAllPowered) window.synth.triggerAttackRelease(tones[countPower+(nRedraw%2)+4], 0.1, Tone.now()+0.2);
 	}
 

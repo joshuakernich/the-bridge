@@ -4,6 +4,7 @@ window.LaunchpadController = function(){
 	let self = this;
 	let listeners = [];
 	let isX = false;
+	let isRotate = false;
 
 	let hex = {
 		red:'red',
@@ -68,7 +69,7 @@ window.LaunchpadController = function(){
 			if(output.name.includes("Launchpad")){
 
 				isX = output.name.includes("X");
-				isRotate = isX;
+				//isRotate = isX;
 
 				launchpad = output;
 				

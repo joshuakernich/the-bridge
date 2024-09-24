@@ -16,10 +16,18 @@ power floorplan{
 
 power floorplan svg{
 	background: var(--purple-opaque);
+	fill: var(--black);
+	stroke: var(--purple);
 }
 
 power floorplan svg path{
-	stroke: var(--purple);
+	fill: inherit;
+	stroke: inherit;
+}
+
+power floorplan svg use.powered{
+	stroke: var(--cyan);
+	fill: var(--blue);
 }
 
 power-row{

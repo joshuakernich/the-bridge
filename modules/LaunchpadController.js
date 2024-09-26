@@ -4,7 +4,7 @@ window.LaunchpadController = function(){
 	let self = this;
 	let listeners = [];
 	let isX = false;
-	let isRotate = false;
+	let isRotate = true;
 
 	let hex = {
 		red:'red',
@@ -35,14 +35,14 @@ window.LaunchpadController = function(){
 
 	let map = [];
 
-	self.$el = $('<table class="launchpadsim">');
+	self.$el = $('<table class="launchpadsim">').appendTo('body').css({'transform':'rotate(-90deg)'});
 
 	for(var i=0; i<8; i++){
 		let $tr = $('<tr>').appendTo(self.$el);
 		map[i] = [];
 		for(var j=0; j<8; j++){
 			map[i][j] = 0;
-			let $td = $('<td>').appendTo($tr).attr('x',j).attr('y',i);
+			let $td = $('<td>').appendTo($tr).attr('x',j).attr('y',i).click(onSimulateLaunchpad);
 		}
 	}
 
@@ -107,7 +107,7 @@ window.LaunchpadController = function(){
   	if(y==-1) return ''+x;
   	if(x==8) return alpha[y];
 
-  	if(isRotate) [x, y] = [y, x];
+  	if(isRotate) y = [7-x, x = y][0];
   	
  	return {x:x,y:y};
   }
@@ -119,12 +119,22 @@ window.LaunchpadController = function(){
   	if(coord.length==2){
   		let x = parseInt(coord[0]);
   		let y = parseInt(coord[1]);
+  		if(isRotate) y = [x, x = y][0]; // fancy code to swap two variables
   		return [144,81-y*10+x,color];
   	} else{
   		let n = alpha.indexOf(coord);
   		if(n == -1) return [144,99-parseInt(coord)*10,color];
   		else return [144,91+n,color];
   	}
+  }
+
+  function onSimulateLaunchpad(){
+  	let $td = $(this);
+  	let x = parseInt($td.attr('x'));
+  	let y = parseInt($td.attr('y'));
+
+  	let id = 81-y*10+x;
+  	onLaunchpadMessage({data:[144,id,5]})
   }
 
   function onLaunchpadMessage(msg){
@@ -146,9 +156,13 @@ window.LaunchpadController = function(){
   			}
   		}
   	}
+
+  	self.$el.find('td').css({'background':`#222`});
   }
 
   self.setXYRGBA = function(x,y,r,g,b,a){
+
+  	if(isRotate) y = [x, x = 7-y][0]; // fancy code to swap two variables
 
   	map[y][x] = [r,g,b,a];
 
@@ -162,25 +176,28 @@ window.LaunchpadController = function(){
   }
 
 
-  self.setXY = function(x,y,color){
-  	map[y][x] = color;
+  self.setXY = function(x,y,colorName){
 
-  	if(typeof(color)=='string') color = colors[color];
+  	if(isRotate) y = [x, x = 7-y][0]; // fancy code to swap two variables
+  	
+  	map[y][x] = colorName;
+
+  	let color = colors[colorName];
 
   	let id = 81-y*10+x;
   	if(launchpad) launchpad.send([144,id,color]);
-
   	
-  	self.$el.find('[x="'+x+'"][y="'+y+'"]').css({'background':hex[color]});
+  	
+  	self.$el.find('[x="'+x+'"][y="'+y+'"]').css({'background':hex[colorName]});
   }
 
   self.set = function(coord,color){
   	let d = toData(coord,color);
+
+  	if(isRotate) coord.y = [coord.x, coord.x = 7-coord.y][0]; // fancy code to swap two variables
   	
   	if(d[1]<0||d[1]>99) return; //limits of the Launchpad
   	if(launchpad) launchpad.send(d);
-
-  	console.log(coord,'[x="'+coord[0]+'"][y="'+coord[1]+'"]',self.$el.find('[x="'+coord[0]+'"][y="'+coord[1]+'"]'));
   	self.$el.find('[x="'+coord[0]+'"][y="'+coord[1]+'"]').css({'background':hex[color]});
   }
 

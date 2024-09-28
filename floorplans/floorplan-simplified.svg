@@ -1,5 +1,4 @@
 
-window.FloorplanSVG = `
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="950px" height="850px" viewBox="0 0 950 850">
 <defs>
 <g id="Wireframe_Flat_0_Layer5_0_FILL">
@@ -368,5 +367,3 @@ L 10.3 -24.95 -45.4 -24.95 -60 -10.3 -60 10.4 -45.35 24.95 10.35 24.95 24.95 10.
 </g>
 </g>
 </svg>
-
-`

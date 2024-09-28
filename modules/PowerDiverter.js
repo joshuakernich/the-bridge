@@ -15,17 +15,25 @@ window.PowerDiverter = function(){
 		
 	}
 
-	let $svgMap = $('<floorplan>'+window.FloorplanSVG+'</floorplan>').appendTo(self.$el);
+	let $scroller = $('<scroller>').appendTo(self.$el);
+	let $msg = $('<msg>').appendTo(self.$el).text('GRID');
+	let $svgMap = $('<floorplan>'+window.FloorplanSVG+'</floorplan>').appendTo($scroller);
 
 	
 
 	let $svg = $(`
 		<svg class='power-network' viewbox="-0.5 -0.5 16 16" width=800 height=800>
 			<path class="laser" vector-effect="non-scaling-stroke" d="M0,0 L7,7"/>
+		</svg>`).appendTo($scroller);
+
+	$(`
+		<svg class='power-network power-frame' viewbox="-0.5 -0.5 16 16" width=800 height=800>
 			<g class="frame-group" >
 			    <path class="frame" transform="translate(-0.5 -0.5)"vector-effect="non-scaling-stroke" d="M0,0.5 L0,0 L0.5,0 M7.5,0 L8,0 L8,0.5 M 8,7.5 L 8,8 L 7.5,8 M 0,7.5 L 0,8 L 0.5,8"/>
 			 </g>
 		</svg>`).appendTo(self.$el);
+
+
 
 	//from up, clockwise at 45 degree increments
 	let dirs = [
@@ -151,7 +159,7 @@ window.PowerDiverter = function(){
 
 	let hull = [];
 	for(var r=0; r<map.length; r++){
-		let $r = $('<power-row>').appendTo(self.$el);
+		let $r = $('<power-row>').appendTo($scroller);
 
 		for(var c=0; c<map[r].length; c++){
 			let $c = $('<power-cell>').appendTo($r).attr('x',c).attr('y',r).attr('type',map[r][c]=='*'?'*':'o');
@@ -282,8 +290,8 @@ window.PowerDiverter = function(){
 
 		$svg.find('g').attr('transform','translate('+level.x+' '+level.y+')');
 
-		
-		self.$el.css('transform','translate('+(-level.x*50)+'px,'+(-level.y*50)+'px)');
+		$msg.text(`GRID ${level.x}-${level.y}`);
+		$scroller.css('transform','translate('+(-level.x*50)+'px,'+(-level.y*50)+'px)');
 
 		for(var a in actors){
 

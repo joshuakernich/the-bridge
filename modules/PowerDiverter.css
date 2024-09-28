@@ -3,10 +3,26 @@ power{
 	line-height: 0px;
 	margin: calc( var(--grid) * 2);
 	position: relative;
-	
-	transition: 0.5s transform;
-	/*background: var(--purple-opaque);*/
 	border: none;
+}
+
+power msg{
+	display: block;
+	background: transparent;
+	color: var(--yellow);
+	position: absolute;
+	top: calc( var(--grid)*8 );
+	left: 0px;
+	right: 0px;
+	line-height: var(--grid);
+	font-size: calc( var(--grid)/2 );
+	z-index: 1;
+}
+
+power scroller{
+	display: block;
+	position: relative;
+	transition: 0.5s transform;
 }
 
 power floorplan{
@@ -95,6 +111,10 @@ power svg{
 	top: 0px;
 	left: 0px;
 	border: none;
+}
+
+power .power-frame{
+	pointer-events:  none;
 }
 
 power .power-network path{

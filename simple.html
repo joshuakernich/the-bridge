@@ -27,6 +27,11 @@
 	<script type="text/javascript">
 		$(function () {
 
+
+			/*let $svgMap = $('<power style="margin:0px;padding:0px; "><floorplan>'+window.FloorplanSVG+'</floorplan></power>').appendTo('body');
+
+			return;*/
+
 			window.launchpad = new LaunchpadController();
 
 			let colors = ['yellow','cyan','purple','pink'];
@@ -43,8 +48,8 @@
 			let OSBox = function(color,header,icon){
 				
 				let self = this;
-				let w = 12;
-				let h = 12;
+				let w = 14;
+				let h = 14;
 
 				let $el = $('<osbox>').appendTo('osstream');
 				let $t = $('<table>').appendTo($el);
@@ -283,7 +288,7 @@
 			top: 50vh;
 		
 			transform: translate(-50%, -50%);
-			width: calc(var(--grid)*15*3);
+			width: calc(var(--grid)*17*3);
 
 		}
 
@@ -401,8 +406,8 @@
 			top: 0px;
 			left: 0px;
 			z-index: 1;
-			width: calc(var(--grid) * 10);
-			height: calc(var(--grid) * 10);
+			width: calc(var(--grid) * 12);
+			height: calc(var(--grid) * 12);
 			overflow: hidden;
 			border-radius: var(--grid);
 		}

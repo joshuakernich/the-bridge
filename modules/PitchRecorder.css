@@ -3,7 +3,7 @@ pitchrecorder{
 	position: relative;
 	display: inline-block;
 	
-	padding: var(--grid);
+	padding: calc( var(--grid) * 2);
 }
 
 pitchrecorder.disabled:after{

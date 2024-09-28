@@ -2,7 +2,7 @@ seq{
 	
 	display: block;
 	
-	padding: var(--grid);
+	padding: calc( var(--grid) * 2);
 }
 
 seq-r{

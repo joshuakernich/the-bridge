@@ -155,32 +155,8 @@ window.PowerDiverter = function(){
 
 		for(var c=0; c<map[r].length; c++){
 			let $c = $('<power-cell>').appendTo($r).attr('x',c).attr('y',r).attr('type',map[r][c]=='*'?'*':'o');
-
-
-			/*if(!hull.length && map[r][c] == '*'){
-
-				hull.push({x:c,y:r});
-				connect(hull,4);
-			}*/
 		}
 	}
-
-	/*let d = '';
-	for(var n in hull){
-		d += (n==0?'M':'L') + hull[n].x + ',' + hull[n].y;
-	}
-
-	$svg.find('.hull').attr('d',d+'Z');*/
-
-	
-
-	/*for(var r=0; r<8; r++){
-		let $r = $('<power-row>').appendTo(self.$el);
-		for(var c=0; c<8; c++){
-			let $c = $('<power-cell>').appendTo($r).attr('x',c).attr('y',r);
-		}
-	}*/
-
 	
 	let nRedraw = 0;
 	let tones = ['C2','D2','E2','F2','G2','A2','C3','D3','E3','F3','G3','A3','C4','D4','E4','F4','G4','A4','C5','D5','E5','F5','G5','A5','C6'];
@@ -237,18 +213,6 @@ window.PowerDiverter = function(){
 				paths.push(path);
 			}
 		}
-
-
-
-		//draw the hull
-		/*for(var r=0; r<8; r++){
-			for(var c=0; c<8; c++){
-
-				let colour = 'off';
-				//if(map[r+level.y] && map[r+level.y][c+level.x] == '*') colour = 'purple';
-				window.launchpad.set(''+c+''+r,colour);
-			}
-		}*/
 
 		window.launchpad.clear();
 

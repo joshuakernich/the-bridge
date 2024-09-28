@@ -1,7 +1,7 @@
 power{
 	display: block;
 	line-height: 0px;
-	margin: var(--grid);
+	margin: calc( var(--grid) * 2);
 	position: relative;
 	
 	transition: 0.5s transform;
@@ -15,14 +15,16 @@ power floorplan{
 }
 
 power floorplan svg{
-	background: var(--purple-opaque);
+	
 	fill: var(--black);
 	stroke: var(--purple);
+	vector-effect: non-scaling-stroke;
 }
 
 power floorplan svg path{
 	fill: inherit;
 	stroke: inherit;
+	vector-effect: inherit;
 }
 
 power floorplan svg use.powered{

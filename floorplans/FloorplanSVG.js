@@ -151,43 +151,51 @@ M 3 15
 L 3 0 -3 0 -3 15 3 15 Z"/>
 </g>
 
-<g id="Wing_flat_0_Layer1_0_FILL">
+<g id="SYSTEM_THRUSTER_0_Layer0_0_FILL">
 <path fill="#FF0000" stroke="none" d="
-M -190 -119
-L -190 -130
-Q -196.2 -130 -200.6 -125.6 -205 -121.2 -205 -115 -205 -108.8 -200.6 -104.4 -196.2 -100 -190 -100
-L -190 -111 -104 -111 -104 -98
-Q -104 -96.35 -102.85 -95.2 -101.65 -94 -100 -94 -98.35 -94 -97.2 -95.2 -96 -96.35 -96 -98
-L -96 -115
-Q -96 -116.65 -97.2 -117.85 -98.35 -119 -100 -119
-L -190 -119
-M 268.5 -199.45
-Q 266.75 -200 265.4 -199.05 264.05 -198.1 263.85 -196.2 263.8 -194.35 264.95 -192.6
-L 325 -106.9 325 -66
-Q 325 -64.35 326.15 -63.2 327.35 -62 329 -62 330.65 -62 331.8 -63.2 333 -64.35 333 -66
-L 333 -108
-Q 333 -109.65 331.8 -110.85
-L 331.9 -110.95 271.5 -197.2
-Q 270.35 -198.95 268.5 -199.45 Z"/>
+M -26.9 -66.4
+Q -28.05 -68.15 -29.9 -68.65 -31.65 -69.2 -33 -68.25 -34.35 -67.3 -34.55 -65.4 -34.6 -63.55 -33.45 -61.8
+L 26.6 23.95 26.6 64.8
+Q 26.6 66.45 27.75 67.6 28.95 68.8 30.6 68.8 32.25 68.8 33.4 67.6 34.6 66.45 34.6 64.8
+L 34.6 22.8
+Q 34.6 21.15 33.4 19.95
+L 33.55 19.9 -26.9 -66.4 Z"/>
+</g>
+
+<g id="SYSTEM_CANNON_0_Layer0_0_FILL">
+<path fill="#FF0000" stroke="none" d="
+M 53.3 -5.85
+Q 52.15 -7 50.5 -7
+L -39.5 -7 -39.5 -18
+Q -45.7 -18 -50.1 -13.6 -54.5 -9.2 -54.5 -3 -54.5 3.2 -50.1 7.6 -45.7 12 -39.5 12
+L -39.5 1 46.5 1 46.5 14
+Q 46.5 15.65 47.65 16.8 48.85 18 50.5 18 52.15 18 53.3 16.8 54.5 15.65 54.5 14
+L 54.5 -3
+Q 54.5 -4.65 53.3 -5.85 Z"/>
 </g>
 
 <g id="Wireframe_Flat_0_Layer4_0_FILL">
 <path fill="#CCCCCC" stroke="none" d="
-M 25 -10.35
-L 10.3 -24.95 -45.4 -24.95 -60 -10.3 -60 10.4 -45.35 24.95 10.35 24.95 24.95 10.3 25 -10.35 Z"/>
+M 25.15 -19.75
+L 18.6 -25 -45 -25
+Q -55.35 -25 -62.65 -17.7 -70 -10.35 -70 0 -70 10.35 -62.65 17.65 -55.35 25 -45 25
+L 18.6 25 25.15 19.8 25.15 -19.75 Z"/>
 </g>
 
-<g id="Wireframe_Flat_0_Layer3_0_FILL">
+<g id="SYSTEM_BRIDGE_0_Layer0_0_FILL">
 <path fill="#FF0000" stroke="none" d="
-M 718.8 -2.85
-Q 717.65 -4 716 -4
-L 434 -4
-Q 432.35 -4 431.15 -2.85 430 -1.65 430 0 430 1.65 431.15 2.8 432.35 4 434 4
-L 716 4
-Q 717.65 4 718.8 2.8 720 1.65 720 0 720 -1.65 718.8 -2.85 Z"/>
+M 7.5 -10.95
+L 7.5 -19.4
+Q 2.35 -18.15 -1.6 -14.15 -7.5 -8.3 -7.5 0 -7.5 8.25 -1.6 14.1
+L -1.6 14.15
+Q 2.4 18.15 7.5 19.4
+L 7.5 10.95
+Q 5.65 10.05 4.1 8.5
+L 4 8.45
+Q 0.5 4.95 0.5 0 0.5 -5 4.05 -8.5 5.6 -10.1 7.5 -10.95 Z"/>
 </g>
 
-<g id="Wireframe_Flat_0_Layer3_1_FILL">
+<g id="SYSTEM_DEFLECTOR_0_Layer0_0_FILL">
 <path fill="#FF0000" stroke="none" d="
 M -100 -65
 Q -101.65 -65 -102.85 -63.85 -104 -62.65 -104 -61
@@ -195,6 +203,16 @@ L -104 61
 Q -104 62.65 -102.85 63.8 -101.65 65 -100 65 -98.35 65 -97.2 63.8 -96 62.65 -96 61
 L -96 -61
 Q -96 -62.65 -97.2 -63.85 -98.35 -65 -100 -65 Z"/>
+</g>
+
+<g id="SYSTEM_STABILISER_0_Layer0_0_FILL">
+<path fill="#FF0000" stroke="none" d="
+M 718.8 -2.85
+Q 717.65 -4 716 -4
+L 434 -4
+Q 432.35 -4 431.15 -2.85 430 -1.65 430 0 430 1.65 431.15 2.8 432.35 4 434 4
+L 716 4
+Q 717.65 4 718.8 2.8 720 1.65 720 0 720 -1.65 718.8 -2.85 Z"/>
 </g>
 
 <path id="Wing_flat_0_Layer7_0_1_STROKES" stroke="#313132" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
@@ -270,8 +288,16 @@ L 100 -156.3"/>
 </g>
 </g>
 
+<g transform="matrix( 1, 0, 0, 1, 298.4,-130.8) ">
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Wing_flat_0_Layer1_0_FILL"/>
+<use class='ship-system thruster-port' xlink:href="#SYSTEM_THRUSTER_0_Layer0_0_FILL"/>
+</g>
+</g>
+
+<g transform="matrix( 1, 0, 0, 1, -150.5,-112) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use class='ship-system cannon-starboard' xlink:href="#SYSTEM_CANNON_0_Layer0_0_FILL"/>
+</g>
 </g>
 </g>
 
@@ -326,8 +352,16 @@ L 100 -156.3"/>
 </g>
 </g>
 
+<g transform="matrix( 1, 0, 0, 1, 298.4,-130.8) ">
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Wing_flat_0_Layer1_0_FILL"/>
+<use class='ship-system thruster-starboard' xlink:href="#SYSTEM_THRUSTER_0_Layer0_0_FILL"/>
+</g>
+</g>
+
+<g transform="matrix( 1, 0, 0, 1, -150.5,-112) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use class='ship-system cannon-port' xlink:href="#SYSTEM_CANNON_0_Layer0_0_FILL"/>
+</g>
 </g>
 </g>
 
@@ -335,12 +369,22 @@ L 100 -156.3"/>
 <use xlink:href="#Wireframe_Flat_0_Layer4_0_FILL"/>
 </g>
 
+<g transform="matrix( 1, 0, 0, 1, -57.5,0) ">
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Wireframe_Flat_0_Layer3_0_FILL"/>
+<use class='ship-system bridge' xlink:href="#SYSTEM_BRIDGE_0_Layer0_0_FILL"/>
+</g>
 </g>
 
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Wireframe_Flat_0_Layer3_1_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, -100,0) ">
+<g transform="matrix( 1, 0, 0, 1, 100,0) ">
+<use class='ship-system deflector' xlink:href="#SYSTEM_DEFLECTOR_0_Layer0_0_FILL"/>
+</g>
+</g>
+
+<g transform="matrix( 1, 0, 0, 1, 575,0) ">
+<g transform="matrix( 1, 0, 0, 1, -575,0) ">
+<use class='ship-system stabiliser' xlink:href="#SYSTEM_STABILISER_0_Layer0_0_FILL"/>
+</g>
 </g>
 
 <g transform="matrix( 1, 0, 0, 1, 25,0) ">
@@ -374,6 +418,5 @@ L 100 -156.3"/>
 </g>
 </g>
 </svg>
-
 
 `

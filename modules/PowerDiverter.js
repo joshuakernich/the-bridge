@@ -48,24 +48,45 @@ window.PowerDiverter = function(){
 	]
 
 	let map = [
-		'****************',
-		'*******  *******',
+		'******** *******',
+		'******   *******',
 		'****     *******',
 		'***      *******',
 		'**        ******',
-		'**         *****',
-		'**         *****',
-		'**         *****',
-		'**             *',
-		'**         *****',
-		'**         *****',
-		'**         *****',
+		'**  333555******',
+		'** 33335557*****',
+		'**  3335557*****',
+		'** 0011112222***',
+		'**  4446668*****',
+		'** 44446668*****',
+		'**  444666******',
 		'**        ******',
 		'***      *******',
 		'****     *******',
 		'******   *******',
-		'****************',
+		'******** *******',
 	]
+
+	let systems = [
+		
+		{name:'.thruster-starboard',x:10,y:6,stick:{dir:0,len:1}},
+		{name:'.thruster-port',x:10,y:10,stick:{dir:4,len:1}},
+		{name:'.bridge',x:3,y:8},
+		{name:'.deflector',x:2,y:8},
+		{name:'.cannon-starboard',x:2,y:6},
+		{name:'.cannon-port',x:2,y:10},
+		{name:'.stabiliser',x:12,y:8,stick:{dir:2,len:1}},
+
+	]
+
+	/*let GRID = 50;
+	for(var s in systems){
+		let $s = $('<system>').appendTo($scroller).css({left:systems[s].x*GRID, top:systems[s].y*GRID});
+
+		if(systems[s].stick){
+			$('<systemstick>').appendTo($s).css({height:systems[s].stick.len*GRID,transform:'rotate('+systems[s].stick.dir*45+'deg)'})
+		}
+	}*/
 
 
 	let levels = 
@@ -74,17 +95,38 @@ window.PowerDiverter = function(){
 		{
 			x:5,y:7,
 			actors:[
-				{type:'power',dir:0,x:2,y:2},
-				{type:'system',subtype:'engine',dir:0,x:2,y:6, link:'.thruster'},
+				{type:'power',dir:0,x:3,y:3},
+				{type:'system',dir:0,x:5,y:3, link:'.thruster-starboard'},
 			]
 		},
 		{
-			x:3,y:7,
+			x:1,y:5,
 			actors:[
-				{type:'power',dir:0,x:5,y:2},
-				{type:'system',subtype:'engine',dir:0,x:5,y:6},
-				{type:'power',dir:0,x:6,y:4},
-				{type:'system',subtype:'oxygen',dir:0,x:2,y:4},
+				{type:'power',dir:0,x:7,y:1},
+				{type:'power',dir:0,x:7,y:5},
+				{type:'system',dir:0,x:1,y:1, link:'.cannon-starboard'},
+				{type:'system',dir:0,x:1,y:5, link:'.cannon-port'},
+			],
+		},
+		{
+			x:5,y:4,
+			actors:[
+				{type:'power',dir:0,x:3,y:2},
+				{type:'power',dir:0,x:3,y:6},
+				{type:'diverter',x:2,y:5,dir:0},
+				{type:'diverter',x:1,y:4,dir:0},
+				{type:'system',dir:0,x:5,y:2, link:'.thruster-port'},
+				{type:'system',dir:0,x:7,y:4, link:'.stabiliser'},
+			]
+		},
+		
+		/*{
+			x:3,y:4,
+			actors:[
+				{type:'power',dir:0,x:4,y:1},
+				{type:'system',dir:0,x:4,y:7},
+				{type:'power',dir:0,x:6,y:5},
+				{type:'system',subtype:'oxygen',dir:0,x:2,y:5},
 			],
 		},
 		{
@@ -131,7 +173,7 @@ window.PowerDiverter = function(){
 				{type:'system',subtype:'engine',x:5,y:7},
 				{type:'damage',x:2,y:3},
 			],
-		},
+		},*/
 		{
 			x:0,y:0,
 			actors:[],
@@ -162,7 +204,7 @@ window.PowerDiverter = function(){
 		let $r = $('<power-row>').appendTo($scroller);
 
 		for(var c=0; c<map[r].length; c++){
-			let $c = $('<power-cell>').appendTo($r).attr('x',c).attr('y',r).attr('type',map[r][c]=='*'?'*':'o');
+			let $c = $('<power-cell>').appendTo($r).attr('x',c).attr('y',r).attr('type',map[r][c]==' '?'o':map[r][c]);
 		}
 	}
 	
@@ -216,8 +258,6 @@ window.PowerDiverter = function(){
 				}
 				while(!hit)
 
-					console.log(path);
-
 				paths.push(path);
 			}
 		}
@@ -242,18 +282,21 @@ window.PowerDiverter = function(){
 			}
 		}
 
-		
-
 		let countPower = 0;
 		for(var a in actors){
+
+			//if(actors[a].link && actors[a].powered) $svgMap.find(actors[a].link).addClass('powered');
+
 			actors[a].$el.attr( 'powered', actors[a].powered );
 			actors[a].$el.css({transform:'rotate('+actors[a].dir*45+'deg)'});
 
 			let icon = (actors[a].subtype?actors[a].subtype:actors[a].type) + (actors[a].powered?'-powered':'');
 			actors[a].$el.css('background-image','url(./icon-'+icon+'.svg)')
 
+			if( actors[a].link ) $svgMap.find(actors[a].link).removeClass('powered');
+
 			if(actors[a].powered){
-				if( actors[a].linked ) $svgMap.find(actors[a].linked).addClass('powered');
+				if( actors[a].link ) $svgMap.find(actors[a].link).addClass('powered');
 				countPower++;
 			}
 
@@ -282,10 +325,13 @@ window.PowerDiverter = function(){
 	let level;
 	function doNextLevel(){
 
+		$svgMap.find('.active').removeClass('active powered');
+
 		$('power-actor').remove();
 
 		iLevel++;
 		level = levels[iLevel];
+		console.log(level);
 		actors = levels[iLevel].actors;
 
 		$svg.find('g').attr('transform','translate('+level.x+' '+level.y+')');
@@ -297,6 +343,7 @@ window.PowerDiverter = function(){
 
 			let icon = actors[a].subtype?actors[a].subtype:actors[a].type;
 
+			
 			let $el = $('<power-actor>')
 			.appendTo(self.$el.find('power-cell[x="'+(level.x+actors[a].x)+'"][y="'+(level.y+actors[a].y)+'"]'))
 			.attr('type',actors[a].type)
@@ -324,6 +371,11 @@ window.PowerDiverter = function(){
 			//let $icon = $('<object data="./icon-'+icon+'.svg" type="image/svg+xml">').appendTo($el);
 
 			actors[a].$el = $el;
+			
+			if(actors[a].link){
+				//$el.hide();
+				$svgMap.find(actors[a].link).addClass('active');
+			}
 			
 		}
 

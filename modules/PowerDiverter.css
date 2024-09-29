@@ -43,9 +43,51 @@ power floorplan svg path{
 	vector-effect: inherit;
 }
 
-power floorplan svg use.powered{
-	stroke: var(--cyan);
-	fill: var(--blue);
+power system{
+	display: block;
+	width: calc( var(--grid)/2 );
+	height: calc( var(--grid)/2 );
+	margin: calc( var(--grid)/4 );
+	position: absolute;
+	background: var(--black);
+
+	box-sizing: border-box;
+	border: 7px solid var(--purple);
+	border-radius: 100%;
+}
+
+power systemstick{
+	display: block;
+	width: 3px;
+	height: 100px;
+	position: absolute;
+	left: 4px;
+	bottom: 5.5px;
+	transform-origin: bottom center;
+}
+
+power systemstick:after{
+	content: '';
+	display: block;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 10px;
+	background: var(--purple);
+}	
+
+power floorplan svg use.ship-system{
+	
+}
+
+power floorplan svg use.ship-system.active{
+	stroke: transparent;
+	fill: var(--red);
+}
+
+power floorplan svg use.ship-system.powered{
+	fill: var(--cyan);
 }
 
 power-row{
@@ -140,11 +182,28 @@ power .power-network path.frame{
 	stroke:var(--yellow);
 }
 
-power-cell[type='*']{
-	
+power-cell{
+	color: var(--purple);
+	text-align: center;
+	line-height: var(--grid);
+	vertical-align: middle;
 }
 
-power-cell[type='o']:before{
+power-cell[type='*']:before{
+	display: none;
+}
+
+/*power-cell[type='0']:after{ content: "0"; }
+power-cell[type='1']:after{ content: "1"; }
+power-cell[type='2']:after{ content: "2"; }
+power-cell[type='3']:after{ content: "3"; }
+power-cell[type='4']:after{ content: "4"; }
+power-cell[type='5']:after{ content: "5"; }
+power-cell[type='6']:after{ content: "6"; }
+power-cell[type='7']:after{ content: "7"; }
+power-cell[type='8']:after{ content: "8"; }*/
+
+power-cell:before{
 	content: " ";
 	background: var(--purple);
 	width: 5%;
@@ -160,9 +219,8 @@ power-cell[type='o']:before{
 	transition: all 0.2s;
 }
 
-power-cell[type='o'].powered:before{
+power-cell.powered:before{
 	border: 2px solid var(--cyan);
-
 	width: 15%;
 	height: 15%;
 	opacity: 1;

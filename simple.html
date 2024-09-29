@@ -28,11 +28,15 @@
 		$(function () {
 
 
-			/*let $svgMap = $('<power style="margin:0px;padding:0px; "><floorplan>'+window.FloorplanSVG+'</floorplan></power>').appendTo('body');
+			
+			window.launchpad = new LaunchpadController();
 
+			/*let proto = new PowerDiverter();
+			proto.$el.appendTo('body');
+			proto.setOnOff(true);
 			return;*/
 
-			window.launchpad = new LaunchpadController();
+			
 
 			let colors = ['yellow','cyan','purple','pink'];
 

@@ -227,7 +227,9 @@ window.PowerDiverter = function(){
 
 			if (actors[a].type == 'system' && actors[a].powered == false) isAllPowered = false;
 
-			window.launchpad.setXY(actors[a].x,actors[a].y,(actors[a].type=='power'||actors[a].powered)?'blue':'red');
+			let color = (actors[a].type=='power'||actors[a].powered)?'blue':'red';
+			if(actors[a].type=='fire') color = 'yellow';
+			window.launchpad.setXY(actors[a].x,actors[a].y,color);
 		}
 
 

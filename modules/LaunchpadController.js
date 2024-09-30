@@ -180,7 +180,7 @@ window.LaunchpadController = function(){
 
   	if(isRotate) y = [x, x = 7-y][0]; // fancy code to swap two variables
   	
-  	map[y][x] = colorName;
+  	if(map[y]) map[y][x] = colorName;
 
   	let color = colors[colorName];
 

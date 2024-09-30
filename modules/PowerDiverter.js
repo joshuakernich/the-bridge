@@ -67,34 +67,13 @@ window.PowerDiverter = function(){
 		'******** *******',
 	]
 
-	let systems = [
-		
-		{name:'.thruster-starboard',x:10,y:6,stick:{dir:0,len:1}},
-		{name:'.thruster-port',x:10,y:10,stick:{dir:4,len:1}},
-		{name:'.bridge',x:3,y:8},
-		{name:'.deflector',x:2,y:8},
-		{name:'.cannon-starboard',x:2,y:6},
-		{name:'.cannon-port',x:2,y:10},
-		{name:'.stabiliser',x:12,y:8,stick:{dir:2,len:1}},
-
-	]
-
-	/*let GRID = 50;
-	for(var s in systems){
-		let $s = $('<system>').appendTo($scroller).css({left:systems[s].x*GRID, top:systems[s].y*GRID});
-
-		if(systems[s].stick){
-			$('<systemstick>').appendTo($s).css({height:systems[s].stick.len*GRID,transform:'rotate('+systems[s].stick.dir*45+'deg)'})
-		}
-	}*/
-
-
 	let levels = 
 	[
 		
 		{
 			x:5,y:7,
 			actors:[
+				
 				{type:'power',dir:0,x:3,y:3},
 				{type:'system',dir:0,x:5,y:3, link:'.thruster-starboard'},
 			]
@@ -102,6 +81,7 @@ window.PowerDiverter = function(){
 		{
 			x:1,y:5,
 			actors:[
+				{type:'fire',x:4,y:1,intensity:50},
 				{type:'power',dir:0,x:7,y:1},
 				{type:'power',dir:0,x:7,y:5},
 				{type:'system',dir:0,x:1,y:1, link:'.cannon-starboard'},
@@ -119,66 +99,13 @@ window.PowerDiverter = function(){
 				{type:'system',dir:0,x:7,y:4, link:'.stabiliser'},
 			]
 		},
-		
-		/*{
-			x:3,y:4,
-			actors:[
-				{type:'power',dir:0,x:4,y:1},
-				{type:'system',dir:0,x:4,y:7},
-				{type:'power',dir:0,x:6,y:5},
-				{type:'system',subtype:'oxygen',dir:0,x:2,y:5},
-			],
-		},
-		{
-			x:1,y:7,
-			actors:[
-				{type:'power',dir:0,x:2,y:2},
-				{type:'diverter',x:5,y:2,dir:0},
-				{type:'system',subtype:'engine',dir:0,x:5,y:6},
-			],
-		},
-		{
-			x:3,y:5,
-			actors:[
-				{type:'power',dir:0,x:7,y:1},
-				{type:'power',dir:0,x:1,y:4},
-				{type:'diverter',x:5,y:3,dir:0},
-				{type:'diverter',x:1,y:2,dir:0},
-				{type:'system',subtype:'engine',dir:0,x:4,y:5},
-				{type:'system',subtype:'oxygen',dir:0,x:4,y:2},
-			],
-		},
-		{
-			x:3,y:5,
-			actors:[
-				{type:'power',dir:0,x:0,y:4},
-				{type:'damage',dir:0,x:3,y:3},
-				{type:'system',subtype:'oxygen',dir:0,x:6,y:2},
-				{type:'diverter',x:3,y:1,dir:0},
-				{type:'diverter',x:4,y:1,dir:0},
-				{type:'diverter',x:7,y:5,dir:0},
-				{type:'diverter',x:3,y:5,dir:0},
-			],
-		},
-		{
-			x:4,y:4,
-			actors:[
-				{type:'power',dir:0,x:2,y:0},
-				{type:'power',dir:0,x:3,y:1},
-				{type:'diverter',x:4,y:0,dir:0},
-				{type:'diverter',x:5,y:1,dir:0},
-				{type:'diverter',x:2,y:4,dir:0},
-				{type:'diverter',x:5,y:3,dir:0},
-				{type:'system',subtype:'engine',x:2,y:7},
-				{type:'system',subtype:'engine',x:5,y:7},
-				{type:'damage',x:2,y:3},
-			],
-		},*/
 		{
 			x:0,y:0,
 			actors:[],
 		}
 	]
+
+
 
 	function connect(path,dir){
 
@@ -285,8 +212,6 @@ window.PowerDiverter = function(){
 		let countPower = 0;
 		for(var a in actors){
 
-			//if(actors[a].link && actors[a].powered) $svgMap.find(actors[a].link).addClass('powered');
-
 			actors[a].$el.attr( 'powered', actors[a].powered );
 			actors[a].$el.css({transform:'rotate('+actors[a].dir*45+'deg)'});
 
@@ -331,7 +256,6 @@ window.PowerDiverter = function(){
 
 		iLevel++;
 		level = levels[iLevel];
-		console.log(level);
 		actors = levels[iLevel].actors;
 
 		$svg.find('g').attr('transform','translate('+level.x+' '+level.y+')');
@@ -339,47 +263,51 @@ window.PowerDiverter = function(){
 		$msg.text(`GRID ${level.x}-${level.y}`);
 		$scroller.css('transform','translate('+(-level.x*50)+'px,'+(-level.y*50)+'px)');
 
-		for(var a in actors){
-
-			let icon = actors[a].subtype?actors[a].subtype:actors[a].type;
-
-			
-			let $el = $('<power-actor>')
-			.appendTo(self.$el.find('power-cell[x="'+(level.x+actors[a].x)+'"][y="'+(level.y+actors[a].y)+'"]'))
-			.attr('type',actors[a].type)
-			.data('actor',actors[a])
-			.css('background-image','url(icon-'+icon+'.svg)')
-			.click(function(e){
-
-				e.preventDefault();
-
-				$('power-actor').removeClass('selected');
-
-				let actor = $(this).data('actor');
-				if(actor.type=='diverter' || actor.type=='power'){
-					actor.dir = (actor.dir + 1)%dirs.length;
-
-					actorSelected = actor;
-					actor.$el.addClass('selected');
-				}
-				redraw();
-			})
-
-
-
-			
-			//let $icon = $('<object data="./icon-'+icon+'.svg" type="image/svg+xml">').appendTo($el);
-
-			actors[a].$el = $el;
-			
-			if(actors[a].link){
-				//$el.hide();
-				$svgMap.find(actors[a].link).addClass('active');
-			}
-			
-		}
+		for(var a in actors) spawnActor(actors[a]);
 
 		redraw()
+	}
+
+	function spawnActor(actor){
+		let icon = actor.subtype?actor.subtype:actor.type;
+
+		let $el = $('<power-actor>')
+		.appendTo(self.$el.find('power-cell[x="'+(level.x+actor.x)+'"][y="'+(level.y+actor.y)+'"]'))
+		.attr('type',actor.type)
+		.data('actor',actor)
+		.css('background-image','url(icon-'+icon+'.svg)')
+		.click(function(e){
+
+			e.preventDefault();
+
+			$('power-actor').removeClass('selected');
+
+			let actor = $(this).data('actor');
+
+			if(actor.type=='diverter' || actor.type=='power'){
+				actor.dir = (actor.dir + 1)%dirs.length;
+				actorSelected = actor;
+				actor.$el.addClass('selected');
+			}
+
+			if(actor.type=='fire'){
+				actor.intensity -= 30;
+				
+				if(actor.intensity<20){
+					actors.splice(actors.indexOf(actor),1);
+					actor.$el.remove();
+				}
+			}
+
+			redraw();
+		})
+
+		if(actor.type=='fire') $el.css('transform','scale('+actor.intensity/100+')')
+
+		actor.$el = $el;
+		
+		if(actor.link) $svgMap.find(actor.link).addClass('active');
+		
 	}
 	
 	doNextLevel();
@@ -410,34 +338,33 @@ window.PowerDiverter = function(){
 		for(var a in actors) if(actors[a].type != 'system' && actors[a].x == x && actors[a].y == y) actors[a].$el.click();
 	})
 
-	let particles = [];
-
-	let splash = [];
-	while(splash.length<64) splash[splash.length] = 0;
-
 	function step(){
-		
-		for(var s in splash) splash[s] = 0;
+		for(var a in actors){
+			if(actors[a].type=='fire'){
+				actors[a].intensity++;
+				actors[a].$el.css('transform','scale('+actors[a].intensity/100+')');
 
-		for(var p=0; p<particles.length; p++){
-			
-			if(particles[p].life <= 0){
-				particles.splice(p,1);
-				p--;
-				continue;
+				if(actors[a].intensity>100){
+					let iRoom = map[actors[a].y+level.y][actors[a].x + level.x];
+					let dir = dirs[Math.floor(Math.random()*dirs.length)];
+					let iSpread = map[actors[a].y+level.y+dir.y][actors[a].x + level.x+dir.x];
+					let x = actors[a].x+dir.x;
+					let y = actors[a].y+dir.y;
+
+					let alreadyFire = false;
+					for(var b in actors) if(actors[b].x == x && actors[b].y == y) alreadyFire = true;			
+
+					actors[a].intensity = 90;
+
+					if(iRoom==iSpread && !alreadyFire){
+						let spread = {type:'fire',x:x,y:y,intensity:20};
+						actors.push(spread);
+						spawnActor(spread);
+					}
+				}
 			}
-
-			splash[particles[p].y*8+particles[p].x] = Math.max(splash[particles[p].y*8+particles[p].x],particles[p].life);
-
-			particles[p].x += dirs[particles[p].dir].x;
-			particles[p].y += dirs[particles[p].dir].y;
-			particles[p].life --;
-			
 		}
-
-		for(var s=0; s<splash.length; s++) console.log(''+(s%8)+''+(Math.floor(s/8)),splash[s]);
-		for(var s=0; s<splash.length; s++) window.launchpad.setXY((s%8),(Math.floor(s/8)),splash[s]);
 	}
 
-	//setInterval(step,150);
+	setInterval(step,100);
 }

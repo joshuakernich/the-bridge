@@ -360,6 +360,7 @@ window.PowerDiverter = function(){
 						let spread = {type:'fire',x:x,y:y,intensity:20};
 						actors.push(spread);
 						spawnActor(spread);
+						redraw();
 					}
 				}
 			}

@@ -26,6 +26,10 @@ window.PowerDiverter = function(){
 			<path class="laser" vector-effect="non-scaling-stroke" d="M0,0 L7,7"/>
 		</svg>`).appendTo($scroller);
 
+
+	let id = '#SYSTEM_THRUSTER_0_Layer0_0_FILL';
+	console.log( $svgMap.find(`use[*|href="${id}"]`));
+
 	$(`
 		<svg class='power-network power-frame' viewbox="-0.5 -0.5 16 16" width=800 height=800>
 			<g class="frame-group" >
@@ -53,10 +57,10 @@ window.PowerDiverter = function(){
 		'****     *******',
 		'***      *******',
 		'**        ******',
-		'**  333555******',
-		'** 33335557*****',
-		'**  3335557*****',
-		'** 0011112222***',
+		'**  3D 555******',
+		'** 333D5557*****',
+		'**  3D 5557*****',
+		'** 0D11112222***',
 		'**  4446668*****',
 		'** 44446668*****',
 		'**  444666******',
@@ -75,7 +79,7 @@ window.PowerDiverter = function(){
 			actors:[
 				
 				{type:'power',dir:0,x:3,y:3},
-				{type:'system',dir:0,x:5,y:3, link:'.thruster-starboard'},
+				{type:'system',dir:0,x:5,y:3, $link:$svgMap.find('use[*|href="#SYSTEM_THRUSTER_0_Layer0_0_FILL"]').eq(1)},
 			]
 		},
 		{
@@ -84,8 +88,8 @@ window.PowerDiverter = function(){
 				{type:'fire',x:4,y:1,intensity:50},
 				{type:'power',dir:0,x:7,y:1},
 				{type:'power',dir:0,x:7,y:5},
-				{type:'system',dir:0,x:1,y:1, link:'.cannon-starboard'},
-				{type:'system',dir:0,x:1,y:5, link:'.cannon-port'},
+				{type:'system',dir:0,x:1,y:1, $link:$svgMap.find('use[*|href="#SYSTEM_CANNON_0_Layer0_0_FILL"]').eq(0)},
+				{type:'system',dir:0,x:1,y:5, $link:$svgMap.find('use[*|href="#SYSTEM_CANNON_0_Layer0_0_FILL"]').eq(1)},
 			],
 		},
 		{
@@ -95,8 +99,8 @@ window.PowerDiverter = function(){
 				{type:'power',dir:0,x:3,y:6},
 				{type:'diverter',x:2,y:5,dir:0},
 				{type:'diverter',x:1,y:4,dir:0},
-				{type:'system',dir:0,x:5,y:2, link:'.thruster-port'},
-				{type:'system',dir:0,x:7,y:4, link:'.stabiliser'},
+				{type:'system',dir:0,x:5,y:2, $link:$svgMap.find('use[*|href="#SYSTEM_THRUSTER_0_Layer0_0_FILL"]').eq(0)},
+				{type:'system',dir:0,x:7,y:4, $link:$svgMap.find('use[*|href="#SYSTEM_STABILISER_0_Layer0_0_FILL"]')},
 			]
 		},
 		{
@@ -218,10 +222,10 @@ window.PowerDiverter = function(){
 			let icon = (actors[a].subtype?actors[a].subtype:actors[a].type) + (actors[a].powered?'-powered':'');
 			actors[a].$el.css('background-image','url(./icon-'+icon+'.svg)')
 
-			if( actors[a].link ) $svgMap.find(actors[a].link).removeClass('powered');
+			if( actors[a].$link ) actors[a].$link.removeClass('powered');
 
 			if(actors[a].powered){
-				if( actors[a].link ) $svgMap.find(actors[a].link).addClass('powered');
+				if( actors[a].$link ) actors[a].$link.addClass('powered');
 				countPower++;
 			}
 
@@ -308,7 +312,7 @@ window.PowerDiverter = function(){
 
 		actor.$el = $el;
 		
-		if(actor.link) $svgMap.find(actor.link).addClass('active');
+		if(actor.$link) actor.$link.addClass('active');
 		
 	}
 	

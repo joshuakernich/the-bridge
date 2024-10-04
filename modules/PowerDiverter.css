@@ -77,16 +77,12 @@ power systemstick:after{
 	background: var(--purple);
 }	
 
-power floorplan svg use.ship-system{
-	
-}
-
-power floorplan svg use.ship-system.active{
+power floorplan svg use.active{
 	stroke: transparent;
 	fill: var(--red);
 }
 
-power floorplan svg use.ship-system.powered{
+power floorplan svg use.powered{
 	fill: var(--cyan);
 }
 

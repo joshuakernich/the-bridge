@@ -2,7 +2,7 @@
 window.FloorplanSVG = `
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="950px" height="850px" viewBox="0 0 950 850">
 <defs>
-<g id="Layer10_0_FILL">
+<g id="Wireframe_Flat_0_Layer10_0_FILL">
 <path fill="#000000" stroke="none" d="
 M 716.75 -3
 L 716.75 -3.4 516.25 -12.35 498.9 -13.15 498.9 -13.3 382.6 -53.25 325.4 -53.25 325.4 -57.75
@@ -12,13 +12,17 @@ Q 338.0115234375 -110.779296875 336.5 -113 336.300390625 -113.4060546875 336 -11
 L 275.6 -200.1 275.65 -199.95
 Q 273.498046875 -203.258984375 270 -204.25 265.7712890625 -205.5572265625 262.5 -203.15 261.7296875 -202.6271484375 261.1 -202
 L 256.9 -208.05 256.9 -230.8 256.9 -230.85 243.2 -230.85 241.65 -419.5
-Q 109.4 -388.65 8.85 -314.85 -90.5 -241.9 -154.85 -130
+Q 109.4 -388.65 8.85 -314.85 -52.1794921875 -270.0376953125 -100 -210.55
+L -100 -187 -118 -187
+Q -137.66171875 -159.8890625 -154.85 -130
 L -154.85 -130
 Q -154.836328125 -129.973828125 -154.85 -129.95
 L -93 -126.6 -84.7 0.2 -93 127 -154.85 130.35
 Q -154.836328125 130.373828125 -154.85 130.4
 L -154.85 130.4
-Q -90.5 242.3 8.85 315.25 109.4 389.05 241.65 419.9
+Q -146.9 144.2 -131.65 167 -124.05 178.4 -118 187
+L -100 187 -100 210.9
+Q -52.178125 270.4388671875 8.85 315.25 109.4 389.05 241.65 419.9
 L 243.2 231.25 256.9 231.25 256.9 231.2 256.9 208.45 261.1 202.35
 Q 261.7099609375 203.0064453125 262.55 203.55 265.75 205.95 270 204.6 273.5 203.65 275.7 200.35
 L 275.6 200.45 336.05 114.2
@@ -28,7 +32,7 @@ Q 338 62.75 335.4 60.15 335.35 60.05 335.25 60 332.65 57.4 329 57.4 327.05 57.4 
 L 325.4 53.65 382.6 53.65 498.9 13.7 498.9 13.5 516.25 12.75 716.75 3.8 716.75 3.4 716.75 -3 Z"/>
 </g>
 
-<g id="Layer8_0_FILL">
+<g id="Wireframe_Flat_0_Layer8_0_FILL">
 <path fill="#999999" stroke="none" d="
 M -91.2 -96.55
 L -112 -98.8 -112 -19.1
@@ -42,15 +46,15 @@ Q -77.506640625 9.2919921875 -77.5 -0.05 -77.4978515625 -9.351171875 -84.1 -15.9
 L -91.2 -96.55 Z"/>
 </g>
 
-<g id="Layer7_0_FILL">
+<g id="Wireframe_Flat_0_Layer7_0_FILL">
 <path fill="#CCCCCC" stroke="none" d="
-M 280 -25
-L 256.55 -25 250 -19.75 250 19.8 256.55 25 280 25 280 50 320 50 320 25 400 25
+M 256.55 -25
+L 250 -19.75 250 19.8 256.55 25 280 25 280 50 320 50 320 25 400 25
 Q 410.35 25 417.65 17.65 425 10.35 425 0 425 -10.35 417.65 -17.7 410.35 -25 400 -25
-L 320 -25 320 -50 280 -50 280 -25 Z"/>
+L 320 -25 320 -50 280 -50 280 -25 256.55 -25 Z"/>
 </g>
 
-<g id="Layer6_0_FILL">
+<g id="Wireframe_Flat_0_Layer6_0_FILL">
 <path fill="#99999A" stroke="none" d="
 M 30 -20
 L 0 -20 0 20 30 20 30 50 70 50 70 20 249.9 20 249.9 -20 70 -20 70 -50 30 -50 30 -20 Z"/>
@@ -77,59 +81,40 @@ Q 134.78828125 -72.846875 138.4 -66.35 137.107421875 -65.3970703125 135.9 -64.2 
 </g>
 
 <g id="Wing_flat_0_Layer7_0_FILL">
+<path fill="#CCCCCC" stroke="none" d="
+M 0 -185
+L 0 -215 -5 -220 -25 -220 -30 -225 -70 -225 -75 -220 -95 -220 -100 -215 -100 -185 -95 -180 -75 -180 -70 -175 -30 -175 -25 -180 -5 -180 0 -185
+M 220 -300
+L 180 -300 180 -270 154.35 -270
+Q 144.4 -269.75 137.35 -262.65 134.4 -259.7 116.9 -239.55
+L 100 -220 100 -180 195 -180
+Q 205.35 -180 212.65 -187.35 217.55 -192.2 250 -230
+L 250 -270 220 -270 220 -300 Z"/>
+
+<path fill="#666666" stroke="none" d="
+M 30 -150
+L 25 -150 25 -170 -0.05 -170
+Q -15.14921875 -170 -27.95 -164.4 -39.6919921875 -159.255859375 -49.5 -149.4 -62.7447265625 -136.2197265625 -67.45 -119.45 -70 -110.2634765625 -70 -100 -70 -71 -49.5 -50.55 -29 -30 -0.05 -30
+L 25 -30 25 -50 70 -50 100 -80 100 -120 70 -150 30 -150 Z"/>
+
 <path fill="#999999" stroke="none" d="
 M 36.1 -314.15
 Q 30.25 -308.3 30.25 -300
 L 30.25 -264 30.25 -263.95 30.25 -220 0 -220 0 -215 0 -185 0 -180 30 -180 30 -150 70 -150 70 -180 100 -180 100 -220 70.25 -220 70.25 -263.95 70.25 -264 70.25 -300
 Q 70.25 -308.3 64.4 -314.15 58.55 -320 50.25 -320 41.95 -320 36.1 -314.15 Z"/>
 
-<path fill="#CCCCCC" stroke="none" d="
-M 220 -300
-L 180 -300 180 -270 154.35 -270
-Q 144.4 -269.75 137.35 -262.65 134.4 -259.7 116.9 -239.55
-L 100 -220 100 -180 195 -180
-Q 205.35 -180 212.65 -187.35 217.55 -192.2 250 -230
-L 250 -270 220 -270 220 -300
-M 0 -185
-L 0 -215 -5 -220 -25 -220 -30 -225 -70 -225 -75 -220 -95 -220 -100 -215 -100 -214.3
-Q -99.9 -214.25 -99.8 -214.15 -98.4 -213.25 -98.05 -211.65 -97.848046875 -210.573046875 -98.2 -209.6 -98.121875 -209.3751953125 -98.1 -209.15 -97.7537109375 -207.533203125 -98.7 -206.15
-L -100 -204.2 -100 -185 -95 -180 -75 -180 -70 -175 -30 -175 -25 -180 -5 -180 0 -185 Z"/>
-
 <path fill="#99999A" stroke="none" d="
 M 220 -350.55
 Q 219.8171875 -358.4828125 214.15 -364.15 208.3 -370 200 -370 191.7 -370 185.85 -364.15 180.1828125 -358.4828125 180 -350.55
 L 180 -300 220 -300 220 -350.55 Z"/>
-
-<path fill="#FF0000" stroke="none" d="
-M -102.8 -214.75
-Q -104.4 -214.45 -105.3 -213.05
-L -119.55 -191.7
-Q -120.4 -190.45 -120.2 -188.95 -120 -187.5 -118.85 -186.5 -117.75 -185.5 -116.25 -185.5
-L -113 -185.5
-Q -112.85 -185.35 -112.65 -185.25 -115.9 -180.2 -119.2 -175.05 -120.15 -175.7 -121.35 -175.7
-L -128.8 -175.7
-Q -129.8 -175.7 -130.65 -175.25 -131.55 -174.8 -132.1 -173.95
-L -147.2 -152
-Q -148.05 -150.75 -147.85 -149.25 -147.7 -147.8 -146.55 -146.75 -145.45 -145.75 -143.95 -145.75
-L -134.55 -145.7
-Q -133.15 -145.7 -132.1 -146.5 -131.1 -146.05 -129.9 -146.25 -128.3 -146.5 -127.3 -147.85 -126.65 -148.75 -114.65 -167.3
-L -114.6 -167.35
-Q -108.7 -176.6 -102.85 -185.7 -102 -186 -101.3 -186.65 -100.15 -187.85 -100.15 -189.5 -100.15 -191.15 -101.3 -192.3 -101.65 -192.65 -102 -192.85
-L -102 -203.65 -98.65 -208.65
-Q -98.355859375 -209.1076171875 -98.2 -209.6 -97.848046875 -210.573046875 -98.05 -211.65 -98.4 -213.25 -99.8 -214.15 -99.9 -214.25 -100 -214.3 -101.3 -215.1 -102.8 -214.75 Z"/>
-
-<path fill="#666666" stroke="none" d="
-M 25 -150
-L 25 -170 -0.05 -170
-Q -15.14921875 -170 -27.95 -164.4 -39.6919921875 -159.255859375 -49.5 -149.4 -62.7447265625 -136.2197265625 -67.45 -119.45 -70 -110.2634765625 -70 -100 -70 -71 -49.5 -50.55 -29 -30 -0.05 -30
-L 25 -30 25 -50 70 -50 100 -80 100 -120 70 -150 30 -150 25 -150 Z"/>
 </g>
 
 <g id="Wing_flat_0_Layer7_1_FILL">
 <path fill="#99999A" stroke="none" d="
-M 320 -100
-Q 320 -108.3 314.15 -114.15 308.3 -120 300 -120 291.7 -120 285.85 -114.15 280 -108.3 280 -100
-L 280 -50 320 -50 320 -100 Z"/>
+M 300 -120
+Q 291.7 -120 285.85 -114.15 280 -108.3 280 -100
+L 280 -50 320 -50 320 -100
+Q 320 -108.3 314.15 -114.15 308.3 -120 300 -120 Z"/>
 </g>
 
 <g id="Wing_flat_0_Layer5_0_FILL">
@@ -138,13 +123,7 @@ M 199.95 -125
 Q 189.6 -125 182.35 -117.7 175 -110.35 175 -100 175 -89.6 182.35 -82.35 189.6 -75 199.95 -75 210.35 -75 217.65 -82.35 225 -89.6 225 -100 225 -110.35 217.65 -117.7 210.35 -125 199.95 -125 Z"/>
 </g>
 
-<g id="Door_0_Layer0_0_FILL">
-<path fill="#FFCC00" stroke="none" d="
-M 3 -15
-L -3 -15 -3 0 3 0 3 -15 Z"/>
-</g>
-
-<g id="Door_0_Layer0_1_FILL">
+<g id="DoorInner_0_Layer0_0_FILL">
 <path fill="#FFCC00" stroke="none" d="
 M 3 15
 L 3 0 -3 0 -3 15 3 15 Z"/>
@@ -175,10 +154,10 @@ L 54.5 -3 Z"/>
 
 <g id="Shield_0_Layer0_0_FILL">
 <path fill="#FF0000" stroke="none" d="
-M 55.3 -25.75
-Q 55.85 -27.5 55.3 -29.1 54.55 -30.85 52.95 -31.55 51.15 -32.2 49.5 -31.55 29.9 -23.35 -9.8 -2.2 -48.95 18.45 -54.1 23.15 -55.4 24.4 -55.5 26.25 -55.65 28.1 -54.4 29.4 -53.2 30.8 -51.35 30.85 -49.5 31 -48.15 29.75 -40.8 23.05 -30.7 23.35 -29 23.35 -27.35 23.65
+M 52.95 -31.55
+Q 51.15 -32.2 49.5 -31.55 29.9 -23.35 -9.8 -2.2 -48.95 18.45 -54.1 23.15 -55.4 24.4 -55.5 26.25 -55.65 28.1 -54.4 29.4 -53.2 30.8 -51.35 30.85 -49.5 31 -48.15 29.75 -40.8 23.05 -30.7 23.35 -29 23.35 -27.35 23.65
 L -27.3 23.65
-Q -27.25 23.65 -27.2 23.65 -19.4 24.85 -13.6 30.65 -12.3 31.95 -10.45 31.9 -8.6 31.9 -7.35 30.6 54.8 -24.6 55.3 -25.75
+Q -27.25 23.65 -27.2 23.65 -19.4 24.85 -13.6 30.65 -12.3 31.95 -10.45 31.9 -8.6 31.9 -7.35 30.6 54.8 -24.6 55.3 -25.75 55.85 -27.5 55.3 -29.1 54.55 -30.85 52.95 -31.55
 M 4.05 -1.3
 Q 4.1 -3.85 5.95 -5.6 7.85 -7.35 10.35 -7.3 12.9 -7.15 14.6 -5.4 16.4 -3.55 16.3 -1 16.25 1.45 14.4 3.15 12.65 5 10.05 4.9 7.55 4.8 5.75 2.95 4 1.15 4.05 -1.3
 M 27.6 -13.35
@@ -189,16 +168,33 @@ Q -3.3 2.9 -1.15 5.15 1.05 7.6 0.95 10.8 0.95 14.05 -1.4 16.2 -3.7 18.45 -6.95 1
 
 <g id="WingStabiliser_0_Layer0_0_FILL">
 <path fill="#FF0000" stroke="none" d="
-M 22 -17.7
-Q 22 -19 21.25 -20 20.5 -21.1 19.25 -21.5 18 -21.9 16.8 -21.5
+M 19.25 -21.5
+Q 18 -21.9 16.8 -21.5
 L -19.2 -10.2
 Q -20.45 -9.8 -21.2 -8.75 -22 -7.7 -22 -6.4
 L -22 17.7
 Q -22 19.2 -21 20.3 -20.05 21.45 -18.55 21.65 -17.1 21.85 -15.85 21.1 -8.85 16.65 0 16.65 8.85 16.6 15.9 21.05 17.15 21.8 18.6 21.6 20.05 21.4 21.05 20.25 22 19.15 22 17.65
-L 22 -17.7 Z"/>
+L 22 -17.7
+Q 22 -19 21.25 -20 20.5 -21.1 19.25 -21.5 Z"/>
 </g>
 
-<g id="Layer4_0_FILL">
+<g id="Ramscoop_0_Layer0_0_FILL">
+<path fill="#FF0000" stroke="none" d="
+M 31.7 -7
+L 26.4 -1.7 -31.15 -1.7 -23.45 -11.6
+Q -22.9115234375 -12.3587890625 -23.05 -13.3 -23.1396484375 -14.2408203125 -23.85 -14.9 -24.555859375 -15.5029296875 -25.5 -15.5
+L -40.5 -15.5
+Q -41.108203125 -15.4943359375 -41.65 -15.2 -42.1974609375 -14.9216796875 -42.55 -14.45
+L -56.3 5.55
+Q -56.838671875 6.3587890625 -56.75 7.3 -56.6103515625 8.2408203125 -55.9 8.85 -55.194140625 9.5029296875 -54.25 9.5
+L -39.25 9.5
+Q -38.641796875 9.494140625 -38.1 9.2 -37.55234375 8.92109375 -37.2 8.4
+L -35.3 5.65 27.1 5.65
+Q 28.1390625 5.653515625 28.85 4.9
+L 40.5 -7 46.5 -7 52.5 -13 20.6 -13 26.6 -7 31.7 -7 Z"/>
+</g>
+
+<g id="Wireframe_Flat_0_Layer4_0_FILL">
 <path fill="#CCCCCC" stroke="none" d="
 M 0 19.8
 L 0 -19.75 -6.55 -25 -45 -25
@@ -243,19 +239,19 @@ Q 717.65 4 718.8 2.8 720 1.65 720 0 720 -1.65 718.8 -2.85 Z"/>
 
 <g transform="matrix( 0.9999847412109375, 0, 0, 1, 225,425) ">
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Layer10_0_FILL"/>
+<use xlink:href="#Wireframe_Flat_0_Layer10_0_FILL"/>
 </g>
 
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Layer8_0_FILL"/>
+<use xlink:href="#Wireframe_Flat_0_Layer8_0_FILL"/>
 </g>
 
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Layer7_0_FILL"/>
+<use xlink:href="#Wireframe_Flat_0_Layer7_0_FILL"/>
 </g>
 
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Layer6_0_FILL"/>
+<use xlink:href="#Wireframe_Flat_0_Layer6_0_FILL"/>
 </g>
 
 <g transform="matrix( 0.9999847412109375, 0, 0, 0.9999847412109375, 0,0) ">
@@ -280,92 +276,128 @@ Q 717.65 4 718.8 2.8 720 1.65 720 0 720 -1.65 718.8 -2.85 Z"/>
 </g>
 
 <g transform="matrix( 0, 1, -1, 0, 50,-50) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_0_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_1_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 </g>
 
 <g transform="matrix( -1, 0, 0, -1, 100,-100) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_0_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_1_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 </g>
 
 <g transform="matrix( 0, 1, -1, 0, 300,-50) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_0_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_1_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 </g>
 
 <g transform="matrix( 0, 1, -1, 0, 50,-150) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_0_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_1_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 </g>
 
 <g transform="matrix( -1, 0, 0, -1, 100,-200) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_0_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_1_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 </g>
 
 <g transform="matrix( -1, 0, 0, -1, 250,-250) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_0_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_1_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 </g>
 
 <g transform="matrix( -1, 0, 0, -1, -100,-200) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_0_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_1_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 </g>
 
 <g transform="matrix( -1, 0, 0, -1, 0,-200) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_0_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_1_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 </g>
 
 <g transform="matrix( 0, 1, -1, 0, 200,-300) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_0_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_1_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 </g>
 
@@ -390,6 +422,12 @@ Q 717.65 4 718.8 2.8 720 1.65 720 0 720 -1.65 718.8 -2.85 Z"/>
 <g transform="matrix( 1, 0, 0, 1, 200,-396.3) ">
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <use xlink:href="#WingStabiliser_0_Layer0_0_FILL"/>
+</g>
+</g>
+
+<g transform="matrix( 1, 0, 0, 1, -86.5,-162) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#Ramscoop_0_Layer0_0_FILL"/>
 </g>
 </g>
 </g>
@@ -416,92 +454,128 @@ Q 717.65 4 718.8 2.8 720 1.65 720 0 720 -1.65 718.8 -2.85 Z"/>
 </g>
 
 <g transform="matrix( 0, 1, -1, 0, 50,-50) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_0_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_1_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 </g>
 
 <g transform="matrix( -1, 0, 0, -1, 100,-100) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_0_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_1_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 </g>
 
 <g transform="matrix( 0, 1, -1, 0, 300,-50) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_0_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_1_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 </g>
 
 <g transform="matrix( 0, 1, -1, 0, 50,-150) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_0_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_1_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 </g>
 
 <g transform="matrix( -1, 0, 0, -1, 100,-200) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_0_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_1_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 </g>
 
 <g transform="matrix( -1, 0, 0, -1, 250,-250) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_0_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_1_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 </g>
 
 <g transform="matrix( -1, 0, 0, -1, -100,-200) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_0_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_1_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 </g>
 
 <g transform="matrix( -1, 0, 0, -1, 0,-200) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_0_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_1_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 </g>
 
 <g transform="matrix( 0, 1, -1, 0, 200,-300) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_0_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_1_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 </g>
 
@@ -528,10 +602,16 @@ Q 717.65 4 718.8 2.8 720 1.65 720 0 720 -1.65 718.8 -2.85 Z"/>
 <use xlink:href="#WingStabiliser_0_Layer0_0_FILL"/>
 </g>
 </g>
+
+<g transform="matrix( 1, 0, 0, 1, -86.5,-162) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#Ramscoop_0_Layer0_0_FILL"/>
+</g>
+</g>
 </g>
 
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Layer4_0_FILL"/>
+<use xlink:href="#Wireframe_Flat_0_Layer4_0_FILL"/>
 </g>
 
 <g transform="matrix( 1, 0, 0, 1, -57.5,0) ">
@@ -553,26 +633,33 @@ Q 717.65 4 718.8 2.8 720 1.65 720 0 720 -1.65 718.8 -2.85 Z"/>
 </g>
 
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_0_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_1_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 </g>
 
 <g transform="matrix( 1, 0, 0, 1, 250,0) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_0_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Door_0_Layer0_1_FILL"/>
+<g transform="matrix( 1, 0, 0, 1, 0,7.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,-7.5) ">
+<use xlink:href="#DoorInner_0_Layer0_0_FILL"/>
+</g>
 </g>
 </g>
 </g>
 </svg>
-
 
 `

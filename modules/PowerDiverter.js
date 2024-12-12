@@ -335,6 +335,7 @@ window.PowerDiverter = function(){
 			if(actors[a].type=='fire') color = 'yellow';
 			if(actors[a].type=='door') color = (actors[a].open)?'pink':'blue';
 
+			
 			window.launchpad.setXY(actors[a].x-level.x,actors[a].y-level.y,color);
 		}
 
@@ -440,11 +441,11 @@ window.PowerDiverter = function(){
 
 	window.launchpad.listen(function(x,y){
 
-		for(var d in dirs) particles.push({x:x,y:y,dir:d,life:3});
-		for(var a in actors) if(actors[a].type != 'system' && actors[a].x == x && actors[a].y == y) actors[a].$el.click();
+		//for(var d in dirs) particles.push({x:x,y:y,dir:d,life:3});
+		for(var a in actors) if(actors[a].type != 'system' && actors[a].x-level.x == x && actors[a].y-level.y == y) actors[a].$el.click();
 	})
 
-
+	// TO DO fix venting effecting all rooms
 	function ventAirlock(door){
 
 		for(var r in door.rooms){
@@ -461,8 +462,6 @@ window.PowerDiverter = function(){
 		}
 	}
 
-	// TODO check for fire extinguishing here
-	// TOOO combine appropriate logic of redraw and step
 	function step(){
 
 		for(var r in ROOMS) ROOMS[r].isSealed = true; //reset all rooms to sealed

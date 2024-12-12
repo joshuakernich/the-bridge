@@ -140,7 +140,8 @@ window.LaunchpadController = function(){
   function onLaunchpadMessage(msg){
   	let d = msg.data;
 
-  	let bTrigger = d[2] > 0;
+  	//strange combo that signifies a "toucstart" on Launchpad X
+  	let bTrigger = d[0]==144 && d[2] > 0;
 
   	if(bTrigger){
   		let coord = toCoord(d);
@@ -177,6 +178,8 @@ window.LaunchpadController = function(){
 
 
   self.setXY = function(x,y,colorName){
+
+  	if(x<0 || y<0 || x>=8 || y>=8) return;
 
   	if(isRotate) y = [x, x = 7-y][0]; // fancy code to swap two variables
   	

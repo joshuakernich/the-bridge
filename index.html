@@ -3,1131 +3,181 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>The Bridge</title>
-	<script type="text/javascript" src="./jq.js"></script>
-	<script type="text/javascript" src="./Tone.js"></script>
-	<script type="text/javascript" src="./modules/Jin.js"></script>
+
+	<script type="text/javascript" src="./js/lib/jq.js"></script>
+	<script type="text/javascript" src="./js/lib/Tone.js"></script>
+
+	<script type="text/javascript" src="./js/FloorplanSVG.js"></script>
+	<script type="text/javascript" src="./js/utils/LaunchpadController.js"></script>
+
+	<script type="text/javascript" src="./js/modules/FrequencyChart.js"></script>
+	<script type="text/javascript" src="./js/modules/PitchRecorder.js"></script>
+	<script type="text/javascript" src="./js/modules/PowerDiverter.js"></script>
+	<script type="text/javascript" src="./js/modules/Sequencer.js"></script>
+	<script type="text/javascript" src="./js/modules/Unscramble.js"></script>
+	<script type="text/javascript" src="./js/modules/BrokenChat.js"></script>
 	
-	<script type="text/javascript" src="./modules/App.js"></script>
+	<link rel="stylesheet" href="./css/index.css">
+	<link rel="stylesheet" href="./css/modules/PitchRecorder.css">
+	<link rel="stylesheet" href="./css/modules/PowerDiverter.css">
+	<link rel="stylesheet" href="./css/modules/Sequencer.css">
+	<link rel="stylesheet" href="./css/modules/Unscramble.css">
+	<link rel="stylesheet" href="./css/modules/BrokenChat.css">
 
-	<script type="text/javascript" src="./modules/FrequencyChart.js"></script>
-
-	<script type="text/javascript" src="./modules/LaunchpadController.js"></script>
-	<script type="text/javascript" src="./modules/Sequencer.js"></script>
-	<script type="text/javascript" src="./modules/Fourier.js"></script>
-	<script type="text/javascript" src="./modules/PitchRecorder.js"></script>
-	<script type="text/javascript" src="./modules/OpticalSensor.js"></script>
-	<script type="text/javascript" src="./modules/SignalLooper.js"></script>
-	<script type="text/javascript" src="./modules/Mastermind.js"></script>
-	<script type="text/javascript" src="./modules/Unscramble.js"></script>
-	<script type="text/javascript" src="./modules/PowerDiverter.js"></script>
-	<script type="text/javascript" src="./modules/Rubix.js"></script>
-
-	
-	<style type="text/css">
-
-		@import url('https://fonts.googleapis.com/css2?family=Antonio&display=swap');
 	
 
-		@font-face {
-		  font-family: "Antonio", sans-serif;
-		  font-optical-sizing: auto;
-		  font-weight: 400;
-		  font-style: normal;
-		}
-
-		body{
-
-			--red: #FF7B7B;
-			--orange: rgb(255, 154, 116);
-			--yellow: rgb(255, 250, 111);
-			--green: rgb(147, 254, 136);
-			--blue: rgb(89, 176, 241);
-			--purple: rgb(153, 153, 255);
-			--pink: rgb(255, 153, 253);
-			--black: black;
-			--grid: 70px;
-
-			--orange-opaque: rgba(255, 154, 116, 0.8);
-			--yellow-opaque: rgb(255, 250, 111, 0.8);
-			--green-opaque: rgba(147, 254, 136, 0.8);
-			--blue-opaque: rgba(89, 176, 241, 0.8);
-			--purple-opaque: rgba(153, 153, 255, 0.8);
-			--pink-opaque: rgba(255, 153, 253, 0.8);
-			
-			margin: 0px;
-			overflow: hidden;
-			width: 100vw;
-			height: 100vh;
-			display: block;
-			color: var(--black);
-			background: var(--blue);
-			font-family: "Antonio";
-
-			font-size: 30px;
-
-
-			user-select: none;
-		}
-
-		h1{
-			font-size: inherit;
-			font-weight: inherit;
-		}
-
-		container{
-			display: block;
-			width: 1px;
-			height: 1px;
-			position: absolute;
-			top: 0px;
-			left: 0px;
-			right: 0px;
-			bottom: 0px;
-			margin: auto;
-		}
-
-		world{
-			display: block;
-			width: 120vw;
-			height: 120vw;
-			position: absolute;
-			top: -60vw;
-			left: -60vw;
-			bottom: -60vw;
-			right: -60vw;
-		}
-
-		layer{
-			display: block;
-			width: 100%;
-			height: 100%;
-			top: 0px;
-			left: 0px;
-			position: absolute;
-			background-size: cover;
-			background-color: transparent;padding: 50px;
-		}
-
-		layer.bg{
-
-
-			/*background: url('https://i.makeagif.com/media/1-13-2021/bzqNMj.gif');
-			background: url('https://64.media.tumblr.com/81267977753eb63f4c1d4dbcc5db7a5a/b06f96fe037fe9c4-df/s500x750/b5868a58076339f7699ea64bd33c8d351e9996fa.gif');*/
-			
-			background-size: 110%;
-			background-position: center;
-
-			opacity: 1;
-
-		}
-
-		layer.bg:before{
-			content: "";
-			position: absolute;
-			top: 0px;
-			left: 0px;
-			right: 0px;
-			bottom: 0px;
-			background: black;
-			opacity: 0.8;
-			display: block;
-		}
-
-		layer.bg:after{
-			content: "";
-			position: absolute;
-			top: 0px;
-			left: 0px;
-			right: 0px;
-			bottom: 0px;
-			background: var(--green);
-			opacity: 0;
-			display: block;
-		}
-
-		
-
-		layer.overlay{
-
-
-			background: url('https://images.pond5.com/rgb-bad-tv-signal-screen-footage-127602246_iconl.jpeg');
-			
-			background-size: 110%;
-			background-position: center;
-
-			opacity: 0.05;
-			pointer-events: none;
-
-
-		}
-
-
-		
-		station{
-			display: block;
-			width: 1000px;
-			height: 1000px;
-			position: absolute;
-			top: 0px;
-			left: 0px;
-			right: 0px;
-			bottom: 0px;
-			margin: auto;
-		}
-
-		stationlayers{
-			display: block;
-			width: 100%;
-			height: 100%;
-			transform: scale(0.5, 0.51) rotate(-5deg);
-			position: absolute;
-			top: 0px;
-			left: 0px;
-			right: 0px;
-			bottom: 0px;
-			margin: auto;
-		}
-
-		stationlayer{
-			position: absolute;
-			display: block;
-			width: 100%;
-			height: 100%;
-			left: 0px;
-			top: 0px;
-			background-size: cover;
-			background-image: url(./space-station.png);
-		}
-
-		hud p{
-			background: rgba(0,0,0,0.5);
-			display: inline-block;
-			padding: 10px;
-			margin: 0px;
-
-			width: 80px;
-			
-			margin: 1px;
-			backdrop-filter: blur(5px);
-		}
-
-		hud p:nth-of-type(odd){
-			text-align: right;
-		}
-
-		stationlayer:nth-of-type(1){ left: -100px; top:30px; filter: contrast(0%) brightness(0.2); }
-		stationlayer:nth-of-type(2){ left: -80px; top:20px; filter: contrast(50%) brightness(0.5); }
-		stationlayer:nth-of-type(3){ left: -20px; top:10px; filter: contrast(0%) brightness(0.2); }
-		stationlayer:nth-of-type(4){ left: 0px; }
-
-		reticule{
-			width: 500px;
-			height: 150px;
-			position: absolute;
-			top: 0px;
-			left: 0px;
-			right: 0px;
-			bottom: 0px;
-			margin: auto;
-			display: block;
-		}
-
-		reticule:before{
-			content: "";
-			position: absolute;
-			display: block;
-			width: 10px;
-			height: 100%;
-			left: 0px;
-			top: 0px;
-
-
-			border-width: 2px;
-			border-color: #00ff00;
-			border-style: solid;
-			border-right: 0px;
-		}
-
-		reticule:after{
-			content: "";
-			position: absolute;
-			display: block;
-			width: 10px;
-			height: 100%;
-			right: 0px;
-			top: 0px;
-
-
-			border-width: 2px;
-			border-color: #00ff00;
-			border-style: solid;
-			border-left: 0px;
-		}
-
-
-		reticule.target:before, reticule.target:after{
-
-		 
-			border-color: red;
-
-		}
-
-		hud{
-			display: block;
-			position: absolute;
-			bottom: 0px;
-			left: 0px;
-			right: 0px;
-			top: 0px;
-			margin: auto;
-
-			width: 500px;
-			height: 150px;
-			transform: translateY(160px);
-		}
-
-		controls{
-			position: absolute;
-			bottom: 10px;
-			right: 10px;
-		}
-
-		button{
-			font: inherit;
-			background: var(--purple);
-			color: inherit;
-			border: none;
-			
-		}
-
-		whale{
-			display: block;
-			width: 40vw;
-			height: 38vw;
-			
-			margin: auto;
-			position: absolute;
-			top: 0px;
-			left: 0px;
-			right: 0px;
-			bottom: 0px;
-			white-space: nowrap;
-
-		}
-
-		whaleslice{
-			display: inline-block;
-			width: 1%;
-			height: 100%;
-			background-size: 10000%;
-			background-position-y:center;
-			background-repeat: no-repeat;
-			background-position-x: 0%;
-			background-image: url('./space-whale.webp');
-
-			animation-duration: 5s;
-			animation-name: downup;
-			animation-iteration-count: infinite;
-			animation-timing-function: ease-in-out;
-			position: relative;
-		}
-
-		fourier{
-			height: 200px;
-			position: relative;
-			display: inline-block;
-			transform: scaleY(-1);
-			padding: 10px;
-			
-		}
-
-		fourier.disabled:after{
-			content: "Click to Enable";
-			position: absolute;
-			top:0px;
-			left: 0px;
-			right: 0px;
-			bottom: 0px;
-			color: white;
-			transform: scaleY(-1);
-			text-align: center;
-			line-height: 200px;
-
-		}
-
-		fourier-c{
-			display: inline-block;
-			width: 10px;
-			background: #CF6A67;
-			vertical-align: top;
-		}
-
-		@keyframes downup{
-			0%{
-				top:-5%;
-			}
-
-			50%{
-				top: 10%;
-			}
-
-			100%{
-				top: -5%;
-			}
-		}
-
-		label{
-			position: absolute;
-			left: 0px;
-			top: 0px;
-			padding: 5px 10px;
-			
-		}
-
-		.yellow{
-			border-color: var(--yellow);
-			color: #FECF68;
-		}
-
-		oscategory{
-			color: black;
-			display: inline-block;
-			text-align: left;
-			
-			overflow: hidden;
-			position: relative;
-			backdrop-filter: blur(10px);
-			box-shadow: 0px 0px 20px rgba(0,0,0,0.1);
-			margin: 10px;
-
-			background: rgba(255,255,255,0.1);
-			vertical-align: top;
+	<script type="text/javascript">
+		$(function () {
 
 			
+			window.launchpad = new LaunchpadController();
 
-		}
+			let colors = ['yellow','cyan','purple','pink'];
 
-		oswindowheader{
-			margin: 0px;
-			padding: 0px;
-			height: var(--grid);
-			line-height: var(--grid);
-			font-size: var(--grid);
-			display: flex;
-			
-			align-items: stretch;
-			align-content: stretch;
+			let toys = [
+				{ title:"DIVERT POWER", color:'yellow', toy:new PowerDiverter() },
+				{ title:"DECODER", color:'pink', toy:new Unscramble() },
+				{ title:"SYNTH SIGNAL", color:'pink', toy:new Sequencer() },
+				{ title:"VOCAL SIGNAL", color:'blue', toy:new PitchRecorder() },
+				{ title:"TRANSLATOR", color:'blue', toy:new BrokenChat() },
 
-		}
+			]
 
-		osh{
-			vertical-align: middle;
-			position: relative;
-			top: -9px;
-			display: block;
-			padding: 0px 3px;
+			let OSBox = function(color,header,icon){
+				
+				let self = this;
+				let w = 14;
+				let h = 14;
 
-		}
+				let $el = $('<osbox>').appendTo('osstream');
+				let $t = $('<table>').appendTo($el);
 
-		oshafter{
-			display: flex;
-			flex-grow: 2;
-			vertical-align: middle;
-		}
+				for(var r=0; r<w; r++ ){
+					let $tr = $('<tr>').appendTo($t);
+					for(let c=0; c<h; c++){
+						let $td = $('<td>').appendTo($tr).attr('c',c).attr('r',r);
+					}
+				}
 
-		oswindow h1{
-			margin: 0px;
-			padding: 0px;
-			height: var(--grid);
-			border-radius: 0px var(--grid) var(--grid) 0px;
+				let paint = [
+					''
+				]
 
+				$el.find(`[c=0], [r=0], [c=${w-1}], [r=${h-1}],
+					[c=1][r=1],
+					[c=${w-2}][r=1], 
+					[c=${w-2}][r=${h-2}],
+					[c=1][r=${h-2}]`).attr('paint','true');
 
-		}
+				//outer corners
+				$el.find(`[c=0][r=0]`).attr('corner','tl');
+				$el.find(`[c=${w-1}][r=0]`).attr('corner','tr');
+				$el.find(`[c=${w-1}][r=${h-1}]`).attr('corner','br');
+				$el.find(`[c=0][r=${h-1}]`).attr('corner','bl');
 
+				//inner corners
+				$el.find(`[c=1][r=1]`).attr('cornice','tl');
+				$el.find(`[c=${w-2}][r=1]`).attr('cornice','tr');
+				$el.find(`[c=${w-2}][r=${h-2}]`).attr('cornice','br');
+				$el.find(`[c=1][r=${h-2}]`).attr('cornice','bl');
 
+				$el.find(`[c=0]`).attr('thick',3);
 
-		oswindow{
-			position: relative;
-			display: block;
-			
-			padding-left: var(--grid);
-		}
+				$('<h1>').appendTo($el.find('[c=2][r=0]'));
 
-		osborder{
-			display: inline-block;
-			width: var(--grid);
-			height: 100%;
-			vertical-align: top;
-			background: blue;
-			position: absolute;
-			top: 0px;
-			left: 0px;
+				
+				$(`[r=6][c=${w-1}]`).attr('bordered','vert');
+				$(`[r=7][c=${w-1}]`).attr('bordered','vert');
 
-			border-radius: var(--grid) 0px 0px var(--grid);
-		}
+				let isStarted = false;
+				let iToy = -1;
+				async function onLaunchToy(){
 
-		
+					if(!isStarted){
+						await Tone.start()
 
-		oscolumn{
-			display: inline-block;
-			vertical-align: top;
-		}
+						let meter = new Tone.Meter();
+						window.mic = new Tone.UserMedia().connect(meter);
 
-		ostoy{
-			display: block;
-			background: rgba(255, 255, 255, 0.2);
-			position: relative;
-			margin: 0px;
-			padding: 0px;
-		}
+						mic.open().then(() => {
+							console.log("mic open");
+							
+						}).catch(e => {
+							console.log("mic not open",e);
+						});
 
+						window.synth = new Tone.Synth().toDestination();
+						synth.envelope.attack = 0.05;
+						synth.envelope.release = 0.5;
+						
 
+						isStarted = true;
+					}
+					
+					if(iToy>-1){
+						toys[iToy].toy.turnOnOff(false);
+						toys[iToy].toy.$el.detach();
+					}
 	
-		oscategory h1{
+					os.$toy.empty();
 
-			
-			
-			background: var(--purple);
-			margin: 0px;
-			
-			padding-left: 15px;
-
-			height: var(--grid);
-
-			
-			text-align: left;
-			box-sizing: border-box;
-			align-content: center;
-			align-items: center;
-			
-		}
-
-		ul{
-			list-style-type: none;
-			margin: 0px;
-			padding: 0px;
-			display: block;
-		}
-
-		li{
-			display: block;
-			background: var(--purple);
-			width: 200px;
-			margin-bottom: 1px;
-			padding: 10px 15px;
-			color: white;
-			background: rgba(255,255,255,0.2);
-		}
-
-		ospanel{
-			border-top-left-radius: 50px;
-			display: block;
-			overflow: hidden;
-			border-top: 5px solid white;
-			width: 700px;
-		}
-
-		ospanelheader{
-			height: var(--grid);
-			width: 200px;
-			background: white;
-			display: block;
-		}
+					/*let now = Tone.now();
+					window.synth.triggerAttackRelease('C4',0.1,now);
+					window.synth.triggerAttackRelease('D4',0.1,now+0.1);*/
 
 
-		osmenu > osmenuprimary, osmenu > osmenu{
-			display: inline-block;
-			vertical-align: top;
-		}
 
-		li:after{
-			content: "→";
-			position: absolute;
-			right: 15px;
-		}
+					iToy = $(this).attr('toy');
+					toys[iToy].toy.turnOnOff(true);
+					toys[iToy].toy.$el.appendTo(os.$toy);
 
-		
-
-		osmenu li, osmenu h1{
-			height: var(--grid);
-			line-height: var(--grid);
-			
-			position: relative;
-			margin: 0px 0px 1px 0px;
-			width: 300px;
-		}
-
-		osli{
-			display: block;
-			margin-top: 5px;
-		}
-
-		pip{
-			content: "";
-			width: 80px;
-			height: 80px;
-			
-			background: white;
-			text-align: center;
-			
+					self.reskin(toys[iToy].title,toys[iToy].color);
 
 
-			display: inline-block;
-			vertical-align: top;
+				}
 
-			margin-right: 5px;
-
-		}
-
-		oslabel{
-			display: inline-block;
-			color: var(--black);
-			width: 300px;
-			height: 80px;
-			line-height: 30px;
-			vertical-align: top;
-			padding: 30px 15px 0px;
-			text-align: right;
-			box-sizing: border-box;
+				let toys = [];
+				self.addToy = function(toy){
+					
+					$(`[r=${2+toys.length}][c=0]`).attr('bordered','top');
+					$(`[r=${2+toys.length}][c=0]`).removeAttr('paint').attr('bg',toy.color).attr('bordered','top').text(toy.title).attr('toy',i).click(onLaunchToy);
+					toys.push(toy);
 
 
-		}
+					$(`[r=${2+toys.length}][c=0]`).attr('bordered','top');
+				}
 
-		osheader{
-			width: 385px;
-			height: 160px;
-			background: white;
-			display: block;
-			border-top-left-radius: 80px;
-			position: relative;
-		}
+				self.reskin = function(title,color){
+					$el.find('[paint]').attr('bg',color);
+					$el.find('h1').attr('color',color).text(title);
+				}
 
-		osheader oslabel{
-			position: absolute;
-			right: 0px;
-			bottom: 0px;
-		}
+				self.reskin(header,color);
 
-		
+				self.$toy = $('<toy>').appendTo($el.find('[r=1][c=1]'));
 
-		osmenu h1{
-			color: var(--black);
-		}
+				if(icon) $('<osicon>').appendTo(self.$toy).css('background-image','url('+icon+')');
 
-		.launchpadsim{
-			padding: 20px;
-			background: black;
-			z-index: 100;
-			position: fixed;
-			bottom: 0px;
-			right: 0px;
-		}
-
-		.launchpadsim td{
-			width: 20px;
-			height: 20px;
-			background: rgba(255, 255, 255, 0.1);
-		}
-
-		header{
-			position: fixed;
-			bottom: 0px;
-			right: 0px;
-			padding: 30px;
-			color:white;
-			display: block;
-			
-		}
-
-		footer{
-			position: fixed;
-			bottom: 0px;
-			left: 0px;
-			padding: 30px;
-			color:white;
-			display: block;
-			font-weight: thinner;
-		}
-
-		b{
-			color: var(--pink);
-		}
-
-		[bg]{
-			box-sizing: border-box;
-
-			border: 4px solid;
-		}
-
-		[bg='red']{ 
-			background-color: var(--red-opaque); 
-			border-color: var(--red);
-
-		}
-		[bg='orange']{ 
-			background-color: var(--orange-opaque); 
-			border-color: var(--orange);
-		}
-		[bg='yellow']{ 
-			background-color: var(--yellow-opaque); 
-			border-color: var(--yellow);
-		}
-		[bg='green']{ 
-			background-color: var(--green-opaque); 
-			border-color: var(--green);
-		}
-		[bg='blue']{ 
-			background-color: var(--blue-opaque);
-			border-color: var(--blue);
-
-		}
-		[bg='purple']{ 
-			background-color: var(--purple-opaque);
-			border-color: var(--purple);
-		}
-
-		[bg='pink']{ 
-			background-color: var(--pink-opaque);
-			border-color: var(--pink);
-		}
-
-		[text='pink']{
-			color: var(--pink);
-		}
-
-		/*oscategory[color='red']{ border-color: var(--red); }
-		oscategory[color='red'] h1, [bg='red']{ background-color: var(--red); }
-
-		oscategory[color='orange']{ border-color: var(--orange); }
-		oscategory[color='orange'] h1, [bg='orange']{ background-color: var(--orange); }
-
-		oscategory[color='yellow']{ border-color: var(--yellow); }
-		oscategory[color='yellow'] h1, [bg='yellow']{ background-color: var(--yellow); }
-
-		oscategory[color='green']{ border-color: var(--green); }
-		oscategory[color='green'] h1, [bg='green']{ background-color: var(--green); }
-
-		oscategory[color='blue']{ border-color: var(--blue); }
-		oscategory[color='blue'] h1, [bg='blue']{ background-color: var(--blue); }
-
-		oscategory[color='purple']{ border-color: var(--purple); }
-		oscategory[color='purple'] h1, [bg='purple']{ background-color: var(--purple); }
-
-		oscategory[color='pink']{ border-color: var(--pink); }
-		oscategory[color='pink'] h1, [bg='pink']{ background-color: var(--pink); }*/
-
-		loader{
-			display: inline-block;
-			width: 400px;
-			height: 5px;
-			background: white;
-			margin-top:50px;
-			position: relative;
-		}
-
-		loaderspot{
-			width: 5px;
-			height: 5px;
-			position: absolute;
-			display: block;
-			animation-name: backandforth;
-			animation-iteration-count: infinite;
-			animation-duration: 3s;
-		}
-
-		loaderspot:after{
-			content: "";
-			width: 25px;
-			height: 25px;
-			position: absolute;
-			
-			background: white;
-			display: block;
-			position: absolute;
-			top: -10px;
-			left: -10px;
-		}
-
-		seq{
-			padding: 20px;
-			display: block;
-		}
-
-		seq-r{
-			display: block;
-			line-height: 0px;
-		}
-
-		seq-c{
-			width: 40px;
-			height: 40px;
-			margin: 1px;
-			background: var(--purple);
-			display: inline-block;
-			position: relative;
-			line-height: 40px;
-			text-align: center;
-			vertical-align: top;
-			color:black;
-			cursor: pointer;
-		}
-
-		seq.looper seq-c{
-			border-radius: 100px;
-		}	
-
-		seq-c.selected{
-			background: var(--green);
-		}
-
-		@keyframes backandforth{
-			0%{
-				left:0%;
+				
 			}
 
-			40%{
-				left: 100%;
-				transform: rotate(90deg);
-			}
+			let osLeft = new OSBox('pink');
+			let os = new OSBox('yellow','ENGINEERING','./img/wireframe/wireframe-top-side.png');
 
-			50%{
-				left: 100%;
-				transform: rotate(90deg);
-			}
+			for(var i=0; i<toys.length; i++) os.addToy(toys[i]);
 
-			90%{
-				left: 0%;
-				transform: rotate(180deg);
-			}
+			let osRight = new OSBox('purple');
 
-			100%{
-				left: 0%;
-				transform: rotate(180deg);
-			}
-		}
+		})
+	</script>
 
-		mastermind, unscramble{
-			padding: 20px;
-			text-align: center;
-			display: block;
-		}
-
-		unscramble p{
-			color: var(--pink);
-		}
-
-		unscramble seq-c{
-			
-		}
-
-
-		mastermind button{
-			margin-top: 20px;
-			display: block;
-			width: 100%;
-			padding: 10px;
-		}
-
-		seq-c[correctness]{
-			overflow: hidden;
-		}
-
-		[correctness]:after{
-			content: "";
-			width: 20px;
-			height: 20px;
-			position: absolute;
-			bottom: -11px;
-			left: 0px;
-			right: 0px;
-			position: absolute;
-			display: block;
-			background: 5px solid var(--purple);
-			border: 1px solid black;
-			margin: auto;
-			transform: rotate(45deg);
-		}
-
-		[correctness='0']:after{
-			display: none;
-		}
-
-		[correctness='1']:after{
-			background: var(--yellow);
-		}
-
-		[correctness='2']:after{
-			background: var(--green);
-		}
-
-		button[type='close']{
-			position: absolute;
-			right: 5px;
-			top: 5px;
-			width: 30px;
-			height: 30px;
-			position: absolute;
-			background: none;
-
-		}
-
-		button[type='close']:after,button[type='close']:before{
-			content: "";
-			width: 1.5px;
-			height: 15px;
-			background: black;
-			
-			transform: rotate(45deg);
-			display: inline-block;
-			position: relative;
-			top: 3px;
-
-		}
-
-		button[type='close']:after{
-			transform: rotate(135deg);
-		}
-
-		power{
-			display: block;
-			line-height: 0px;
-			margin: 0px;
-			position: relative;
-			box-shadow: inset 0px 0px 50px black;
-		}
-
-		power-row{
-			display: block;
-		}
-
-		power-cell{
-			display: inline-block;
-			width: 50px;
-			height: 50px;
-			
-			position: relative;
-			box-sizing: border-box;
-			line-height: 50px;
-		}
-
-		power-actor{
-			position: absolute;
-			top: 0px;
-			left: 0px;
-			bottom: 0px;
-			right: 0px;
-			margin: auto;
-		
-			
-			
-			display: block;
-			line-height: 50px;
-			color: var(--blue);
-			text-align: center;
-			
-			
-			font-weight: bold;
-			
-			background-size: cover;
-			
-		}
-
-		power-actor.selected:after{
-			content: "";
-			width: 150%;
-			height: 150%;
-			position: absolute;
-			left: -25%;
-			top:-25%;
-			box-sizing: border-box;
-			border: 1px dashed var(--yellow);
-			border-radius: 100px;
-		}
-
-		power-actor object{
-			width: 100%;
-			height: 100%;
-			pointer-events: none;
-			
-		}
-		/*power-actor[type='damage']{
-			
-			background-image: url(./icon-damage.svg);
-			
-		}
-
-
-		power-actor[type='battery']{
-			
-			
-			background-image: url('./icon-power.svg');
-			
-			
-		}
-
-		power-actor[subtype='engine']{
-			
-			background-image: url('./icon-engine.svg');
-			
-		}
-
-		power-actor[subtype='oxygen']{
-			
-			background-image: url('./icon-oxygen.svg');
-			
-		}
-
-		power-actor[type='diverter']{
-			
-			
-			line-height: 20px;
-			font-size: 20px;
-			font-weight: bold;
-
-			background-image: url(./icon-diverter.svg);
-			
-		}
-
-		power-actor[type='diverter'][powered='true']{
-			background-image: url(./icon-diverter-powered.svg);
-		}
-
-		power-actor[subtype='engine'][powered='true']{
-			background-image: url('./icon-engine-powered.svg');
-		}*/
-		
-
-		power svg{
-			position: absolute;
-			top: 0px;
-			left: 0px;
-		}
-
-		power path{
-			stroke: var(--blue);
-			fill: none;
-		}
-
-		power path.hull:nth-of-type(1){
-			stroke:var(--purple);
-			fill:rgba(0,0,0,0.5);
-			stroke-width: 10;
-		}
-
-		power path.hull:nth-of-type(2){
-			stroke:black;
-			stroke-width: 9;
-			
-		}
-
-		power path.frame{
-			stroke:var(--yellow);
-		}
-
-		power-cell[type='*']{
-
-		}
-
-		/*power path:nth-of-type(2){
-			stroke-width: 4;
-			opacity: 0.2;
-		}
-
-		power path:nth-of-type(1){
-			stroke-width: 10;
-			opacity: 0.2;
-		}*/
-
-		rubix{
-			display: block;
-			padding: var(--grid);
-			
-		}
-
-		rubix row{
-			display: block;
-			line-height: 0px;
-		}
-
-		rubix cell{
-			display: inline-block;
-			width: var(--grid);
-			height: var(--grid);
-			margin: 1px;
-			vertical-align: middle;
-			line-height: 40px;
-			text-align: center;
-		}
-
-	</style>
+	<title></title>
 </head>
 <body>
-	<container>
-		<world>
-			<layer class=stars></layer>
-			<layer module=docking>
-				<station>
-					<stationlayers>
-						<stationlayer></stationlayer>
-						<stationlayer></stationlayer>
-						<stationlayer></stationlayer>
-						<stationlayer></stationlayer>
-					</stationlayers>
-				<station>
-			</layer>
-			<layer module=whale>
-				<whale></whale>
-			</layer>
-		</world>
-	</container>
-	<layer class=bg></layer>
 	
-	<layer module='intro' style='text-align: center;padding: 200px 0px;'>
-		<footer>ATLAS<b>OS</b></footer>
-		<header>CTE <b>Communications Translation Encryption</b></header>
-		<h1 style="line-height:400px;font-size: 400px;margin:0px;padding:0px;">CTE</h1> 
-		<loader>
-			<loaderspot></loaderspot>
-		</loader>
-	</layer>
-	<layer module='whale'>
-		<controls>
-			<button trigger=listen>Listen</button><br><br>
-			<button trigger=connect>Connect</button><br><br>
-			<launchpad></launchpad>
-		</controls>
-
-	</layer>
-
-	<layer module=docking>
-
-		<reticule class='target'>
-			
-		</reticule>
-		<reticule >
-			
-		</reticule>
-
-		<hud>
-			<p>Distance</p><p>2,132,456 metres</p><br>
-			<p>Speed</p><p>1.5 m/s</p><br>
-			<p>Rotation</p><p>0 m/s</p>
-		</hud>
-		<controls>
-			<button onmousedown="moduleLive.thrust(true)" onmouseup="moduleLive.thrust(false)">Thrust</button>
-			<button onmousedown="moduleLive.roll(-1)" onmouseup="moduleLive.roll(0)">Roll left</button>
-			<button onmousedown="moduleLive.roll(1)" onmouseup="rmoduleLive.oll(0)">Roll right</button>
-		</controls>
-	</layer>
-
-	<layer module='audiomash'>
-		<footer>ATLAS<b>OS</b></footer>
-		<header>CTE <b>Communications Translation Encryption</b></header>
-		
-		
-		
-	</layer>
-	<layer class='overlay'></layer>
+	<container>
+		<osstream></osstream>
+	</container>
+	<midi-message></midi-message>
 </body>
 </html>

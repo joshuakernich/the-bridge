@@ -1,0 +1,246 @@
+@import url('https://fonts.googleapis.com/css2?family=Antonio&display=swap');
+	
+@font-face {
+  font-family: "Antonio", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+body{
+
+	--red: #D9297B; /* same as pink */
+	
+	--yellow: #F2C849;
+	--green: #A7C342;
+	--cyan: #10CFDC;
+	--blue: #0098FF;
+	--purple: #A100F7;
+	--pink: #D9297B;
+	--black: black;
+	--white: white;
+
+	--grid: 50px;
+
+
+	
+	--yellow-opaque: rgb(255, 250, 111, 0.3);
+	--green-opaque: rgba(147, 254, 136, 0.3);
+	--blue-opaque: rgba(89, 176, 241, 0.3);
+	--cyan-opaque: rgba(13, 207, 219, 0.3);
+	--purple-opaque: rgba(153, 153, 255, 0.3);
+	--pink-opaque: rgba(255, 153, 253, 0.3);
+	
+	margin: 0px;
+	
+
+	
+	color: var(--black);
+	background: gray;
+	font-family: "Antonio";
+
+	font-size: 20px;
+	font-weight: bold;
+
+
+	user-select: none;
+	
+
+}
+
+.launchpadsim{
+	border: 10px solid black;
+	background: black;
+	z-index: 100;
+	position: fixed;
+	bottom: 0px;
+	right: 0px;
+
+}
+
+.launchpadsim td{
+	background: #333;
+	width: 20px;
+	height: 20px;
+	margin: 1px;
+	border: 1px solid black;
+}
+
+
+container{
+	display: block;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100vw;
+	height: 100vh;
+	/*width: 1920px;
+	height: 1080px;*/
+	overflow: hidden;
+	transform-origin: top left;
+	background: black;
+}
+
+osstream{
+	white-space: nowrap;
+
+	display: block;
+	position: absolute;
+
+	
+	left: 50vw;
+	top: 50vh;
+
+	transform: translate(-50%, -50%);
+	width: calc(var(--grid)*17*3);
+
+}
+
+table{
+	position: relative;
+	
+	border-collapse: collapse;
+	
+	margin: auto;
+}
+td{
+	
+	width: var(--grid);
+	height: var(--grid);
+	position: relative;
+	padding: 0px 10px;
+	box-sizing: border-box;
+	white-space: nowrap;
+	text-align: right;
+
+	
+}
+
+[bg=cyan]{ background: var(--cyan); }
+[bg=red]{ background: var(--red); }
+[bg=blue]{ background: var(--blue); }
+[bg=green]{ background: var(--green); }
+[bg=purple]{ background: var(--purple); }
+[bg=pink]{ background: var(--pink); }
+[bg=orange]{ background: var(--orange); }
+[bg=yellow]{ background: var(--yellow); }
+[bg=white]{ background: var(--white); }
+
+[color=cyan]{ color: var(--cyan); }
+[color=red]{ color: var(--red); }
+[color=blue]{ color: var(--blue); }
+[color=green]{ color: var(--green); }
+[color=orange]{ color: var(--orange); }
+[color=purple]{ color: var(--purple); }
+[color=pink]{ color: var(--pink); }
+[color=orange]{ color: var(--orange); }
+[color=yellow]{ color: var(--yellow); }
+[color=white]{ color: var(--white); }
+
+[corner=tr]{ border-top-right-radius: var(--grid); }
+[corner=tl]{ border-top-left-radius: var(--grid); }
+[corner=bl]{ border-bottom-left-radius: var(--grid); }
+[corner=br]{ border-bottom-right-radius: var(--grid); }
+
+[cornice]:after{
+	content: "";
+	background: var(--black);
+	position: absolute;
+	display: block;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+}
+
+[cornice=tr]:after{ border-top-right-radius: var(--grid); }
+[cornice=tl]:after{ border-top-left-radius: var(--grid);; }
+[cornice=br]:after{ border-bottom-right-radius: var(--grid); }
+[cornice=bl]:after{ border-bottom-left-radius: var(--grid); }
+
+[thick='3']{ width: calc(var(--grid) * 3); }
+
+[bordered=top]{ 
+	border-top: 0.4vw solid var(--black);
+ }
+
+ [bordered=bottom]{ 
+	border-bottom: 0.4vw solid var(--black);
+ }
+
+[bordered=vert]{ 
+	border-top: 0.4vw solid var(--black);
+	border-bottom: 0.4vw solid var(--black);
+ }
+
+ [bordered=horz]{ 
+	border-left: 0.4vw solid var(--black);
+	border-right: 0.4vw solid var(--black);
+ }
+
+ [bordered=both]{ 
+	border: 0.4vw solid var(--black);
+ }
+
+h1{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+	display: inline-block;
+	background: var(--black);
+	color: var(--blue);
+	padding: 0px;
+	margin: 0px;
+	line-height: calc( var(--grid) * 0.9);
+	z-index: 1;
+	padding: 0px 0.5vw;
+	font-size: var(--grid);
+	text-transform: uppercase;
+	white-space: nowrap;
+}
+
+h1:empty{
+	display: none;
+}
+
+toy{
+	display: block;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 1;
+	width: calc(var(--grid) * 12);
+	height: calc(var(--grid) * 12);
+	overflow: hidden;
+	border-radius: var(--grid);
+}
+
+toy osicon{
+	
+	/*background: url('./birds/flamingo.svg');*/
+	background-position: center;
+	background-size: 90%;
+	background-repeat: no-repeat;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	display: block;
+}
+
+osbox{
+	display: inline-block;
+	margin: calc(var(--grid)/2);
+}
+
+midi-message{
+	display: block;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	color: white;
+	text-transform: uppercase;
+	padding: 20px;
+}

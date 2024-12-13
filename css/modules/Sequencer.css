@@ -1,0 +1,64 @@
+seq{
+	
+	display: block;
+	
+	padding: calc( var(--grid) * 2);
+}
+
+seq-r{
+	display: block;
+	line-height: 0px;
+}
+
+seq-c{
+	width: var(--grid);
+	height: var(--grid);
+	
+	background: black;
+	display: inline-block;
+	position: relative;
+	line-height: 40px;
+	text-align: center;
+	vertical-align: top;
+	color:black;
+	cursor: pointer;
+	box-sizing: border-box;
+}
+
+seq-c svg{
+	
+	fill: none;
+	stroke: var(--yellow);
+	stroke-width: 1;
+
+	
+	
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	border-top: 1px solid var(--yellow);
+	border-bottom: 1px solid var(--yellow);
+	box-sizing: border-box;
+
+}
+
+/*seq-r:nth-of-type(4) seq-c:nth-of-type(4){ border-bottom-right-radius: 25%; }
+seq-r:nth-of-type(4) seq-c:nth-of-type(5){ border-bottom-left-radius: 25%; }
+seq-r:nth-of-type(5) seq-c:nth-of-type(4){ border-top-right-radius: 25%; }
+seq-r:nth-of-type(5) seq-c:nth-of-type(5){ border-top-left-radius: 25%; }*/
+
+
+seq.looper seq-c{
+	border-radius: 100px;
+}	
+
+seq-c.selected{
+	--s: 10px; /* the size on the corner */
+  
+  border: 1px solid var(--cyan); /* the thickness and color */
+  -webkit-mask:
+    conic-gradient(at var(--s) var(--s),#0000 75%,#000 0)
+    0 0/calc(100% - var(--s)) calc(100% - var(--s)),
+    linear-gradient(#000 0 0) content-box;
+}
+

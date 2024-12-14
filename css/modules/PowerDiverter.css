@@ -21,8 +21,9 @@ power msg{
 
 power scroller{
 	display: block;
-	position: relative;
-	transition: 0.5s transform;
+	position: absolute;
+	top: 0px;
+	left: 0px;
 }
 
 power floorplan{

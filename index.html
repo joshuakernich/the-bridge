@@ -7,7 +7,9 @@
 	<script type="text/javascript" src="./js/lib/jq.js"></script>
 	<script type="text/javascript" src="./js/lib/Tone.js"></script>
 
+
 	<script type="text/javascript" src="./js/FloorplanSVG.js"></script>
+	<script type="text/javascript" src="./js/utils/HASocket.js"></script>
 	<script type="text/javascript" src="./js/utils/LaunchpadController.js"></script>
 
 	<script type="text/javascript" src="./js/modules/FrequencyChart.js"></script>
@@ -29,8 +31,8 @@
 	<script type="text/javascript">
 		$(function () {
 
-			
 			window.launchpad = new LaunchpadController();
+			window.socket = new HASocket();
 
 			let colors = ['yellow','cyan','purple','pink'];
 
@@ -110,10 +112,13 @@
 						synth.envelope.attack = 0.05;
 						synth.envelope.release = 0.5;
 						
-
 						isStarted = true;
 					}
 					
+					toToy( $(this).attr('toy') );
+				}
+
+				function toToy(iNew,params){
 					if(iToy>-1){
 						toys[iToy].toy.turnOnOff(false);
 						toys[iToy].toy.$el.detach();
@@ -121,30 +126,23 @@
 	
 					os.$toy.empty();
 
-					/*let now = Tone.now();
-					window.synth.triggerAttackRelease('C4',0.1,now);
-					window.synth.triggerAttackRelease('D4',0.1,now+0.1);*/
-
-
-
-					iToy = $(this).attr('toy');
-					toys[iToy].toy.turnOnOff(true);
+					iToy = iNew;
+					toys[iToy].toy.turnOnOff(true,params);
 					toys[iToy].toy.$el.appendTo(os.$toy);
-
 					self.reskin(toys[iToy].title,toys[iToy].color);
-
-
 				}
 
 				let toys = [];
 				self.addToy = function(toy){
 					
-					$(`[r=${2+toys.length}][c=0]`).attr('bordered','top');
-					$(`[r=${2+toys.length}][c=0]`).removeAttr('paint').attr('bg',toy.color).attr('bordered','top').text(toy.title).attr('toy',i).click(onLaunchToy);
+
+
+					/*$(`[r=${2+toys.length}][c=0]`).attr('bordered','top');
+					$(`[r=${2+toys.length}][c=0]`).removeAttr('paint').attr('bg',toy.color).attr('bordered','top').text(toy.title).attr('toy',i).click(onLaunchToy);*/
+					
 					toys.push(toy);
 
-
-					$(`[r=${2+toys.length}][c=0]`).attr('bordered','top');
+					//$(`[r=${2+toys.length}][c=0]`).attr('bordered','top');
 				}
 
 				self.reskin = function(title,color){
@@ -158,7 +156,11 @@
 
 				if(icon) $('<osicon>').appendTo(self.$toy).css('background-image','url('+icon+')');
 
-				
+				self.toToy = function(title,params){
+					for(var t=0; t<toys.length; t++){
+						if(toys[t].title==title) toToy(t,params);
+					}
+				}
 			}
 
 			let osLeft = new OSBox('pink');
@@ -167,6 +169,11 @@
 			for(var i=0; i<toys.length; i++) os.addToy(toys[i]);
 
 			let osRight = new OSBox('purple');
+
+			window.socket.on('circuit_damage',function(params){
+				console.log('LETS DAMAGE A CIRCUIT',params.severity);
+				os.toToy('DIVERT POWER',params);
+			})
 
 		})
 	</script>

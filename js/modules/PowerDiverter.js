@@ -12,10 +12,16 @@ window.PowerDiverter = function(){
 			<path class="laser" vector-effect="non-scaling-stroke" d="M0,0 L7,7"/>
 		</svg>`).appendTo($scroller);
 
+	const S = 100;
+	const C = 15;
+
 	$(`
-		<svg class='power-network power-frame' viewbox="-0.5 -0.5 16 16" width=800 height=800>
-			<g class="frame-group" >
-			    <path class="frame" transform="translate(-0.5 -0.5)"vector-effect="non-scaling-stroke" d="M0,0.5 L0,0 L0.5,0 M7.5,0 L8,0 L8,0.5 M 8,7.5 L 8,8 L 7.5,8 M 0,7.5 L 0,8 L 0.5,8"/>
+		<svg class='power-network power-frame' viewbox="0 0 100 100" width=400 height=400>
+			<g class="frame-group">
+			    <path class="frame" "vector-effect="non-scaling-stroke" d="M${0},${C} L${0},${0} L${C},${0}"/>
+			    <path class="frame" "vector-effect="non-scaling-stroke" d="M${S},${C} L${S},${0} L${S-C},${0}"/>
+			    <path class="frame" "vector-effect="non-scaling-stroke" d="M${0},${S-C} L${0},${S} L${C},${S}"/>
+			    <path class="frame" "vector-effect="non-scaling-stroke" d="M${S},${S-C} L${S},${S} L${S-C},${S}"/>
 			 </g>
 		</svg>`).appendTo(self.$el);
 
@@ -309,7 +315,7 @@ window.PowerDiverter = function(){
 			let icon = (actors[a].subtype?actors[a].subtype:actors[a].type) + (actors[a].powered?'-powered':'');
 			actors[a].$el.css('background-image','url(./img/icon/icon-'+icon+'.svg)')
 
-			if(actors[a].type=='door' && actors[a].open) actors[a].$el.css('background-image','url(./icon-'+icon+'-open.svg)')
+			if(actors[a].type=='door' && actors[a].open) actors[a].$el.css('background-image','url(./img/icon/icon-'+icon+'-open.svg)')
 
 			if( actors[a].$link ) actors[a].$link.removeClass('powered');
 
@@ -335,7 +341,7 @@ window.PowerDiverter = function(){
 		if(isAllPowered && !isFire){
 			$('power-actor').off();
 			actorSelected = undefined;
-			setTimeout(doNextLevel,700);
+			setTimeout(doCompleteLevel,700);
 		}
 
 		//if(window.synth) window.synth.triggerAttack(tones[countPower+(nRedraw%2)+(isAllPowered?2:0)]);
@@ -347,20 +353,57 @@ window.PowerDiverter = function(){
 	let actors = [];
 	let level;
 
-	function doNextLevel(){
+	function doCompleteLevel(){
 
+		let iLevelComplete = iLevel;
+		iLevel = -1;
+
+		dumpLevel();
+		self.turnOnOff(false);
+
+		window.socket.send({
+			id:iLevelComplete,
+			type:'circuit_fixed',
+		});
+
+		
+	}
+
+	function dumpLevel(){
+		$('power-actor').off();
+		actorSelected = undefined;
+		self.$el.find('power-cell').removeClass('powered');
 		$svgMap.find('.active').removeClass('active powered');
-
 		$('power-actor').remove();
+		actors.length = 0;
+		$svg.find('.laser').attr('d','');
+		window.launchpad.clear();
+	}
 
-		iLevel++;
+	function doNextLevel(){
+		doLevel(iLevel+1);
+	}
+
+	function doLevel(iToLevel){
+
+		
+		
+
+		iLevel = iToLevel;
+
+		
+
 		level = levels[iLevel];
 		actors = levels[iLevel].actors;
 
 		$svg.find('g').attr('transform','translate('+level.x+' '+level.y+')');
 
 		$msg.text(`GRID ${level.x}-${level.y}`);
-		$scroller.css('transform','translate('+(-level.x*50)+'px,'+(-level.y*50)+'px)');
+		//$scroller.css('transform','translate('+(-level.x*50)+'px,'+(-level.y*50)+'px)');
+		$scroller.animate({
+			'left':-level.x*50,
+			'top':-level.y*50
+		});
 
 		for(var a in actors) spawnActor(actors[a]);
 
@@ -408,7 +451,6 @@ window.PowerDiverter = function(){
 		
 	}
 	
-	doNextLevel();
 
 	let keyWas = undefined;
 	let cntClick = 0;
@@ -534,19 +576,19 @@ window.PowerDiverter = function(){
 	}
 
 	let interval = undefined;
-	self.turnOnOff = function(b){
+	self.turnOnOff = function(b,params){
 		
 
 		clearInterval(interval)
 		if(b){
+			if(params && params.severity) doLevel(params.severity-1);
 			interval = setInterval(step,100);
 			redraw();
 		} else {
-			window.synth.triggerRelease();
+			//window.synth.triggerRelease();
 		}
+
+		
 	}
-
-
-
 	
 }

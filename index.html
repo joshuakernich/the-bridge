@@ -135,14 +135,12 @@
 				let toys = [];
 				self.addToy = function(toy){
 					
-
-
-					/*$(`[r=${2+toys.length}][c=0]`).attr('bordered','top');
-					$(`[r=${2+toys.length}][c=0]`).removeAttr('paint').attr('bg',toy.color).attr('bordered','top').text(toy.title).attr('toy',i).click(onLaunchToy);*/
+					$(`[r=${2+toys.length}][c=0]`).attr('bordered','top');
+					$(`[r=${2+toys.length}][c=0]`).removeAttr('paint').attr('bg',toy.color).attr('bordered','top').text(toy.title).attr('toy',i).click(onLaunchToy);
 					
 					toys.push(toy);
 
-					//$(`[r=${2+toys.length}][c=0]`).attr('bordered','top');
+					$(`[r=${2+toys.length}][c=0]`).attr('bordered','top');
 				}
 
 				self.reskin = function(title,color){

@@ -3,7 +3,7 @@ window.HASocket = function(){
 	let self = this;
 	let listeners = {};
 
-	const URL = 'http://localhost:8080';
+	const URL = 'http://localhost:8123';
 	const protocols = 'nothingHere';
 	const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJmMzRjZWI1OTNlOTY0OTJhYThjYzNlNmMwNGUyYjY1MiIsImlhdCI6MTcyNjg5NjE3NCwiZXhwIjoyMDQyMjU2MTc0fQ.ru0S-BHJCClCRKkpMNbNfwRvi8QUfVy8NznFT-80L_c';
 

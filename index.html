@@ -128,7 +128,7 @@
 
 					iToy = iNew;
 					toys[iToy].toy.turnOnOff(true,params);
-					toys[iToy].toy.$el.appendTo(os.$toy);
+					toys[iToy].toy.$el.appendTo('body');
 					self.reskin(toys[iToy].title,toys[iToy].color);
 				}
 
@@ -164,13 +164,18 @@
 			let osLeft = new OSBox('pink');
 			let os = new OSBox('yellow','ENGINEERING','./img/wireframe/wireframe-top-side.png');
 
+
 			for(var i=0; i<toys.length; i++) os.addToy(toys[i]);
+				os.toToy('DIVERT POWER');
 
 			let osRight = new OSBox('purple');
 
 			window.socket.on('circuit_damage',function(params){
-				console.log('LETS DAMAGE A CIRCUIT',params.severity);
-				os.toToy('DIVERT POWER',params);
+				//os.toToy('DIVERT POWER',params);
+			})
+
+			$(document).click(function(){
+				os.toToy('DIVERT POWER',{severity:1});
 			})
 
 		})

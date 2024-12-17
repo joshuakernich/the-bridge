@@ -374,14 +374,17 @@ window.PowerDiverter = function(){
 
 		$msg.text('ALL SYSTEMS NOMINAL');
 
-		$('power-actor').off();
-		actorSelected = undefined;
+		self.$el.find('power-actor').off();
+		self.$el.find('power-actor').remove();
+
 		self.$el.find('power-cell').removeClass('powered');
 		$svgMap.find('.active').removeClass('active powered');
-		$('power-actor').remove();
-		actors.length = 0;
+		
 		$svg.find('.laser').attr('d','');
 		window.launchpad.clear();
+
+		actors.length = 0;
+		actorSelected = undefined;
 	}
 
 	function doNextLevel(){
@@ -390,12 +393,24 @@ window.PowerDiverter = function(){
 
 	function doLevel(iToLevel){
 
+		dumpLevel();
+
 		iLevel = iToLevel;
 		level = levels[iLevel];
-		actors = levels[iLevel].actors;
+
+		actors = [];
+
+		for(var n=0; n<levels[iLevel].actors.length; n++ ){
+			
+			let actor = levels[iLevel].actors[n];
+
+			let clone = {};
+			for(var v in actor) clone[v] = actor[v];
+			
+			actors[n] = clone;
+		}
 
 		$svg.find('g').attr('transform','translate('+level.x+' '+level.y+')');
-
 		$msg.text(`GRID ${level.x}-${level.y}`);
 		//$scroller.css('transform','translate('+(-level.x*50)+'px,'+(-level.y*50)+'px)');
 		$scroller.animate({
@@ -403,12 +418,17 @@ window.PowerDiverter = function(){
 			'top':-level.y*50
 		});
 
+
 		for(var a in actors) spawnActor(actors[a]);
 
 		redraw()
 	}
 
 	function spawnActor(actor){
+
+
+
+
 		let icon = actor.subtype?actor.subtype:actor.type;
 
 		let $el = $('<power-actor>')

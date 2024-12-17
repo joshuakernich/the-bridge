@@ -128,7 +128,7 @@
 
 					iToy = iNew;
 					toys[iToy].toy.turnOnOff(true,params);
-					toys[iToy].toy.$el.appendTo('body');
+					toys[iToy].toy.$el.appendTo(os.$toy);
 					self.reskin(toys[iToy].title,toys[iToy].color);
 				}
 
@@ -171,11 +171,11 @@
 			let osRight = new OSBox('purple');
 
 			window.socket.on('circuit_damage',function(params){
-				//os.toToy('DIVERT POWER',params);
+				os.toToy('DIVERT POWER',params);
 			})
 
 			$(document).click(function(){
-				os.toToy('DIVERT POWER',{severity:1});
+				//os.toToy('DIVERT POWER',{severity:1});
 			})
 
 		})

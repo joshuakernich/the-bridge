@@ -4,7 +4,7 @@ window.PowerDiverter = function(){
 	self.$el = $('<power>');
 
 	let $scroller = $('<scroller>').appendTo(self.$el);
-	let $msg = $('<msg>').appendTo(self.$el).text('GRID');
+	let $msg = $('<msg>').appendTo(self.$el).text('ALL SYSTEMS NOMINAL');
 	let $svgMap = $('<floorplan>'+window.FloorplanSVG+'</floorplan>').appendTo($scroller);
 
 	let $svg = $(`
@@ -353,6 +353,8 @@ window.PowerDiverter = function(){
 	let actors = [];
 	let level;
 
+	let n = 120;
+
 	function doCompleteLevel(){
 
 		let iLevelComplete = iLevel;
@@ -362,14 +364,16 @@ window.PowerDiverter = function(){
 		self.turnOnOff(false);
 
 		window.socket.send({
-			id:iLevelComplete,
-			type:'circuit_fixed',
+			"id": n++,
+			type:'fire_event',
+			event_type:'circuit_fixed'
 		});
-
-		
 	}
 
 	function dumpLevel(){
+
+		$msg.text('ALL SYSTEMS NOMINAL');
+
 		$('power-actor').off();
 		actorSelected = undefined;
 		self.$el.find('power-cell').removeClass('powered');
@@ -386,13 +390,7 @@ window.PowerDiverter = function(){
 
 	function doLevel(iToLevel){
 
-		
-		
-
 		iLevel = iToLevel;
-
-		
-
 		level = levels[iLevel];
 		actors = levels[iLevel].actors;
 

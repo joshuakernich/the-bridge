@@ -3,11 +3,11 @@ window.HASocket = function(){
 	let self = this;
 	let listeners = {};
 
-	const URL = 'http://localhost:8123';
+	const URL = 'http://192.168.1.141:8123/api/websocket';
 	const protocols = 'nothingHere';
 	const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJmMzRjZWI1OTNlOTY0OTJhYThjYzNlNmMwNGUyYjY1MiIsImlhdCI6MTcyNjg5NjE3NCwiZXhwIjoyMDQyMjU2MTc0fQ.ru0S-BHJCClCRKkpMNbNfwRvi8QUfVy8NznFT-80L_c';
 
-	let s = new WebSocket(URL, protocols);
+	let s = new WebSocket(URL);
 
 
 	s.onopen = function(e){
@@ -27,7 +27,8 @@ window.HASocket = function(){
 		
 		let data = JSON.parse(e.data);
 	 	
-		console.log('Socket Message',data.type,data);
+		if(data.type=='result') console.log('Socket Message',data.type,data);
+		
 
 	 	if(data.type=='auth_required'){
 	 		self.send({
@@ -41,12 +42,13 @@ window.HASocket = function(){
 	 		self.send({
 	 			"id": 100,
 	 			"type": "subscribe_events",
+	 			"event_type": "circuit_damage"
 	 		})
 
-	 		self.send({
+	 		/*self.send({
 	 			"id": 200,
 	 			"type": "subscribe_triggers",
-	 		})
+	 		})*/
 	 	}
 
 	 	if(data.type=='auth_invalid'){
@@ -54,10 +56,14 @@ window.HASocket = function(){
 	 	}
 
 	 	if(data.type=='event'){
-	 		console.log('GOT EVENT!',data.event);
+	 		
+	 		console.log('event',data);
 
 	 		let type = data.event['event_type'];
 	 		let d = data.event.data;
+
+	 		//if(type=='circuit_damage') console.log(type,data.event.data);
+
 
 	 		for(let n in listeners[type] ) listeners[type][n](d);
 	 	}
@@ -65,6 +71,7 @@ window.HASocket = function(){
 
 	self.send = function(msg){
 		msg = JSON.stringify(msg);
+		console.log("SEND",msg);
 		s.send(msg);
 	}
 

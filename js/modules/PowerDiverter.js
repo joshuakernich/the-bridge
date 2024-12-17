@@ -9,7 +9,7 @@ window.PowerDiverter = function(){
 
 	let $svg = $(`
 		<svg class='power-network' viewbox="-0.5 -0.5 16 16" width=800 height=800>
-			<path class="laser" vector-effect="non-scaling-stroke" d="M0,0 L7,7"/>
+			<path class="laser" vector-effect="non-scaling-stroke" d=""/>
 		</svg>`).appendTo($scroller);
 
 	const S = 100;
@@ -104,7 +104,7 @@ window.PowerDiverter = function(){
 		'p-dive-1':{type:'diverter',x:7,y:9,dir:0},
 		'c-dive':{type:'diverter',x:6,y:8,dir:0},
 	}
-
+ 
 	// Reverse engineer the structure of the rooms and doors
 	// We'll use this to determine if rooms are sealed or not
 	const ROOMS = {};
@@ -115,7 +115,7 @@ window.PowerDiverter = function(){
 
 			if(id!='*' && id!=' ' && id!='+') {
 				//this is a room
-				if(!ROOMS[id]) ROOMS[id] = {nodes:[],doors:[],isSealed:true};
+				if(!ROOMS[id]) ROOMS[id] = {nodes:[],doors:[]};
 				ROOMS[id].nodes.push({x:x,y:y});
 			}
 		}
@@ -132,17 +132,17 @@ window.PowerDiverter = function(){
 
 			SYSTEMS[s].isAirlock = (a=='*'||b=='*');
 
-			if(a!='*') ROOMS[a].doors.push(SYSTEMS[s]); 
-			if(b!='*') ROOMS[b].doors.push(SYSTEMS[s]);
+			if(a!='*') ROOMS[a].doors.push(s); 
+			if(b!='*') ROOMS[b].doors.push(s);
 
-			if(a!='*') SYSTEMS[s].rooms.push(ROOMS[a]);
-			if(b!='*') SYSTEMS[s].rooms.push(ROOMS[b]);
+			if(a!='*') SYSTEMS[s].rooms.push(a);
+			if(b!='*') SYSTEMS[s].rooms.push(b);
 		}
 	}
 
 
 
-	let levels = 
+	let MAP = 
 	[
 		{
 			x:5,y:5,
@@ -174,8 +174,6 @@ window.PowerDiverter = function(){
 				'p-dive-1',
 				's-dive-1',
 				'c-dive',
-				
-				
 			]
 		},
 		{
@@ -184,10 +182,17 @@ window.PowerDiverter = function(){
 		}
 	]
 
-	for(var l in levels){
-		if( !levels[l].actors ) levels[l].actors = [];
+	let levels = [];
 
-		if(levels[l].includeDoors){
+	for(var l in MAP){
+
+		levels[l] = {
+			x:MAP[l].x, 
+			y:MAP[l].y, 
+			actors:{},
+		}
+
+		if(MAP[l].includeDoors){
 			for(var s in SYSTEMS){
 				if(
 					SYSTEMS[s].type=='door' && 
@@ -196,16 +201,23 @@ window.PowerDiverter = function(){
 					SYSTEMS[s].y >= levels[l].y && 
 					SYSTEMS[s].y < levels[l].y+8
 					){
-					levels[l].actors.push( SYSTEMS[s] )
+					levels[l].actors[s] = SYSTEMS[s];
 				}
 			}
 		}
 
-		for(var a in levels[l].actors) if(SYSTEMS[levels[l].actors[a]]) levels[l].actors[a] = SYSTEMS[levels[l].actors[a]];
+		for(var a in MAP[l].actors){
+			
+			let iActor = MAP[l].actors[a];
+
+			if(typeof(iActor) == 'string'){
+				levels[l].actors[iActor] = SYSTEMS[iActor];
+			} else {
+				levels[l].actors['anon-'+Math.random()] = iActor;
+			}
+			
+		}
 	}
-
-
-
 
 	function connect(path,dir){
 
@@ -239,6 +251,8 @@ window.PowerDiverter = function(){
 	let tones = ['C2','D2','E2','F2','G2','A2','C3','D3','E3','F3','G3','A3','C4','D4','E4','F4','G4','A4','C5','D5','E5','F5','G5','A5','C6'];
 	function redraw(){
 
+		if(!model) return;
+
 		nRedraw++;
 		
 		let isAllPowered = true;
@@ -246,15 +260,15 @@ window.PowerDiverter = function(){
 		
 		let paths = [];
 
-		for(var a in actors) actors[a].powered = false;
+		for(var a in model.actors) model.actors[a].powered = false;
 
-		for(var a in actors){
-			if(actors[a].type=='power'){
+		for(var a in model.actors){
+			if(model.actors[a].type=='power'){
 				
 				let n = 0;
 				let path = [];
 				let hit = false;
-				let anchor = actors[a];
+				let anchor = model.actors[a];
 				let anchors = [anchor];
 				
 				do{
@@ -263,18 +277,18 @@ window.PowerDiverter = function(){
 					path.push({x:x, y:y});
 					n++;
 
-					for(var b in actors){
-						if(anchor != actors[b] && actors[b].x == x && actors[b].y == y){
+					for(var b in model.actors){
+						if(anchor != model.actors[b] && model.actors[b].x == x && model.actors[b].y == y){
 							
-							if(actors[b].type=='diverter' && !anchors.includes(actors[b])){
-								anchor = actors[b];
+							if(model.actors[b].type=='diverter' && !anchors.includes(model.actors[b])){
+								anchor = model.actors[b];
 								anchor.powered = true;
 								anchors.push(anchor);
 								
 								n = 0;
 							} else {
 								hit = true;
-								if( actors[b].type == 'system' || actors[b].type == 'diverter') actors[b].powered = true;
+								if( model.actors[b].type == 'system' || model.actors[b].type == 'diverter') model.actors[b].powered = true;
 							}
 						} else if( !map[y] || !map[y][x] || map[y][x] == '*'){
 							
@@ -302,45 +316,47 @@ window.PowerDiverter = function(){
 				
 				self.$el.find('power-cell[x="'+(paths[n][p].x)+'"][y="'+(paths[n][p].y)+'"]').addClass('powered');
 
-				window.launchpad.setXY(paths[n][p].x-level.x,paths[n][p].y-level.y,'purple');
+				window.launchpad.setXY(paths[n][p].x-model.x,paths[n][p].y-model.y,'purple');
 			}
 		}
 
 		let countPower = 0;
-		for(var a in actors){
+		for(var a in model.actors){
 
-			actors[a].$el.attr( 'powered', actors[a].powered );
-			actors[a].$el.css({transform:'rotate('+actors[a].dir*45+'deg)'});
+			let actor = model.actors[a];
 
-			let icon = (actors[a].subtype?actors[a].subtype:actors[a].type) + (actors[a].powered?'-powered':'');
-			actors[a].$el.css('background-image','url(./img/icon/icon-'+icon+'.svg)')
+			
 
-			if(actors[a].type=='door' && actors[a].open) actors[a].$el.css('background-image','url(./img/icon/icon-'+icon+'-open.svg)')
+			let icon = (actor.subtype?actor.subtype:actor.type) + (actor.powered?'-powered':'');
+			actor.$el.css('background-image','url(./img/icon/icon-'+icon+'.svg)')
 
-			if( actors[a].$link ) actors[a].$link.removeClass('powered');
+			if( actor.type=='door' && actor.open) actor.$el.css('background-image','url(./img/icon/icon-'+icon+'-open.svg)')
 
-			if(actors[a].powered){
-				if( actors[a].$link ) actors[a].$link.addClass('powered');
+			if( actor.$link ) actor.$link.removeClass('powered');
+
+			if( actor.powered){
+				if( actor.$link ) actor.$link.addClass('powered');
 				countPower++;
 			}
 
-			if(actors[a].type=='fire') isFire = true;
+			if( actor.type=='fire') isFire = true;
+			if ( actor.type == 'system' && actor.powered == false) isAllPowered = false;
 
-			if (actors[a].type == 'system' && actors[a].powered == false) isAllPowered = false;
 
-			let color = (actors[a].type=='power'||actors[a].powered)?'blue':'red';
-			if(actors[a].type=='fire') color = 'yellow';
-			if(actors[a].type=='door') color = (actors[a].open)?'pink':'blue';
+			actor.$el.attr( 'powered', actor.powered );
+			actor.$el.css({transform:'rotate('+actor.dir*45+'deg)'});
 
-			
-			window.launchpad.setXY(actors[a].x-level.x,actors[a].y-level.y,color);
+			let color = (actor.type=='power'||actor.powered)?'blue':'red';
+			if(actor.type=='fire') color = 'yellow';
+			if(actor.type=='door') color = (actor.open)?'pink':'blue';
+
+			window.launchpad.setXY(actor.x-model.x,actor.y-model.y,color);
 		}
 
 		$svg.find('.laser').attr('d',d);
 		
 		if(isAllPowered && !isFire){
 			$('power-actor').off();
-			actorSelected = undefined;
 			setTimeout(doCompleteLevel,700);
 		}
 
@@ -348,17 +364,13 @@ window.PowerDiverter = function(){
 		//if(isAllPowered) window.synth.triggerAttackRelease(tones[countPower+(nRedraw%2)+4], 0.1, Tone.now()+0.2);
 	}
 
-	let iLevel = -1;
-	let actorSelected;
-	let actors = [];
-	let level;
+	
+	let model;
 
 	let n = 120;
 
 	function doCompleteLevel(){
 
-		let iLevelComplete = iLevel;
-		iLevel = -1;
 
 		dumpLevel();
 		self.turnOnOff(false);
@@ -383,53 +395,50 @@ window.PowerDiverter = function(){
 		$svg.find('.laser').attr('d','');
 		window.launchpad.clear();
 
-		actors.length = 0;
-		actorSelected = undefined;
+		model = undefined;
 	}
 
 	function doNextLevel(){
 		doLevel(iLevel+1);
 	}
 
-	function doLevel(iToLevel){
+	function doLevel(iLevel){
 
 		dumpLevel();
 
-		iLevel = iToLevel;
-		level = levels[iLevel];
+		model = {
+			iLevel:iLevel,
+			x:levels[iLevel].x,
+			y:levels[iLevel].y,
+			isRoomSealed:{},
+			actors:{},
+		};
 
-		actors = levels[iLevel].actors;
+		for(var r in ROOMS) model.isRoomSealed[r] = true;
 		
-		/*actors = [];
+		for(var n in levels[iLevel].actors ){
+			let source = levels[iLevel].actors[n];
+			model.actors[n] = {};
+			for(var v in source) model.actors[n][v] = source[v];
+		}
 
-		for(var n=0; n<levels[iLevel].actors.length; n++ ){
-			
-			let actor = levels[iLevel].actors[n];
+		console.log('DO LEVEL',model);
 
-			let clone = {};
-			for(var v in actor) clone[v] = actor[v];
-			
-			actors[n] = clone;
-		}*/
-
-		$svg.find('g').attr('transform','translate('+level.x+' '+level.y+')');
-		$msg.text(`GRID ${level.x}-${level.y}`);
+		$svg.find('g').attr('transform','translate('+model.x+' '+model.y+')');
+		$msg.text(`GRID ${model.x}-${model.y}`);
 		//$scroller.css('transform','translate('+(-level.x*50)+'px,'+(-level.y*50)+'px)');
 		$scroller.animate({
-			'left':-level.x*50,
-			'top':-level.y*50
+			'left':-model.x*50,
+			'top':-model.y*50
 		});
 
 
-		for(var a in actors) spawnActor(actors[a]);
+		for(var a in model.actors) spawnActor(model.actors[a]);
 
 		redraw()
 	}
 
 	function spawnActor(actor){
-
-
-
 
 		let icon = actor.subtype?actor.subtype:actor.type;
 
@@ -452,7 +461,6 @@ window.PowerDiverter = function(){
 
 			if(actor.type=='diverter' || actor.type=='power'){
 				actor.dir = (actor.dir + 1)%dirs.length;
-				actorSelected = actor;
 				actor.$el.addClass('selected');
 			}
 
@@ -470,70 +478,65 @@ window.PowerDiverter = function(){
 		if(actor.$link) actor.$link.addClass('active');
 		
 	}
-	
-
-	let keyWas = undefined;
-	let cntClick = 0;
-	const CLICKS_PER_CLICK = 2;
-
-	$(window).keydown(function(e){
-
-		if (keyWas == e.which) cntClick ++;
-		else cntClick = 1;
-
-		keyWas = e.which;
-		if(cntClick>=CLICKS_PER_CLICK && actorSelected){
-
-			if(e.which==39) actorSelected.dir = (actorSelected.dir + 1)%dirs.length;
-			if(e.which==37) actorSelected.dir = (actorSelected.dir - 1 + dirs.length)%dirs.length;
-
-			redraw();
-			keyWas = undefined;
-		}
-	});
 
 	window.launchpad.listen(function(x,y){
-
-		//for(var d in dirs) particles.push({x:x,y:y,dir:d,life:3});
-		for(var a in actors) if(actors[a].type != 'system' && actors[a].x-level.x == x && actors[a].y-level.y == y) actors[a].$el.click();
+		//TO DO make a splash
+		for(var a in model.actors){
+			if( model.actors[a].type != 'system' && 
+				model.actors[a].x-level.x == x && 
+				model.actors[a].y-level.y == y) model.actors[a].$el.click();
+		}
 	})
 
-	// TO DO fix venting effecting all rooms
 	function ventAirlock(door){
 
 		for(var r in door.rooms){
 
-			if(!door.rooms[r].isSealed) continue;
-			door.rooms[r].isSealed = false;
+			let iRoom = door.rooms[r];
 
-			for(var d in door.rooms[r].doors){
-				if(door.rooms[r].doors[d].open){
+			if(!model.isRoomSealed[iRoom]) continue;
+			model.isRoomSealed[iRoom] = false;
+
+			let doors = ROOMS[iRoom].doors;
+
+			for(var d in doors){
+
+				let iDoor = doors[d];
+
+
+				if( model.actors[iDoor].open ){
+					model.actors[iDoor].isSealed = false;
+					ventAirlock(model.actors[iDoor]);
+				}
+
+				/*if(door.rooms[r].doors[d].open){
 					door.rooms[r].doors[d].isSealed = false;
 					ventAirlock(door.rooms[r].doors[d]);
-				}
+				}*/
 			}
 		}
 	}
 
 	function step(){
 
-		for(var r in ROOMS) ROOMS[r].isSealed = true; //reset all rooms to sealed
-		for(var a in actors) if(actors[a].type=='door') actors[a].isSealed = true; //reset all doors to sealed
+		if(!model) return;
+
+		for(var r in model.isRoomSealed) model.isRoomSealed[r] = true; //reset all rooms to sealed
+		for(var a in model.actors) if(model.actors[a].type=='door') model.actors[a].isSealed = true; //reset all doors to sealed
 
 		//detect unsealed rooms
-		for(var a in actors) if(actors[a].type=='door' && actors[a].open && actors[a].isAirlock) ventAirlock(actors[a]);
+		for(var a in model.actors) if(model.actors[a].type=='door' && model.actors[a].open && model.actors[a].isAirlock) ventAirlock(model.actors[a]);
 
 		//spread fires
-		for(var a in actors) if(actors[a].type=='fire') stepFire(actors[a]);
+		for(var a in model.actors) if(model.actors[a].type=='fire') stepFire(model.actors[a]);
 
-		for(var a=0; a<actors.length; a++){
+		//extinguish fires
+		for(var a in model.actors){
+			if(model.actors[a].type=='fire'){
 
-			if(actors[a].type=='fire'){
-				stepFire(actors[a]);
-				if(actors[a].intensity<20){
-					actors[a].$el.remove();
-					actors.splice(a,1);
-					a--;
+				if(model.actors[a].intensity<20){
+					model.actors[a].$el.remove();
+					delete model.actors[a];
 				}
 			} 
 		} 
@@ -542,7 +545,7 @@ window.PowerDiverter = function(){
 	function stepFire( actorSource ){
 		let iRoom = map[actorSource.y][actorSource.x];
 
-		let isSealedRoom = ( ROOMS[iRoom] && ROOMS[iRoom].isSealed )?true:false;
+		let isSealedRoom = ( ROOMS[iRoom] && model.isRoomSealed[iRoom] )?true:false;
 		let isSealedDoor = ( actorSource.door && actorSource.door.isSealed )?true:false;
 
 		if(isSealedRoom || isSealedDoor) actorSource.intensity += 5;
@@ -568,10 +571,10 @@ window.PowerDiverter = function(){
 
 			let actorSpread = undefined;
 			let actorFire = undefined;
-			for(var b in actors){
-				if(actors[b].x == x && actors[b].y == y){
-					if(actors[b].type=='fire') actorFire = actors[b];
-					else actorSpread = actors[b];
+			for(var b in model.actors){
+				if(model.actors[b].x == x && model.actors[b].y == y){
+					if(model.actors[b].type=='fire') actorFire = model.actors[b];
+					else actorSpread = model.actors[b];
 				}
 			}
 			
@@ -583,7 +586,7 @@ window.PowerDiverter = function(){
 				
 				let spread = {type:'fire',x:x,y:y,intensity:20};
 				if(spreadIntoDoor) spread.door = actorSpread;
-				actors.push(spread);
+				model.actors['anon-'+Math.random()] = spread;
 				spawnActor(spread);
 
 				redraw();

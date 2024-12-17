@@ -398,7 +398,9 @@ window.PowerDiverter = function(){
 		iLevel = iToLevel;
 		level = levels[iLevel];
 
-		actors = [];
+		actors = levels[iLevel].actors;
+		
+		/*actors = [];
 
 		for(var n=0; n<levels[iLevel].actors.length; n++ ){
 			
@@ -408,7 +410,7 @@ window.PowerDiverter = function(){
 			for(var v in actor) clone[v] = actor[v];
 			
 			actors[n] = clone;
-		}
+		}*/
 
 		$svg.find('g').attr('transform','translate('+level.x+' '+level.y+')');
 		$msg.text(`GRID ${level.x}-${level.y}`);
@@ -540,11 +542,9 @@ window.PowerDiverter = function(){
 	function stepFire( actorSource ){
 		let iRoom = map[actorSource.y][actorSource.x];
 
-		let isSealedRoom = ROOMS[iRoom] && ROOMS[iRoom].isSealed;
-		let isSealedDoor = actorSource.door && actorSource.door.isSealed;
+		let isSealedRoom = ( ROOMS[iRoom] && ROOMS[iRoom].isSealed )?true:false;
+		let isSealedDoor = ( actorSource.door && actorSource.door.isSealed )?true:false;
 
-		// TODO put out fires in doorways (somehow)
-		// probably adding an isSealed property to the doors as well
 		if(isSealedRoom || isSealedDoor) actorSource.intensity += 5;
 		else actorSource.intensity--;
 

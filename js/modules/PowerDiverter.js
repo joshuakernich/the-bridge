@@ -259,6 +259,7 @@ window.PowerDiverter = function(){
 	let tones = ['C2','D2','E2','F2','G2','A2','C3','D3','E3','F3','G3','A3','C4','D4','E4','F4','G4','A4','C5','D5','E5','F5','G5','A5','C6'];
 	function redraw(){
 
+		window.launchpad.clear();
 		if(!model) return;
 
 		nRedraw++;
@@ -319,7 +320,7 @@ window.PowerDiverter = function(){
 			} 
 		}
 
-		window.launchpad.clear();
+		
 
 		self.$el.find('power-cell').removeClass('powered');
 
@@ -371,7 +372,7 @@ window.PowerDiverter = function(){
 		$svg.find('.laser').attr('d',d);
 		
 		if(isAllPowered && !isFire){
-			
+			model = undefined;
 			$('power-actor').off();
 			setTimeout(doCompleteLevel,700);
 		}
@@ -501,6 +502,7 @@ window.PowerDiverter = function(){
 
 	window.launchpad.listen(function(x,y){
 		//TO DO make a splash
+		if(!model) return;
 		for(var a in model.actors){
 			if( model.actors[a].type != 'system' && 
 				model.actors[a].x-model.x == x && 
@@ -559,7 +561,9 @@ window.PowerDiverter = function(){
 					delete model.actors[a];
 				}
 			} 
-		} 
+		}
+
+		redraw(); 
 	}
 
 	function stepFire( actorSource ){

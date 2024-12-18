@@ -15,6 +15,14 @@ window.PowerDiverter = function(){
 	const S = 100;
 	const C = 15;
 
+	const audio = new AudioContext();
+	audio.add('blip','./audio/sfx-blip.mp3');
+	audio.add('error','./audio/sfx-error.mp3');
+	audio.add('correct','./audio/sfx-correct.mp3');
+	audio.add('vent','./audio/sfx-vent.mp3', 0.2);
+	audio.add('powerup','./audio/sfx-powerup.mp3', 1);
+	audio.add('good','./audio/sfx-good.mp3', 1);
+
 	$(`
 		<svg class='power-network power-frame' viewbox="0 0 100 100" width=400 height=400>
 			<g class="frame-group">
@@ -260,6 +268,7 @@ window.PowerDiverter = function(){
 		
 		let paths = [];
 
+		for(var a in model.actors) model.actors[a].poweredWas =  model.actors[a].powered;
 		for(var a in model.actors) model.actors[a].powered = false;
 
 		for(var a in model.actors){
@@ -288,7 +297,13 @@ window.PowerDiverter = function(){
 								n = 0;
 							} else {
 								hit = true;
-								if( model.actors[b].type == 'system' || model.actors[b].type == 'diverter') model.actors[b].powered = true;
+								if( model.actors[b].type == 'system' || model.actors[b].type == 'diverter'){
+									model.actors[b].powered = true;
+									if(!model.actors[b].poweredWas){
+										//audio.play('powerup',true);
+										audio.play('good',true);
+									}
+								}
 							}
 						} else if( !map[y] || !map[y][x] || map[y][x] == '*'){
 							
@@ -356,6 +371,7 @@ window.PowerDiverter = function(){
 		$svg.find('.laser').attr('d',d);
 		
 		if(isAllPowered && !isFire){
+			
 			$('power-actor').off();
 			setTimeout(doCompleteLevel,700);
 		}
@@ -371,7 +387,7 @@ window.PowerDiverter = function(){
 
 	function doCompleteLevel(){
 
-
+		audio.play('correct',true);
 		dumpLevel();
 		self.turnOnOff(false);
 
@@ -435,7 +451,9 @@ window.PowerDiverter = function(){
 
 		for(var a in model.actors) spawnActor(model.actors[a]);
 
-		redraw()
+		audio.play('error',true);
+
+		redraw();
 	}
 
 	function spawnActor(actor){
@@ -451,12 +469,14 @@ window.PowerDiverter = function(){
 
 			e.preventDefault();
 
+			audio.play('blip',true);
 			$('power-actor').removeClass('selected');``
 
 			let actor = $(this).data('actor');
 
 			if(actor.type=='door'){
 				actor.open = !actor.open;
+				if(actor.open && actor.isAirlock) audio.play('vent',true);
 			}
 
 			if(actor.type=='diverter' || actor.type=='power'){
@@ -483,8 +503,8 @@ window.PowerDiverter = function(){
 		//TO DO make a splash
 		for(var a in model.actors){
 			if( model.actors[a].type != 'system' && 
-				model.actors[a].x-level.x == x && 
-				model.actors[a].y-level.y == y) model.actors[a].$el.click();
+				model.actors[a].x-model.x == x && 
+				model.actors[a].y-model.y == y) model.actors[a].$el.click();
 		}
 	})
 

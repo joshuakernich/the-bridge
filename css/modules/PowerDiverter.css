@@ -24,6 +24,7 @@ power scroller{
 	position: absolute;
 	top: 0px;
 	left: 0px;
+	transition: all 1s;
 }
 
 power floorplan{

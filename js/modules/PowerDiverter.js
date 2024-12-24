@@ -403,6 +403,12 @@ window.PowerDiverter = function(){
 
 		$msg.text('ALL SYSTEMS NOMINAL');
 
+		$scroller.css({
+			'transform':'scale(0.5)',
+			'left':'-200px',
+			'top':'-250px',
+		})
+
 		self.$el.find('power-actor').off();
 		self.$el.find('power-actor').remove();
 
@@ -443,8 +449,9 @@ window.PowerDiverter = function(){
 
 		$svg.find('g').attr('transform','translate('+model.x+' '+model.y+')');
 		$msg.text(`GRID ${model.x}-${model.y}`);
-		//$scroller.css('transform','translate('+(-level.x*50)+'px,'+(-level.y*50)+'px)');
-		$scroller.animate({
+		
+		$scroller.css({
+			'transform':'scale(1)',
 			'left':-model.x*50,
 			'top':-model.y*50
 		});

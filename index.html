@@ -38,11 +38,11 @@
 			let colors = ['yellow','cyan','purple','pink'];
 
 			let toys = [
-				{ title:"DIVERT POWER", color:'yellow', toy:new PowerDiverter() },
-				{ title:"DECODER", color:'pink', toy:new Unscramble() },
-				{ title:"SYNTH SIGNAL", color:'pink', toy:new Sequencer() },
-				{ title:"VOCAL SIGNAL", color:'blue', toy:new PitchRecorder() },
-				{ title:"TRANSLATOR", color:'blue', toy:new BrokenChat() },
+				{ title:"DIVERT POWER", color:'yellow', instance:new PowerDiverter() },
+				{ title:"DECODER", color:'pink', instance:new Unscramble() },
+				{ title:"SYNTH SIGNAL", color:'pink', instance:new Sequencer() },
+				{ title:"VOCAL SIGNAL", color:'blue', instance:new PitchRecorder() },
+				{ title:"TRANSLATOR", color:'blue', instance:new BrokenChat() },
 
 			]
 
@@ -121,15 +121,13 @@
 
 				function toToy(iNew,params){
 					if(iToy>-1){
-						toys[iToy].toy.turnOnOff(false);
-						toys[iToy].toy.$el.detach();
+						toys[iToy].instance.turnOnOff(false);
+						toys[iToy].instance.$el.hide();
 					}
 	
-					os.$toy.empty();
-
 					iToy = iNew;
-					toys[iToy].toy.turnOnOff(true,params);
-					toys[iToy].toy.$el.appendTo(os.$toy);
+					toys[iToy].instance.turnOnOff(true,params);
+					toys[iToy].instance.$el.show();
 					self.reskin(toys[iToy].title,toys[iToy].color);
 				}
 
@@ -142,6 +140,10 @@
 					toys.push(toy);
 
 					$(`[r=${2+toys.length}][c=0]`).attr('bordered','top');
+
+
+					toy.instance.$el.appendTo(self.$toy);
+					toy.instance.$el.hide();
 				}
 
 				self.reskin = function(title,color){
@@ -163,7 +165,7 @@
 			}
 
 			let osLeft = new OSBox('pink');
-			let os = new OSBox('yellow','ENGINEERING','./img/wireframe/wireframe-top-side.png');
+			let os = new OSBox('yellow','ENGINEERING');
 
 
 			for(var i=0; i<toys.length; i++) os.addToy(toys[i]);
@@ -175,9 +177,7 @@
 				os.toToy('DIVERT POWER',params);
 			})
 
-			$(document).click(function(){
-				//os.toToy('DIVERT POWER',{severity:1});
-			})
+			
 
 		})
 	</script>

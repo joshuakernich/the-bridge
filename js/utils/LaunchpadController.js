@@ -61,13 +61,14 @@ window.LaunchpadController = function(){
         reviseMidi();
 	}
 
+
 	function reviseMidi() {
 		
 		launchpad = undefined;
 		for (var output of midiAccess.outputs.values()){
-			
-			if(output.name.includes("Launchpad")){
-
+		
+			if(output.name.includes("LP")){
+				console.log('output',output);
 				isX = output.name.includes("X");
 				//isRotate = isX;
 
@@ -84,7 +85,8 @@ window.LaunchpadController = function(){
 		}
 
         for (var input of midiAccess.inputs.values()){
-			if(output.name.includes("Launchpad")){
+			if(input.name.includes("LP")){
+				console.log('input',input);
 				input.onmidimessage = onLaunchpadMessage;
 			}
         }

@@ -52,8 +52,10 @@
 				let w = 14;
 				let h = 14;
 
-				let $el = $('<osbox>').appendTo('osstream');
+				let $el = $('<osbox>');
 				let $t = $('<table>').appendTo($el);
+
+				self.$el = $el;
 
 				for(var r=0; r<w; r++ ){
 					let $tr = $('<tr>').appendTo($t);
@@ -164,17 +166,28 @@
 				}
 			}
 
-			let osLeft = new OSBox('pink');
-			let os = new OSBox('yellow','ENGINEERING');
+			let osLeft = new OSBox('purple');
+			let osRight = new OSBox('yellow');
 
+			osLeft.$el.appendTo('body').css({
+				'left':'0px',
+				'right':'33.3%',
+				'bottom':'0px',
+			});
 
-			for(var i=0; i<toys.length; i++) os.addToy(toys[i]);
-				os.toToy('DIVERT POWER');
+			osRight.$el.appendTo('body').css({
+				'left':'33.3%',
+				'right':'0px',
+				'bottom':'0px',
+			})
 
-			let osRight = new OSBox('purple');
+			for(var i=0; i<toys.length; i++) osRight.addToy(toys[i]);
+			
+			osRight.toToy('DIVERT POWER');
+
 
 			window.socket.on('circuit_damage',function(params){
-				os.toToy('DIVERT POWER',params);
+				osRight.toToy('DIVERT POWER',params);
 			})
 
 			

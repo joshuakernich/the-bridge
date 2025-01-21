@@ -8,15 +8,16 @@ window.PowerDiverter = function(){
 
 	let W = 950/50;
 	let H = 850/50;
-	const GRID = 0.5;
+	const GRID = 40;
+	const UNIT = 'px';
 
-	let $svgMap = $(window.FloorplanSVG).css({width:W*GRID+'vw',height:H*GRID+'vw'});
+	let $svgMap = $(window.FloorplanSVG).css({width:W*GRID+UNIT,height:H*GRID+UNIT});
 
 	let $floorplan = $('<floorplan>').appendTo($scroller);
 	$svgMap.appendTo($floorplan);
 
 	let $svg = $(`
-		<svg class='power-network' viewbox="-0.5 -0.5 16 16" width=${16*GRID}vw height=${16*GRID}vw>
+		<svg class='power-network' viewbox="-0.5 -0.5 16 16" width=${16*GRID}${UNIT} height=${16*GRID}${UNIT}>
 			<path class="laser" vector-effect="non-scaling-stroke" d=""/>
 		</svg>`).appendTo($scroller);
 
@@ -32,7 +33,7 @@ window.PowerDiverter = function(){
 	audio.add('good','./audio/sfx-good.mp3', 1);
 
 	$(`
-		<svg class='power-network power-frame' viewbox="0 0 100 100" width=${8*GRID}vw height=${8*GRID}vw>
+		<svg class='power-network power-frame' viewbox="0 0 100 100" width=${8*GRID}${UNIT} height=${8*GRID}${UNIT}>
 			<g class="frame-group">
 			    <path class="frame" "vector-effect="non-scaling-stroke" d="M${0},${C} L${0},${0} L${C},${0}"/>
 			    <path class="frame" "vector-effect="non-scaling-stroke" d="M${S},${C} L${S},${0} L${S-C},${0}"/>
@@ -269,10 +270,7 @@ window.PowerDiverter = function(){
 
 		window.launchpad.clear();
 
-
-
 		if(!model) return;
-
 
 		renderRipples();
 
@@ -472,10 +470,9 @@ window.PowerDiverter = function(){
 		
 		$scroller.css({
 			'transform':'scale(1)',
-			'left':-model.x*GRID+'vw',
-			'top':-model.y*GRID+'vw'
+			'left':-model.x*GRID+UNIT,
+			'top':-model.y*GRID+UNIT
 		});
-
 
 		for(var a in model.actors) spawnActor(model.actors[a]);
 

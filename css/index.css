@@ -20,7 +20,7 @@ body{
 	--black: black;
 	--white: white;
 
-	--grid: 0.5vw;
+	--grid: 40px;
 	--border: calc( var(--grid)/10 );
 
 
@@ -37,7 +37,7 @@ body{
 
 	
 	color: var(--black);
-	background: gray;
+
 	font-family: "Antonio";
 
 	font-size: calc( var(--grid)/2 );
@@ -48,6 +48,8 @@ body{
 	
 	width: 100vw;
 	height: 100vh;
+	overflow: hidden;
+	background: black;
 }
 
 .launchpadsim{
@@ -62,26 +64,22 @@ body{
 
 .launchpadsim td{
 	background: #333;
-	box-shadow: inset 0px 0px 0.1vw black;
+	box-shadow: inset 0px 0px 10px black;
 }
 
 
 container{
 	display: block;
 	position: absolute;
-	top: 0px;
+
 	left: 0px;
 	right: 0px;
 	bottom: 0px;
 
-	width: 100vw;
-	height: 33.3vw;
-	/*width: 1920px;
-	height: 1080px;*/
-	overflow: hidden;
-	transform-origin: top left;
+
+
 	background: black;
-	margin: auto;
+
 	
 }
 
@@ -89,14 +87,14 @@ osstream{
 	white-space: nowrap;
 
 	display: block;
-	position: absolute;
+
 
 	
-	left: 50%;
+	/*left: 50%;
 	top: 50%;
 
 	transform: translate(-50%, -50%);
-	width: calc(var(--grid)*17*3);
+	width: calc(var(--grid)*17*3);*/
 
 }
 
@@ -235,6 +233,8 @@ toy osicon{
 osbox{
 	display: inline-block;
 	margin: calc(var(--grid)/2);
+	position: absolute;
+	margin: auto;
 }
 
 midi-message{
@@ -244,6 +244,6 @@ midi-message{
 	left: 0px;
 	color: white;
 	text-transform: uppercase;
-	font-size: 5em;
-	padding: 0.5em;
+	font-size: var(--grid);
+	padding: var(--grid);
 }

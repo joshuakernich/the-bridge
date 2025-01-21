@@ -3,12 +3,13 @@ window.HASocket = function(){
 	let self = this;
 	let listeners = {};
 
-	const URL = 'http://192.168.1.141:8123/api/websocket';
-	//const URL = 'http://localhost:8123/api/websocket';
+	//const URL = 'http://192.168.1.141:8123/api/websocket';
+	const URL = 'https://localhost:8123/api/websocket';
 	const protocols = 'nothingHere';
 	const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJmMzRjZWI1OTNlOTY0OTJhYThjYzNlNmMwNGUyYjY1MiIsImlhdCI6MTcyNjg5NjE3NCwiZXhwIjoyMDQyMjU2MTc0fQ.ru0S-BHJCClCRKkpMNbNfwRvi8QUfVy8NznFT-80L_c';
 
-	let s = new WebSocket(URL);
+	//let s = new WebSocket(URL);
+	let s = {};
 
 
 	s.onopen = function(e){

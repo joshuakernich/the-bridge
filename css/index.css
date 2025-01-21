@@ -23,8 +23,6 @@ body{
 	--grid: 40px;
 	--border: calc( var(--grid)/10 );
 
-
-	
 	--yellow-opaque: rgb(255, 250, 111, 0.3);
 	--green-opaque: rgba(147, 254, 136, 0.3);
 	--blue-opaque: rgba(89, 176, 241, 0.3);

@@ -1,7 +1,7 @@
 power{
 	display: block;
 	line-height: 0px;
-	margin: var(--grid);
+	margin: calc( var(--grid)*2 );
 	position: relative;
 	border: none;
 }

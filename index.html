@@ -32,12 +32,25 @@
 	<script type="text/javascript">
 		$(function () {
 
+
+
 			window.launchpad = new LaunchpadController();
 			window.socket = new HASocket();
 
+
+
 			let colors = ['yellow','cyan','purple','pink'];
 
-			let toys = [
+			let toysLeft = [
+				{ title:"DIVERT POWER", color:'yellow', instance:new PowerDiverter() },
+				{ title:"DECODER", color:'pink', instance:new Unscramble() },
+				{ title:"SYNTH SIGNAL", color:'pink', instance:new Sequencer() },
+				{ title:"VOCAL SIGNAL", color:'blue', instance:new PitchRecorder() },
+				{ title:"TRANSLATOR", color:'blue', instance:new BrokenChat() },
+
+			]
+
+			let toysRight = [
 				{ title:"DIVERT POWER", color:'yellow', instance:new PowerDiverter() },
 				{ title:"DECODER", color:'pink', instance:new Unscramble() },
 				{ title:"SYNTH SIGNAL", color:'pink', instance:new Sequencer() },
@@ -48,6 +61,7 @@
 
 			let OSBox = function(color,header,icon){
 				
+				let toys = [];
 				let self = this;
 				let w = 14;
 				let h = 14;
@@ -99,6 +113,7 @@
 				async function onLaunchToy(){
 
 					if(!isStarted){
+
 						await Tone.start()
 
 						let meter = new Tone.Meter();
@@ -133,11 +148,13 @@
 					self.reskin(toys[iToy].title,toys[iToy].color);
 				}
 
-				let toys = [];
+				
 				self.addToy = function(toy){
+
+
 					
-					$(`[r=${2+toys.length}][c=0]`).attr('bordered','top');
-					$(`[r=${2+toys.length}][c=0]`).removeAttr('paint').attr('bg',toy.color).attr('bordered','top').text(toy.title).attr('toy',i).click(onLaunchToy);
+					/*$(`[r=${2+toys.length}][c=0]`).attr('bordered','top');
+					$(`[r=${2+toys.length}][c=0]`).removeAttr('paint').attr('bg',toy.color).attr('bordered','top').text(toy.title).attr('toy',i).click(onLaunchToy);*/
 					
 					toys.push(toy);
 
@@ -181,9 +198,11 @@
 				'bottom':'40px',
 			})
 
-			for(var i=0; i<toys.length; i++) osRight.addToy(toys[i]);
+			for(var i=0; i<toysRight.length; i++) osRight.addToy(toysRight[i]);
+			for(var i=0; i<toysLeft.length; i++) osLeft.addToy(toysLeft[i]);
 			
 			osRight.toToy('DIVERT POWER');
+			osLeft.toToy('TRANSLATOR');
 
 
 			window.socket.on('circuit_damage',function(params){

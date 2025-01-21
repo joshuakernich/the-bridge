@@ -20,7 +20,8 @@ body{
 	--black: black;
 	--white: white;
 
-	--grid: 50px;
+	--grid: 0.5vw;
+	--border: calc( var(--grid)/10 );
 
 
 	
@@ -39,7 +40,7 @@ body{
 	background: gray;
 	font-family: "Antonio";
 
-	font-size: 20px;
+	font-size: calc( var(--grid)/2 );
 	font-weight: bold;
 
 
@@ -49,7 +50,7 @@ body{
 }
 
 .launchpadsim{
-	border: 10px solid black;
+	
 	background: black;
 	z-index: 100;
 	position: fixed;
@@ -60,10 +61,7 @@ body{
 
 .launchpadsim td{
 	background: #333;
-	width: 20px;
-	height: 20px;
-	margin: 1px;
-	border: 1px solid black;
+	box-shadow: inset 0px 0px 0.1vw black;
 }
 
 
@@ -72,13 +70,18 @@ container{
 	position: absolute;
 	top: 0px;
 	left: 0px;
+	right: 0px;
+	bottom: 0px;
+
 	width: 100vw;
-	height: 100vh;
+	height: 33.3vw;
 	/*width: 1920px;
 	height: 1080px;*/
 	overflow: hidden;
 	transform-origin: top left;
 	background: black;
+	margin: auto;
+	
 }
 
 osstream{
@@ -88,8 +91,8 @@ osstream{
 	position: absolute;
 
 	
-	left: 50vw;
-	top: 50vh;
+	left: 50%;
+	top: 50%;
 
 	transform: translate(-50%, -50%);
 	width: calc(var(--grid)*17*3);
@@ -98,9 +101,7 @@ osstream{
 
 table{
 	position: relative;
-	
 	border-collapse: collapse;
-	
 	margin: auto;
 }
 td{
@@ -108,7 +109,7 @@ td{
 	width: var(--grid);
 	height: var(--grid);
 	position: relative;
-	padding: 0px 10px;
+	padding: 0px;
 	box-sizing: border-box;
 	white-space: nowrap;
 	text-align: right;
@@ -161,25 +162,25 @@ td{
 [thick='3']{ width: calc(var(--grid) * 3); }
 
 [bordered=top]{ 
-	border-top: 0.4vw solid var(--black);
+	border-top: var(--border) solid var(--black);
  }
 
  [bordered=bottom]{ 
-	border-bottom: 0.4vw solid var(--black);
+	border-bottom: var(--border) solid var(--black);
  }
 
 [bordered=vert]{ 
-	border-top: 0.4vw solid var(--black);
-	border-bottom: 0.4vw solid var(--black);
+	border-top: var(--border) solid var(--black);
+	border-bottom: var(--border) solid var(--black);
  }
 
  [bordered=horz]{ 
-	border-left: 0.4vw solid var(--black);
-	border-right: 0.4vw solid var(--black);
+	border-left: var(--border) solid var(--black);
+	border-right: var(--border) solid var(--black);
  }
 
  [bordered=both]{ 
-	border: 0.4vw solid var(--black);
+	border: var(--border) solid var(--black);
  }
 
 h1{

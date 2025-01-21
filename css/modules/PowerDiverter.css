@@ -1,7 +1,7 @@
 power{
 	display: block;
 	line-height: 0px;
-	margin: calc( var(--grid) * 2);
+	margin: var(--grid);
 	position: relative;
 	border: none;
 }
@@ -54,7 +54,7 @@ power system{
 	background: var(--black);
 
 	box-sizing: border-box;
-	border: 7px solid var(--purple);
+	border: var(--border) solid var(--purple);
 	border-radius: 100%;
 }
 
@@ -96,12 +96,12 @@ power-row{
 
 power-cell{
 	display: inline-block;
-	width: 50px;
-	height: 50px;
+	width: var(--grid);
+	height: var(--grid);
 	
 	position: relative;
 	box-sizing: border-box;
-	line-height: 50px;
+	line-height: var(--grid);
 	border: none;
 }
 
@@ -116,7 +116,7 @@ power-actor{
 	
 	
 	display: block;
-	line-height: 50px;
+	line-height: var(--grid);
 	color: var(--cyan);
 	text-align: center;
 	
@@ -159,7 +159,7 @@ power .power-frame{
 
 power .power-network path{
 	stroke: var(--cyan);
-	stroke-width: 2;
+	stroke-width: var(--border);
 	fill: none;
 }
 
@@ -176,7 +176,7 @@ power .power-network path.hull:nth-of-type(2){
 }
 
 power .power-network path.frame{
-	stroke-width: 2;
+	stroke-width: var(--border);
 	stroke:var(--yellow);
 }
 

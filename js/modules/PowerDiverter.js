@@ -5,10 +5,18 @@ window.PowerDiverter = function(){
 
 	let $scroller = $('<scroller>').appendTo(self.$el);
 	let $msg = $('<msg>').appendTo(self.$el).text('ALL SYSTEMS NOMINAL');
-	let $svgMap = $('<floorplan>'+window.FloorplanSVG+'</floorplan>').appendTo($scroller);
+
+	let W = 950/50;
+	let H = 850/50;
+	const GRID = 0.5;
+
+	let $svgMap = $(window.FloorplanSVG).css({width:W*GRID+'vw',height:H*GRID+'vw'});
+
+	let $floorplan = $('<floorplan>').appendTo($scroller);
+	$svgMap.appendTo($floorplan);
 
 	let $svg = $(`
-		<svg class='power-network' viewbox="-0.5 -0.5 16 16" width=800 height=800>
+		<svg class='power-network' viewbox="-0.5 -0.5 16 16" width=${16*GRID}vw height=${16*GRID}vw>
 			<path class="laser" vector-effect="non-scaling-stroke" d=""/>
 		</svg>`).appendTo($scroller);
 
@@ -24,7 +32,7 @@ window.PowerDiverter = function(){
 	audio.add('good','./audio/sfx-good.mp3', 1);
 
 	$(`
-		<svg class='power-network power-frame' viewbox="0 0 100 100" width=400 height=400>
+		<svg class='power-network power-frame' viewbox="0 0 100 100" width=${8*GRID}vw height=${8*GRID}vw>
 			<g class="frame-group">
 			    <path class="frame" "vector-effect="non-scaling-stroke" d="M${0},${C} L${0},${0} L${C},${0}"/>
 			    <path class="frame" "vector-effect="non-scaling-stroke" d="M${S},${C} L${S},${0} L${S-C},${0}"/>
@@ -260,7 +268,13 @@ window.PowerDiverter = function(){
 	function redraw(){
 
 		window.launchpad.clear();
+
+
+
 		if(!model) return;
+
+
+		renderRipples();
 
 		nRedraw++;
 		
@@ -385,6 +399,14 @@ window.PowerDiverter = function(){
 	let model;
 
 	let n = 120;
+	let ripples = [];
+
+	function renderRipples(){
+		for(var r in ripples){
+			ripples[r].size++;
+			
+		}
+	}
 
 	function doCompleteLevel(){
 
@@ -403,11 +425,11 @@ window.PowerDiverter = function(){
 
 		$msg.text('ALL SYSTEMS NOMINAL');
 
-		$scroller.css({
+		/*$scroller.css({
 			'transform':'scale(0.5)',
 			'left':'-200px',
 			'top':'-250px',
-		})
+		})*/
 
 		self.$el.find('power-actor').off();
 		self.$el.find('power-actor').remove();
@@ -445,15 +467,13 @@ window.PowerDiverter = function(){
 			for(var v in source) model.actors[n][v] = source[v];
 		}
 
-		console.log('DO LEVEL',model);
-
 		$svg.find('g').attr('transform','translate('+model.x+' '+model.y+')');
 		$msg.text(`GRID ${model.x}-${model.y}`);
 		
 		$scroller.css({
 			'transform':'scale(1)',
-			'left':-model.x*50,
-			'top':-model.y*50
+			'left':-model.x*GRID+'vw',
+			'top':-model.y*GRID+'vw'
 		});
 
 
@@ -510,6 +530,9 @@ window.PowerDiverter = function(){
 	window.launchpad.listen(function(x,y){
 		//TO DO make a splash
 		if(!model) return;
+
+		ripples.push({x:x,y:y,size:0,color:[255,255,255]});
+
 		for(var a in model.actors){
 			if( model.actors[a].type != 'system' && 
 				model.actors[a].x-model.x == x && 
@@ -642,5 +665,7 @@ window.PowerDiverter = function(){
 
 		
 	}
+
+	doLevel(0);
 	
 }

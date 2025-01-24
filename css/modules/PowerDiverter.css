@@ -34,7 +34,7 @@ power floorplan{
 
 power floorplan svg{
 	
-	fill: var(--black);
+	fill: var(--gray);
 	stroke: var(--purple);
 	vector-effect: non-scaling-stroke;
 }
@@ -51,7 +51,7 @@ power system{
 	height: calc( var(--grid)/2 );
 	margin: calc( var(--grid)/4 );
 	position: absolute;
-	background: var(--black);
+	background: var(--gray);
 
 	box-sizing: border-box;
 	border: var(--border) solid var(--purple);
@@ -163,12 +163,12 @@ power .power-network path{
 
 power .power-network path.hull:nth-of-type(1){
 	stroke:var(--purple);
-	fill: black;
+	fill: var(--gray);
 	stroke-width: 12;
 }
 
 power .power-network path.hull:nth-of-type(2){
-	stroke:black;
+	stroke: var(--gray);
 	stroke-width: 9;
 	
 }

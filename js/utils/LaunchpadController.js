@@ -35,10 +35,11 @@ window.LaunchpadController = function(){
 
 	let map = [];
 
-	self.$el = $('<table class="launchpadsim">').appendTo('body').css({'transform':'rotate(-90deg)'});
+	self.$el = $('<launchpadsim>').appendTo('debug').css({'transform':'rotate(-90deg)'});
+	let $t = $('<table>').appendTo(self.$el);
 
 	for(var i=0; i<8; i++){
-		let $tr = $('<tr>').appendTo(self.$el);
+		let $tr = $('<tr>').appendTo($t);
 		map[i] = [];
 		for(var j=0; j<8; j++){
 			map[i][j] = 0;

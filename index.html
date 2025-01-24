@@ -96,10 +96,66 @@
 				return $t;
 			}
 
+			let audio = new AudioContext();
+			audio.add('alert','./audio/sfx-alert.mp3',0.5);
+			audio.add('alarm','./audio/sfx-alarm.mp3',0.1,true);
+			audio.add('boom','./audio/sfx-boom.mp3',0.5);
+
+			function showChapter(n,title){
+				$('chapterline').eq(0).text('CHAPTER '+n);
+				$('chapterline').eq(1).text(title);
+
+				$('chapter')
+				.css({'opacity':0})
+				.animate({'opacity':1},1000)
+				.delay(3000)
+				.animate({'opacity':0},1000);
+			}
+
+			function doDamage( whatKind ){
+
+				audio.play('boom',true);
+				audio.play('alert',true);
+				audio.play('alarm');
+				new OSWarning(whatKind).$el.appendTo('alerts');
+
+				$('container')
+				.animate({bottom:-10,left:-10},20)
+				.animate({bottom:10,left:10},20)
+				.animate({bottom:-20,left:-50},20)
+				.animate({bottom:-20,left:-10},20)
+				.animate({bottom:0,left:0},20);
+			}
+
+			let WormHoleSimulator = function(){
+				let self = this;
+
+				audio.add('music','./audio/music-wormhole.mp3',0.5,true);
+
+				self.start = function(){
+
+					$(`<video autoplay loop muted>
+					  <source src="./video/video-wormhole.mp4" type="video/mp4">
+					</video>`).appendTo('bg');
+
+					audio.play('music');
+
+					setTimeout(function(){ doDamage('CIRCUIT<br>DAMAGE') }, 5000);
+					setTimeout(function(){ doDamage('CIRCUIT<br>DAMAGE') }, 10000);
+					setTimeout(function(){ doDamage('CIRCUIT<br>DAMAGE') }, 11000);
+					setTimeout(function(){ doDamage('CIRCUIT<br>DAMAGE') }, 21000);
+					setTimeout(function(){ doDamage('CIRCUIT<br>DAMAGE') }, 22000);
+
+					showChapter(2,'THE WORMHOLE');
+				}
+
+				
+			}
+
 			let OSWarning = function(text){
 				let self = this;
 				self.$el = $('<oswarning>').html(text);
-				
+
 			}
 
 			let OSBox = function(color,header,icon){
@@ -212,15 +268,7 @@
 			osRight.toToy('DIVERT POWER');
 			osLeft.toToy('TRANSLATOR');
 
-			new OSWarning('CIRCUIT<br>DAMAGE').$el.appendTo('screen[position="center"]')
-			new OSWarning('PLASMA<br>FIRE').$el.appendTo('screen[position="center"]')
-			new OSWarning('ALGORITHM<br>FRAGMENTATION').$el.appendTo('screen[position="center"]')
-			new OSWarning('DAMPENERS<br>OFFLINE').$el.appendTo('screen[position="center"]')
-			new OSWarning('COMMS<br>OFFLINE').$el.appendTo('screen[position="center"]')
-			new OSWarning('HELM<br>OFFLINE').$el.appendTo('screen[position="center"]')
 			
-
-
 			window.socket.on('circuit_damage',function(params){
 				osRight.toToy('DIVERT POWER',params);
 			})
@@ -240,18 +288,41 @@
 
 			},1000);
 
+			let simulator = new WormHoleSimulator();
+
+			$('[action="doWormhole"]').click(function(){
+				simulator.start();
+			})
+
 		})
 	</script>
 
 	<title></title>
 </head>
 <body>
-	<midi-message></midi-message>
+	<bg>
+		
+	</bg>
+	
 	<container>
 		<screen position='left'></screen>
-		<screen position='center'></screen>
+		<screen position='center'>
+			
+			<alerts></alerts>
+		</screen>
 		<screen position='right'></screen>
 	</container>
-	
+	<debug>
+		<button action='doWormhole'>SIMULATE WORMHOLE</button>
+		<midi-message>
+			
+		</midi-message>
+	</debug>
+
+	<chapter>
+		<chapterline>CHAPTER N</chapterline>
+		<hr>
+		<chapterline>THE THING</chapterline>
+	</chapter>
 </body>
 </html>

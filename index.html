@@ -59,6 +59,49 @@
 
 			]
 
+			function makeTable(w,h,hasInner){
+
+				let $t = $('<table>');
+
+				for(var r=0; r<h; r++ ){
+					let $tr = $('<tr>').appendTo($t);
+					for(let c=0; c<w; c++){
+						let $td = $('<td>').appendTo($tr).attr('c',c).attr('r',r);
+					}
+				}
+
+				//outer corners
+				$t.find(`[c=0][r=0]`).attr('corner','tl');
+				$t.find(`[c=${w-1}][r=0]`).attr('corner','tr');
+				$t.find(`[c=${w-1}][r=${h-1}]`).attr('corner','br');
+				$t.find(`[c=0][r=${h-1}]`).attr('corner','bl');
+
+				if(hasInner){
+					//inner corners
+					$t.find(`[c=1][r=1]`).attr('cornice','tl');
+					$t.find(`[c=${w-2}][r=1]`).attr('cornice','tr');
+					$t.find(`[c=${w-2}][r=${h-2}]`).attr('cornice','br');
+					$t.find(`[c=1][r=${h-2}]`).attr('cornice','bl');
+
+					$t.find(`
+					[c=${w-2}][r=1], 
+					[c=${w-2}][r=${h-2}],
+					[c=1][r=${h-2}]`).attr('paint','true');
+				}
+				
+
+				$t.find(`[c=0], [r=0], [c=${w-1}], [r=${h-1}],
+					[c=1][r=1]`).attr('paint','true');
+
+				return $t;
+			}
+
+			let OSWarning = function(text){
+				let self = this;
+				self.$el = $('<oswarning>').html(text);
+				
+			}
+
 			let OSBox = function(color,header,icon){
 				
 				let toys = [];
@@ -67,43 +110,17 @@
 				let h = 14;
 
 				let $el = $('<osbox>');
-				let $t = $('<table>').appendTo($el);
+				let $t = makeTable(w,h,true).appendTo($el);
 
 				self.$el = $el;
 
-				for(var r=0; r<w; r++ ){
-					let $tr = $('<tr>').appendTo($t);
-					for(let c=0; c<h; c++){
-						let $td = $('<td>').appendTo($tr).attr('c',c).attr('r',r);
-					}
-				}
-
+			
 				let paint = [
 					''
 				]
 
-				$el.find(`[c=0], [r=0], [c=${w-1}], [r=${h-1}],
-					[c=1][r=1],
-					[c=${w-2}][r=1], 
-					[c=${w-2}][r=${h-2}],
-					[c=1][r=${h-2}]`).attr('paint','true');
-
-				//outer corners
-				$el.find(`[c=0][r=0]`).attr('corner','tl');
-				$el.find(`[c=${w-1}][r=0]`).attr('corner','tr');
-				$el.find(`[c=${w-1}][r=${h-1}]`).attr('corner','br');
-				$el.find(`[c=0][r=${h-1}]`).attr('corner','bl');
-
-				//inner corners
-				$el.find(`[c=1][r=1]`).attr('cornice','tl');
-				$el.find(`[c=${w-2}][r=1]`).attr('cornice','tr');
-				$el.find(`[c=${w-2}][r=${h-2}]`).attr('cornice','br');
-				$el.find(`[c=1][r=${h-2}]`).attr('cornice','bl');
-
-				$el.find(`[c=0]`).attr('thick',3);
 
 				$('<h1>').appendTo($el.find('[c=2][r=0]'));
-
 				
 				$(`[r=6][c=${w-1}]`).attr('bordered','vert');
 				$(`[r=7][c=${w-1}]`).attr('bordered','vert');
@@ -186,17 +203,8 @@
 			let osLeft = new OSBox('purple');
 			let osRight = new OSBox('yellow');
 
-			osLeft.$el.appendTo('body').css({
-				'left':'0px',
-				'right':'66.6%',
-				'bottom':'40px',
-			});
-
-			osRight.$el.appendTo('body').css({
-				'left':'66.6%',
-				'right':'0px',
-				'bottom':'40px',
-			})
+			osLeft.$el.appendTo('screen[position="left"]');
+			osRight.$el.appendTo('screen[position="right"]');
 
 			for(var i=0; i<toysRight.length; i++) osRight.addToy(toysRight[i]);
 			for(var i=0; i<toysLeft.length; i++) osLeft.addToy(toysLeft[i]);
@@ -204,12 +212,33 @@
 			osRight.toToy('DIVERT POWER');
 			osLeft.toToy('TRANSLATOR');
 
+			new OSWarning('CIRCUIT<br>DAMAGE').$el.appendTo('screen[position="center"]')
+			new OSWarning('PLASMA<br>FIRE').$el.appendTo('screen[position="center"]')
+			new OSWarning('ALGORITHM<br>FRAGMENTATION').$el.appendTo('screen[position="center"]')
+			new OSWarning('DAMPENERS<br>OFFLINE').$el.appendTo('screen[position="center"]')
+			new OSWarning('COMMS<br>OFFLINE').$el.appendTo('screen[position="center"]')
+			new OSWarning('HELM<br>OFFLINE').$el.appendTo('screen[position="center"]')
+			
+
 
 			window.socket.on('circuit_damage',function(params){
 				osRight.toToy('DIVERT POWER',params);
 			})
 
-			
+			const WIDTH = 1000;
+			setInterval(function(){
+
+				let w = $('body').width();
+				if(w<WIDTH){
+					let scale = w/WIDTH;
+					
+					$('container').css('transform','scale('+scale+')');
+				} else {
+					$('container').css('transform','scale(1)');
+				}
+				
+
+			},1000);
 
 		})
 	</script>
@@ -217,10 +246,12 @@
 	<title></title>
 </head>
 <body>
-	
-	<container>
-		<osstream></osstream>
-	</container>
 	<midi-message></midi-message>
+	<container>
+		<screen position='left'></screen>
+		<screen position='center'></screen>
+		<screen position='right'></screen>
+	</container>
+	
 </body>
 </html>

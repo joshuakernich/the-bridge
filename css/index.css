@@ -55,7 +55,7 @@ body{
 	background: black;
 	z-index: 100;
 	position: fixed;
-	bottom: 0px;
+	top: 0px;
 	right: 0px;
 
 }
@@ -70,37 +70,35 @@ container{
 	display: block;
 	position: absolute;
 
+	top: 0px;
 	left: 0px;
 	right: 0px;
 	bottom: 0px;
 
+	transform-origin: bottom left;
+	min-width: 4500px;
 
 
 	background: black;
-
-	
-}
-
-osstream{
 	white-space: nowrap;
-
-	display: block;
-
-
-	
-	/*left: 50%;
-	top: 50%;
-
-	transform: translate(-50%, -50%);
-	width: calc(var(--grid)*17*3);*/
-
 }
+
+screen{
+	width: 33.3%;
+	height: 100%;
+	display: inline-block;
+	position: relative;
+	white-space: normal;
+	text-align: center;
+}
+
 
 table{
 	position: relative;
 	border-collapse: collapse;
 	margin: auto;
 }
+
 td{
 	
 	width: var(--grid);
@@ -230,10 +228,21 @@ toy osicon{
 
 osbox{
 	display: inline-block;
-	margin: calc(var(--grid)/2);
-	position: absolute;
-	margin: auto;
 }
+
+oswarning{
+	display: inline-block;
+	color: var(--pink);
+
+	white-space: normal;
+	width: calc( var(--grid)*4 );
+	background: url('../img/icon/icon-alert-triangle.svg');
+	background-size: calc( var(--grid)*2 );
+	background-position: top center;
+	background-repeat: no-repeat;
+	padding-top: calc( var(--grid)*2 );
+}
+
 
 midi-message{
 	display: block;

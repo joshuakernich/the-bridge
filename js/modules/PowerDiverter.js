@@ -30,7 +30,7 @@
 
 		's-core':{type:'power',dir:0,x:8,y:6},
 		's-thru':{type:'system',dir:0,x:10,y:6, link:'use[*|href="#SYSTEM_THRUSTER_0_Layer0_0_FILL"]:first-of-type'},
-		's-stab':{type:'system',dir:0,x:8,y:1, link:'use[*|href="#WingStabiliser_0_Layer0_0_FILL"]:first-of-type'},
+		's-stab':{type:'system',dir:0,x:8,y:1, link:'use[*|href="#WingStabiliser_0_Layer0_0_FILL"]:last-of-type'},
 
 		's-cannon':{type:'system',dir:0,x:2,y:6, link:'use[*|href="#SYSTEM_CANNON_0_Layer0_0_FILL"]:first-of-type'},
 		'p-cannon':{type:'system',dir:0,x:2,y:10, link:'use[*|href="#SYSTEM_CANNON_0_Layer0_0_FILL"]:last-of-type'},
@@ -475,7 +475,8 @@ window.PowerDiverter = function( puzzle ){
 			let source = puzzle.actors[n];
 			model.actors[n] = {};
 			for(var v in source) model.actors[n][v] = source[v];
-			if( model.actors.link ) model.actors.$link = $svgMap.find( model.actors.link );
+
+			if( model.actors[n].link ) model.actors[n].$link = $svgMap.find( model.actors[n].link );
 		}
 
 		$svg.find('g').attr('transform','translate('+model.x+' '+model.y+')');

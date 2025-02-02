@@ -1,4 +1,215 @@
-window.PowerDiverter = function(){
+{
+	const SYSTEMS = {
+
+		'd-s-core':{type:'door',dir:2,x:6,y:6},
+		'd-s-pass':{type:'door',dir:0,x:5,y:7},
+		'd-s-wing':{type:'door',dir:0,x:5,y:5},
+		'd-s-scoo':{type:'door',dir:2,x:4,y:4},
+		'd-s-scoo-airl':{type:'door',dir:2,x:2,y:4},
+		'd-s-rear':{type:'door',dir:2,x:6,y:4},
+		'd-s-rear-airl':{type:'door',dir:2,x:9,y:3},
+		'd-s-rear-stab':{type:'door',dir:0,x:8,y:2},
+		'd-s-thru-stab':{type:'door',dir:0,x:10,y:7},
+		
+		'd-brid':{type:'door',dir:2,x:4,y:8},
+		'd-tail':{type:'door',dir:2,x:9,y:8},
+
+		'd-p-core':{type:'door',dir:2,x:6,y:10},
+		'd-p-pass':{type:'door',dir:0,x:5,y:9},
+		'd-p-wing':{type:'door',dir:0,x:5,y:11},
+		'd-p-scoo':{type:'door',dir:2,x:4,y:12},
+		'd-p-scoo-airl':{type:'door',dir:2,x:2,y:12},
+		'd-p-rear':{type:'door',dir:2,x:6,y:12},
+		'd-p-rear-airl':{type:'door',dir:2,x:9,y:13},
+		'd-p-rear-stab':{type:'door',dir:0,x:8,y:14},
+		'd-p-thru-stab':{type:'door',dir:0,x:10,y:9},
+		
+
+		'p-core':{type:'power',dir:0,x:8,y:10},
+		'p-thru':{type:'system',dir:0,x:10,y:10, link:'use[*|href="#SYSTEM_THRUSTER_0_Layer0_0_FILL"]:last-of-type'},
+
+		's-core':{type:'power',dir:0,x:8,y:6},
+		's-thru':{type:'system',dir:0,x:10,y:6, link:'use[*|href="#SYSTEM_THRUSTER_0_Layer0_0_FILL"]:first-of-type'},
+		's-stab':{type:'system',dir:0,x:8,y:1, link:'use[*|href="#WingStabiliser_0_Layer0_0_FILL"]:first-of-type'},
+
+		's-cannon':{type:'system',dir:0,x:2,y:6, link:'use[*|href="#SYSTEM_CANNON_0_Layer0_0_FILL"]:first-of-type'},
+		'p-cannon':{type:'system',dir:0,x:2,y:10, link:'use[*|href="#SYSTEM_CANNON_0_Layer0_0_FILL"]:last-of-type'},
+
+		'r-stab':{type:'system',dir:0,x:12,y:8, link:'use[*|href="#SYSTEM_STABILISER_0_Layer0_0_FILL"]'},
+
+		's-dive-1':{type:'diverter',x:7,y:7,dir:0},
+		'p-dive-1':{type:'diverter',x:7,y:9,dir:0},
+		'c-dive':{type:'diverter',x:6,y:8,dir:0},
+	}
+
+	window.ShipLayout = [
+		'******** *******',
+		'******  B*******',
+		'**** 9  +*******',
+		'***  9 AA+******',
+		'**+A+9+AA ******',
+		'**  3+ 555******',
+		'** 333+5557*****',
+		'**  3+ 555+*****',
+		'** 0+1111+222***',
+		'**  4+ 666+*****',
+		'** 444+6668*****',
+		'**  4+ 666******',
+		'**+C+F+DD+******',
+		'***  F DD*******',
+		'**** F  +*******',
+		'******  E*******',
+		'******** *******',
+	]
+
+	//from up, clockwise at 45 degree increments
+	window.dirs = [
+		{x:0,y:-1},
+		{x:1,y:-1},
+		{x:1,y:0},
+		{x:1,y:1},
+		{x:0,y:1},
+		{x:-1,y:1},
+		{x:-1,y:0},
+		{x:-1,y:-1},
+	]
+ 
+	// Reverse engineer the structure of the rooms and doors
+	// We'll use this to determine if rooms are sealed or not
+	window.ShipRooms = {};
+	
+	for(var y=0; y<ShipLayout.length; y++){
+		for(var x=0; x<ShipLayout[y].length; x++){
+			let id = ShipLayout[y][x];
+
+			if(id!='*' && id!=' ' && id!='+') {
+				//this is a room
+				if(!ShipRooms[id]) ShipRooms[id] = {nodes:[],doors:[]};
+				ShipRooms[id].nodes.push({x:x,y:y});
+			}
+		}
+	}
+
+	for(var s in SYSTEMS){
+		if(SYSTEMS[s].type=='door'){
+			SYSTEMS[s].open = false;
+			let dirA = dirs[SYSTEMS[s].dir];
+			let dirB = dirs[(SYSTEMS[s].dir + 4)%dirs.length];
+			let a = ShipLayout[SYSTEMS[s].y + dirA.y]?ShipLayout[SYSTEMS[s].y + dirA.y][SYSTEMS[s].x + dirA.x]:undefined;
+			let b = ShipLayout[SYSTEMS[s].y + dirB.y]?ShipLayout[SYSTEMS[s].y + dirB.y][SYSTEMS[s].x + dirB.x]:undefined;
+			SYSTEMS[s].rooms = [];
+
+			SYSTEMS[s].isAirlock = (a=='*'||b=='*');
+
+			if(a!='*') ShipRooms[a].doors.push(s); 
+			if(b!='*') ShipRooms[b].doors.push(s);
+
+			if(a!='*') SYSTEMS[s].rooms.push(a);
+			if(b!='*') SYSTEMS[s].rooms.push(b);
+		}
+	}
+
+
+
+	const MAP = 
+	[
+		{
+			x:5,y:0,
+			actors:[
+				{type:'damage',x:8,y:3},
+				{type:'diverter',x:7,y:5,dir:0},
+				{type:'diverter',x:7,y:2,dir:0},
+				's-core',
+				's-stab',
+			],
+		},
+		{
+			x:2,y:2,
+			includeDoors:true,
+			actors:[
+				{type:'fire',x:8,y:3,intensity:50},
+			]
+		},
+		{
+			x:2,y:2,
+			includeDoors:true,
+			actors:[
+				{type:'fire',x:5,y:8,intensity:50},
+			]
+		},
+		
+		{
+
+			x:5,y:5,
+			actors:[
+				'p-core','p-thru',
+				's-core','s-thru',
+			],
+		},
+		
+		{
+			x:1,y:5,
+			actors:[
+				's-cannon','p-cannon',
+				'p-core','s-core',
+				
+			],
+		},
+		{
+			x:5,y:4,
+			actors:[
+				'p-core','s-core',
+				's-thru','r-stab',
+				'p-dive-1',
+				's-dive-1',
+				'c-dive',
+			]
+		},
+		{
+			x:0,y:0,
+			actors:[],
+		}
+	]
+
+	window.PowerDiverterPuzzles = [];
+
+	for(var l in MAP){
+
+		PowerDiverterPuzzles[l] = {
+			x:MAP[l].x, 
+			y:MAP[l].y, 
+			actors:{},
+		}
+
+		if(MAP[l].includeDoors){
+			for(var s in SYSTEMS){
+				if(
+					SYSTEMS[s].type=='door' && 
+					SYSTEMS[s].x >= PowerDiverterPuzzles[l].x &&
+					SYSTEMS[s].x < PowerDiverterPuzzles[l].x+8 && 
+					SYSTEMS[s].y >= PowerDiverterPuzzles[l].y && 
+					SYSTEMS[s].y < PowerDiverterPuzzles[l].y+8
+					){
+					PowerDiverterPuzzles[l].actors[s] = SYSTEMS[s];
+				}
+			}
+		}
+
+		for(var a in MAP[l].actors){
+			
+			let iActor = MAP[l].actors[a];
+
+			if(typeof(iActor) == 'string'){
+				PowerDiverterPuzzles[l].actors[iActor] = SYSTEMS[iActor];
+			} else {
+				PowerDiverterPuzzles[l].actors['anon-'+Math.random()] = iActor;
+			}
+			
+		}
+	}
+}
+
+window.PowerDiverter = function( puzzle ){
 
 	let self = this;
 	self.$el = $('<power>');
@@ -42,212 +253,6 @@ window.PowerDiverter = function(){
 			 </g>
 		</svg>`).appendTo(self.$el);
 
-
-
-	//from up, clockwise at 45 degree increments
-	let dirs = [
-		{x:0,y:-1},
-		{x:1,y:-1},
-		{x:1,y:0},
-		{x:1,y:1},
-		{x:0,y:1},
-		{x:-1,y:1},
-		{x:-1,y:0},
-		{x:-1,y:-1},
-	]
-
-
-
-	let map = [
-		'******** *******',
-		'******  B*******',
-		'**** 9  +*******',
-		'***  9 AA+******',
-		'**+A+9+AA ******',
-		'**  3+ 555******',
-		'** 333+5557*****',
-		'**  3+ 555+*****',
-		'** 0+1111+222***',
-		'**  4+ 666+*****',
-		'** 444+6668*****',
-		'**  4+ 666******',
-		'**+C+F+DD+******',
-		'***  F DD*******',
-		'**** F  +*******',
-		'******  E*******',
-		'******** *******',
-	]
-
-	
-
-	const SYSTEMS = {
-
-		'd-s-core':{type:'door',dir:2,x:6,y:6},
-		'd-s-pass':{type:'door',dir:0,x:5,y:7},
-		'd-s-wing':{type:'door',dir:0,x:5,y:5},
-		'd-s-scoo':{type:'door',dir:2,x:4,y:4},
-		'd-s-scoo-airl':{type:'door',dir:2,x:2,y:4},
-		'd-s-rear':{type:'door',dir:2,x:6,y:4},
-		'd-s-rear-airl':{type:'door',dir:2,x:9,y:3},
-		'd-s-rear-stab':{type:'door',dir:0,x:8,y:2},
-		'd-s-thru-stab':{type:'door',dir:0,x:10,y:7},
-		
-		'd-brid':{type:'door',dir:2,x:4,y:8},
-		'd-tail':{type:'door',dir:2,x:9,y:8},
-
-		'd-p-core':{type:'door',dir:2,x:6,y:10},
-		'd-p-pass':{type:'door',dir:0,x:5,y:9},
-		'd-p-wing':{type:'door',dir:0,x:5,y:11},
-		'd-p-scoo':{type:'door',dir:2,x:4,y:12},
-		'd-p-scoo-airl':{type:'door',dir:2,x:2,y:12},
-		'd-p-rear':{type:'door',dir:2,x:6,y:12},
-		'd-p-rear-airl':{type:'door',dir:2,x:9,y:13},
-		'd-p-rear-stab':{type:'door',dir:0,x:8,y:14},
-		'd-p-thru-stab':{type:'door',dir:0,x:10,y:9},
-		
-
-		'p-core':{type:'power',dir:0,x:8,y:10},
-		'p-thru':{type:'system',dir:0,x:10,y:10, $link:$svgMap.find('use[*|href="#SYSTEM_THRUSTER_0_Layer0_0_FILL"]').eq(1)},
-
-		's-core':{type:'power',dir:0,x:8,y:6},
-		's-thru':{type:'system',dir:0,x:10,y:6, $link:$svgMap.find('use[*|href="#SYSTEM_THRUSTER_0_Layer0_0_FILL"]').eq(0)},
-		's-stab':{type:'system',dir:0,x:8,y:1, $link:$svgMap.find('use[*|href="#WingStabiliser_0_Layer0_0_FILL"]').eq(0)},
-
-		's-cannon':{type:'system',dir:0,x:2,y:6, $link:$svgMap.find('use[*|href="#SYSTEM_CANNON_0_Layer0_0_FILL"]').eq(0)},
-		'p-cannon':{type:'system',dir:0,x:2,y:10, $link:$svgMap.find('use[*|href="#SYSTEM_CANNON_0_Layer0_0_FILL"]').eq(1)},
-
-		'r-stab':{type:'system',dir:0,x:12,y:8, $link:$svgMap.find('use[*|href="#SYSTEM_STABILISER_0_Layer0_0_FILL"]')},
-
-		's-dive-1':{type:'diverter',x:7,y:7,dir:0},
-		'p-dive-1':{type:'diverter',x:7,y:9,dir:0},
-		'c-dive':{type:'diverter',x:6,y:8,dir:0},
-	}
- 
-	// Reverse engineer the structure of the rooms and doors
-	// We'll use this to determine if rooms are sealed or not
-	const ROOMS = {};
-	
-	for(var y in map){
-		for(var x=0; x<map[y].length; x++){
-			let id = map[y][x];
-
-			if(id!='*' && id!=' ' && id!='+') {
-				//this is a room
-				if(!ROOMS[id]) ROOMS[id] = {nodes:[],doors:[]};
-				ROOMS[id].nodes.push({x:x,y:y});
-			}
-		}
-	}
-
-	for(var s in SYSTEMS){
-		if(SYSTEMS[s].type=='door'){
-			SYSTEMS[s].open = false;
-			let dirA = dirs[SYSTEMS[s].dir];
-			let dirB = dirs[(SYSTEMS[s].dir + 4)%dirs.length];
-			let a = map[SYSTEMS[s].y + dirA.y]?map[SYSTEMS[s].y + dirA.y][SYSTEMS[s].x + dirA.x]:undefined;
-			let b = map[SYSTEMS[s].y + dirB.y]?map[SYSTEMS[s].y + dirB.y][SYSTEMS[s].x + dirB.x]:undefined;
-			SYSTEMS[s].rooms = [];
-
-			SYSTEMS[s].isAirlock = (a=='*'||b=='*');
-
-			if(a!='*') ROOMS[a].doors.push(s); 
-			if(b!='*') ROOMS[b].doors.push(s);
-
-			if(a!='*') SYSTEMS[s].rooms.push(a);
-			if(b!='*') SYSTEMS[s].rooms.push(b);
-		}
-	}
-
-
-
-	let MAP = 
-	[
-		{
-			x:5,y:0,
-			actors:[
-				{type:'damage',x:8,y:3},
-				{type:'diverter',x:7,y:5,dir:0},
-				{type:'diverter',x:7,y:2,dir:0},
-				's-core',
-				's-stab',
-			],
-		},
-		{
-
-			x:5,y:5,
-			actors:[
-				'p-core','p-thru',
-				's-core','s-thru',
-			],
-		},
-		{
-			x:2,y:2,
-			includeDoors:true,
-			actors:[
-				{type:'fire',x:5,y:4,intensity:50},
-			]
-		},
-		{
-			x:1,y:5,
-			actors:[
-				's-cannon','p-cannon',
-				'p-core','s-core',
-				
-			],
-		},
-		{
-			x:5,y:4,
-			actors:[
-				'p-core','s-core',
-				's-thru','r-stab',
-				'p-dive-1',
-				's-dive-1',
-				'c-dive',
-			]
-		},
-		{
-			x:0,y:0,
-			actors:[],
-		}
-	]
-
-	let levels = [];
-
-	for(var l in MAP){
-
-		levels[l] = {
-			x:MAP[l].x, 
-			y:MAP[l].y, 
-			actors:{},
-		}
-
-		if(MAP[l].includeDoors){
-			for(var s in SYSTEMS){
-				if(
-					SYSTEMS[s].type=='door' && 
-					SYSTEMS[s].x >= levels[l].x &&
-					SYSTEMS[s].x < levels[l].x+8 && 
-					SYSTEMS[s].y >= levels[l].y && 
-					SYSTEMS[s].y < levels[l].y+8
-					){
-					levels[l].actors[s] = SYSTEMS[s];
-				}
-			}
-		}
-
-		for(var a in MAP[l].actors){
-			
-			let iActor = MAP[l].actors[a];
-
-			if(typeof(iActor) == 'string'){
-				levels[l].actors[iActor] = SYSTEMS[iActor];
-			} else {
-				levels[l].actors['anon-'+Math.random()] = iActor;
-			}
-			
-		}
-	}
-
 	function connect(path,dir){
 
 		let tip = path[path.length-1];
@@ -257,7 +262,7 @@ window.PowerDiverter = function(){
 
 		do{
 			dir = (dir+1)%dirs.length;
-			next = map[tip.y+dirs[dir].y]?map[tip.y+dirs[dir].y][tip.x+dirs[dir].x]:undefined;
+			next = ShipLayout[tip.y+dirs[dir].y]?ShipLayout[tip.y+dirs[dir].y][tip.x+dirs[dir].x]:undefined;
 		}
 		while( next != '*')
 		
@@ -268,11 +273,11 @@ window.PowerDiverter = function(){
 	}
 
 	let hull = [];
-	for(var r=0; r<map.length; r++){
+	for(var r=0; r<ShipLayout.length; r++){
 		let $r = $('<power-row>').appendTo($scroller);
 
-		for(var c=0; c<map[r].length; c++){
-			let $c = $('<power-cell>').appendTo($r).attr('x',c).attr('y',r).attr('type',map[r][c]==' '?'o':map[r][c]);
+		for(var c=0; c<ShipLayout[r].length; c++){
+			let $c = $('<power-cell>').appendTo($r).attr('x',c).attr('y',r).attr('type',ShipLayout[r][c]==' '?'o':ShipLayout[r][c]);
 		}
 	}
 	
@@ -330,7 +335,7 @@ window.PowerDiverter = function(){
 									}
 								}
 							}
-						} else if( !map[y] || !map[y][x] || map[y][x] == '*'){
+						} else if( !ShipLayout[y] || !ShipLayout[y][x] || ShipLayout[y][x] == '*'){
 							
 							if(!hit) path.pop();
 							hit = true;
@@ -364,8 +369,6 @@ window.PowerDiverter = function(){
 		for(var a in model.actors){
 
 			let actor = model.actors[a];
-
-			
 
 			let icon = (actor.subtype?actor.subtype:actor.type) + (actor.powered?'-powered':'');
 			actor.$el.css('background-image','url(./img/icon/icon-'+icon+'.svg)')
@@ -454,28 +457,25 @@ window.PowerDiverter = function(){
 		model = undefined;
 	}
 
-	function doNextLevel(){
-		doLevel(iLevel+1);
-	}
-
-	function doLevel(iLevel){
+	function doPuzzle( puzzle ){
 
 		dumpLevel();
 
 		model = {
-			iLevel:iLevel,
-			x:levels[iLevel].x,
-			y:levels[iLevel].y,
+			//iLevel:iLevel,
+			x:puzzle.x,
+			y:puzzle.y,
 			isRoomSealed:{},
 			actors:{},
 		};
 
-		for(var r in ROOMS) model.isRoomSealed[r] = true;
+		for(var r in ShipRooms) model.isRoomSealed[r] = true;
 		
-		for(var n in levels[iLevel].actors ){
-			let source = levels[iLevel].actors[n];
+		for(var n in puzzle.actors ){
+			let source = puzzle.actors[n];
 			model.actors[n] = {};
 			for(var v in source) model.actors[n][v] = source[v];
+			if( model.actors.link ) model.actors.$link = $svgMap.find( model.actors.link );
 		}
 
 		$svg.find('g').attr('transform','translate('+model.x+' '+model.y+')');
@@ -538,6 +538,7 @@ window.PowerDiverter = function(){
 	}
 
 	window.launchpad.listen(function(x,y){
+
 		//TO DO make a splash
 		if(!model) return;
 
@@ -546,7 +547,7 @@ window.PowerDiverter = function(){
 		for(var a in model.actors){
 			if( model.actors[a].type != 'system' && 
 				model.actors[a].x-model.x == x && 
-				model.actors[a].y-model.y == y) model.actors[a].$el.click();
+				model.actors[a].y-model.y == y) return model.actors[a].$el.click();
 		}
 	})
 
@@ -559,7 +560,7 @@ window.PowerDiverter = function(){
 			if(!model.isRoomSealed[iRoom]) continue;
 			model.isRoomSealed[iRoom] = false;
 
-			let doors = ROOMS[iRoom].doors;
+			let doors = ShipRooms[iRoom].doors;
 
 			for(var d in doors){
 
@@ -607,11 +608,12 @@ window.PowerDiverter = function(){
 	}
 
 	function stepFire( actorSource ){
-		let iRoom = map[actorSource.y][actorSource.x];
+		let iRoom = ShipLayout[actorSource.y][actorSource.x];
 
-		let isSealedRoom = ( ROOMS[iRoom] && model.isRoomSealed[iRoom] )?true:false;
+		let isSealedRoom = ( ShipRooms[iRoom] && model.isRoomSealed[iRoom] )?true:false;
 		let isSealedDoor = ( actorSource.door && actorSource.door.isSealed )?true:false;
 
+	
 		if(isSealedRoom || isSealedDoor) actorSource.intensity += 5;
 		else actorSource.intensity--;
 
@@ -631,7 +633,7 @@ window.PowerDiverter = function(){
 			let x = actorSource.x+dir.x;
 			let y = actorSource.y+dir.y;
 
-			let iSpread = map[y][x];
+			let iSpread = ShipLayout[y][x];
 
 			let actorSpread = undefined;
 			let actorFire = undefined;
@@ -666,7 +668,7 @@ window.PowerDiverter = function(){
 
 		clearInterval(interval)
 		if(b){
-			if(params && params.severity) doLevel(params.severity-1);
+			//if(params && params.severity) doLevel(params.severity-1);
 			interval = setInterval(step,100);
 			redraw();
 		} else {
@@ -676,6 +678,9 @@ window.PowerDiverter = function(){
 		
 	}
 
-	doLevel(0);
+	if(puzzle){
+		doPuzzle(puzzle);
+		self.turnOnOff(true);
+	}
 	
 }

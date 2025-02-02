@@ -11,7 +11,6 @@ window.HASocket = function(){
 	//let s = new WebSocket(URL);
 	let s = {};
 
-
 	s.onopen = function(e){
 		console.log('SOCKET OPEN!');
 	};
@@ -74,7 +73,7 @@ window.HASocket = function(){
 	self.send = function(msg){
 		msg = JSON.stringify(msg);
 		console.log("SEND",msg);
-		s.send(msg);
+		if(s.send) s.send(msg);
 	}
 
 	self.on = function(type,fn){

@@ -1,3 +1,4 @@
+
 window.LaunchpadController = function(){
 
 	const RGB = {
@@ -82,7 +83,6 @@ window.LaunchpadController = function(){
 		for (var output of midiAccess.outputs.values()){
 		
 			if(output.name.includes("LP")){
-				console.log('output',output);
 				isX = output.name.includes("X");
 				//isRotate = isX;
 
@@ -100,7 +100,6 @@ window.LaunchpadController = function(){
 
         for (var input of midiAccess.inputs.values()){
 			if(input.name.includes("LP")){
-				console.log('input',input);
 				input.onmidimessage = onLaunchpadMessage;
 			}
         }
@@ -191,7 +190,7 @@ window.LaunchpadController = function(){
   		3,id,r/2*a,g/2*a,b/2*a,
   		247]);
 
-  	console.log(`rgba(${r},${g},${b},${a})`);
+  	//console.log(`rgba(${r},${g},${b},${a})`);
 
   	self.$el.find('[x="'+x+'"][y="'+y+'"]').css({'background':`rgba(${r},${g},${b},${a})`});
   }

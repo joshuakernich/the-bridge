@@ -89,7 +89,7 @@ container{
 	bottom: 0px;
 
 	transform-origin: bottom left;
-	min-width: 4500px;
+	min-width: 3000px;
 
 	padding-bottom: var(--grid);
 
@@ -296,8 +296,15 @@ button{
 	border: none;
 	padding: 0px;
 	margin: 0px;
-	border-left: var(--border) solid white;
-	padding-left: var(--border);
+	width: 150px;
+	text-align: left;
+	display: block;
+}
+
+button:after{
+	content: ">";
+	position: absolute;
+	right: 0px;
 }
 
 chapter{

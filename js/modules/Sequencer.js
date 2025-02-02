@@ -1,6 +1,21 @@
-window.Sequencer = function(){
+window.Sequencer = async function(){
 
+	await Tone.start()
 
+	let meter = new Tone.Meter();
+	window.mic = new Tone.UserMedia().connect(meter);
+
+	mic.open().then(() => {
+		console.log("mic open");
+		
+	}).catch(e => {
+		console.log("mic not open",e);
+	});
+
+	window.synth = new Tone.Synth().toDestination();
+	synth.envelope.attack = 0.05;
+	synth.envelope.release = 0.5;
+		
 	
 	const pitchLibrary = ['D3','E3','G3','A3','C4','D4','E4','G4','A4'];
 	const timePerBeat = 0.5;

@@ -243,8 +243,7 @@ window.PowerDiverter = function( puzzle ){
 	audio.add('powerup','./audio/sfx-powerup.mp3', 1);
 	audio.add('good','./audio/sfx-good.mp3', 1);
 
-	$(`
-		<svg class='power-network power-frame' viewbox="0 0 100 100" width=${8*GRID}${UNIT} height=${8*GRID}${UNIT}>
+	$(`<svg class='power-network power-frame' viewbox="0 0 100 100" width=${8*GRID}${UNIT} height=${8*GRID}${UNIT}>
 			<g class="frame-group">
 			    <path class="frame" "vector-effect="non-scaling-stroke" d="M${0},${C} L${0},${0} L${C},${0}"/>
 			    <path class="frame" "vector-effect="non-scaling-stroke" d="M${S},${C} L${S},${0} L${S-C},${0}"/>
@@ -282,7 +281,6 @@ window.PowerDiverter = function( puzzle ){
 	}
 	
 	let nRedraw = 0;
-	let tones = ['C2','D2','E2','F2','G2','A2','C3','D3','E3','F3','G3','A3','C4','D4','E4','F4','G4','A4','C5','D5','E5','F5','G5','A5','C6'];
 	function redraw(){
 
 		window.launchpad.clear();
@@ -404,9 +402,6 @@ window.PowerDiverter = function( puzzle ){
 			$('power-actor').off();
 			setTimeout(doCompleteLevel,700);
 		}
-
-		//if(window.synth) window.synth.triggerAttack(tones[countPower+(nRedraw%2)+(isAllPowered?2:0)]);
-		//if(isAllPowered) window.synth.triggerAttackRelease(tones[countPower+(nRedraw%2)+4], 0.1, Tone.now()+0.2);
 	}
 
 	
@@ -428,11 +423,7 @@ window.PowerDiverter = function( puzzle ){
 		dumpLevel();
 		self.turnOnOff(false);
 
-		window.socket.send({
-			"id": n++,
-			type:'fire_event',
-			event_type:'circuit_fixed'
-		});
+		if( self.callbackComplete ) self.callbackComplete();
 	}
 
 	function dumpLevel(){

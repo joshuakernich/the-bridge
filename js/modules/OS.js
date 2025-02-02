@@ -73,11 +73,13 @@ window.OS = function(){
 		audio.play('boom',true);
 		audio.play('alert',true);
 		audio.play('alarm');
-		new OSWarning(whatKind).$el.appendTo('alerts');
+		let warning = new OSWarning(whatKind);
+		warning.$el.appendTo('alerts');
 
 		if(tiedTo){
 			let box = new OSBox( tiedTo.color, tiedTo.name, tiedTo.toy );
 			box.$el.appendTo('screen[position="left"]');
+			box.warning = warning;
 		}
 		
 
@@ -87,6 +89,13 @@ window.OS = function(){
 		.animate({bottom:-20,left:-50},20)
 		.animate({bottom:-20,left:-10},20)
 		.animate({bottom:0,left:0},20);
+	}
+
+	function onCompleteBox(box){
+		console.log(box);
+		box.$el.remove();
+		box.warning.$el.remove();
+		audio.stop('alarm');
 	}
 
 	let WormHoleSimulator = function(){
@@ -117,8 +126,8 @@ window.OS = function(){
 
 	}
 
+	let n = 0;
 	let OSBox = function(color,header,toy){
-		
 		
 		let self = this;
 		let w = 14;
@@ -147,10 +156,25 @@ window.OS = function(){
 		self.$toy = $('<toy>').appendTo($el.find('[r=1][c=1]'));
 
 		toy.$el.appendTo(self.$toy);
+
+		toy.callbackComplete = function(){
+			sendEvent(n++,'circuit_fixed');
+			
+			onCompleteBox(self);
+		}
+	}
+
+	function sendEvent(id,evt){
+		window.socket.send({
+			"id": id,
+			type:'fire_event',
+			event_type:evt
+		});
 	}
 	
 	window.socket.on('circuit_damage',function(params){
 		//osRight.toToy('DIVERT POWER',params);
+		doDamage('CIRCUIT<br>DAMAGE', { color:'yellow', name:'POWER DIVERTER', toy:new PowerDiverter( PowerDiverterPuzzles[0] ) } );
 	})
 
 	const WIDTH = 3000;

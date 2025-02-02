@@ -103,10 +103,7 @@ window.OS = function(){
 			audio.play('music');
 
 			setTimeout(function(){ doDamage('CIRCUIT<br>DAMAGE', {name:'POWER DIVERTER', color:'yellow', toy:new PowerDiverter( PowerDiverterPuzzles[0] )}) }, 5000);
-			setTimeout(function(){ doDamage('CIRCUIT<br>DAMAGE') }, 10000);
-			setTimeout(function(){ doDamage('CIRCUIT<br>DAMAGE') }, 11000);
-			setTimeout(function(){ doDamage('CIRCUIT<br>DAMAGE') }, 21000);
-			setTimeout(function(){ doDamage('CIRCUIT<br>DAMAGE') }, 22000);
+			
 
 			showChapter(2,'THE WORMHOLE');
 		}
@@ -182,5 +179,9 @@ window.OS = function(){
 
 	$('<button>DO FIRE</button>').appendTo('debug').click(function(){
 		doDamage('PLASMA<br>FIRE', { color:'pink', name:'FIRE SUPRESSION', toy:new PowerDiverter( PowerDiverterPuzzles[1] ) } );
+	})
+
+	$('<button>DATA FRAGMENTATION</button>').appendTo('debug').click(function(){
+		doDamage('DATA<br>FRAGMENTATION', { color:'blue', name:'DEFRAGGLETISER', toy:new Unscramble() } );
 	})
 }

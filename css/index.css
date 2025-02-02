@@ -67,8 +67,8 @@ video{
 }
 
 launchpadsim{
-	display: block;
-
+	display: inline-block;
+	text-align: left;
 }
 
 launchpadsim td{
@@ -109,7 +109,8 @@ screen{
 table{
 	position: relative;
 	border-collapse: collapse;
-	margin: auto;
+
+	margin: none;
 }
 
 td{
@@ -284,6 +285,7 @@ debug{
 	top: 0px;
 	left: 0px;
 	padding: var(--grid);
+	text-align: left;
 }
 
 midi-message{

@@ -173,7 +173,7 @@ window.LaunchpadController = function(){
   		}
   	}
 
-  	self.$el.find('td').css({'background':`#222`});
+  	self.$el.find('td').css({'background':`#111`});
   }
 
   self.setXYRGBA = function(x,y,r,g,b,a){

@@ -168,7 +168,6 @@ window.Unscramble = function(){
 
 	self.triggerXY = function(x,y){
 		let $cell = self.$el.find('[c="'+x+'"][r="'+y+'"]');
-		console.log($cell);
 		if($cell.length) $cell.click();
 	}
 

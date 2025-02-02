@@ -1,21 +1,25 @@
 window.Unscramble = function(){
 
+	const audio = new AudioContext();
+	audio.add('blip','./audio/sfx-blip.mp3');
+	audio.add('correct','./audio/sfx-correct.mp3');
+
 	let colors = ['red','yellow','green','blue','pink','purple'];
 	let levels = [
 		{
-			name:'Duotronic Encryption Matrix',
+			name:'Duotronic Encryption',
 			pattern : '00 10 11 12 02 01',
 			message: 'FEAR THE| COMING |  DOOM  ',
 			patternWidth:2,
 		},
 		{
-			name:'Triotonic Encryption Matrix',
+			name:'Triotonic Encryption',
 			pattern: '00 10 20 21 22 12 02 01',
 			message: ' EVERYONE|IS GOING |  TO DIE ',
 			patternWidth:3,
 		},
 		{
-			name:'Duotrionic Encryption Matrix',
+			name:'Duotrionic Encryption',
 			pattern: '00 10 11 12 02 01',
 			message: 'TAKE ME |TO YOUR | LEADER ',
 			patternWidth:2,
@@ -63,25 +67,29 @@ window.Unscramble = function(){
 
 		self.$el.empty();
 
-		$('<h2>').appendTo(self.$el).text(level.name);
+		$('<header>').appendTo(self.$el).text(level.name);
+
+		launchpad.clear();
 
 		for(var r = 0; r < messageLive.length; r++){
-			$r = $('<seq-r>').appendTo(self.$el);
+			$r = $('<row>').appendTo(self.$el);
 			for(var c = 0; c < messageLive[r].length; c++){
-				$('<seq-c>')
+				$('<cell>')
 				.appendTo($r)
 				.attr('c',c)
 				.attr('r',r)
-				.attr('bg',colors[Math.floor(c/level.patternWidth)])
+				.attr('color',colors[Math.floor(c/level.patternWidth)])
 				.text(messageLive[r][c])
-				.on('mousedown',onCell);
+				.on('click',onCell);
+
+				launchpad.setXY(c,r,colors[Math.floor(c/level.patternWidth)])
 			}
 		}
 
 		group = level.pattern.split(' ');
 		for(let n=0; n<messageTarget[0].length/level.patternWidth; n++) randomScramble(n*level.patternWidth,0);
 
-		$('<button>').appendTo(self.$el).text('VERIFY').click(validate);
+		//$('<verify>').appendTo(self.$el).text('VERIFY').click(validate);
 	}
 	doLevel();
 
@@ -92,14 +100,19 @@ window.Unscramble = function(){
 
 		scramble(c,r);
 
-		self.$el.css({'pointer-events':'none'});
+		//self.$el.css({'pointer-events':'none'});
 
-		for(let a in anims) anims[a].$el.offset(anims[a].o).animate({top:0,left:0},300);
-		setTimeout(onMove,300);
+		audio.play('blip',true);
+
+		//for(let a in anims) anims[a].$el.offset(anims[a].o).animate({top:0,left:0},300);
+		//for(let a in anims) anims[a].$el.offset(anims[a].o);
+		//setTimeout(onMove,300);
+		validate();
 	}
 
 	function onMove(){
 		self.$el.css({'pointer-events':'auto'});
+		validate();
 	}
 
 	function validate() {
@@ -108,10 +121,11 @@ window.Unscramble = function(){
 		for(var r in messageLive) for(var c in messageLive[r]) if(messageLive[r][c] != messageTarget[r][c]) isCorrect = false;
 		
 		if(isCorrect){
-			self.$el.find('seq-c').off('mousedown').attr('bg','yellow');
+			audio.play('correct');
+			self.$el.find('cell').off('click').attr('color','yellow');
 			setTimeout(function(){
-				iLevel++;
-				doLevel();
+				launchpad.clear();
+				self.callbackComplete();
 			},1000)
 		}
 
@@ -152,7 +166,11 @@ window.Unscramble = function(){
 		}
 	}
 
-	
+	self.triggerXY = function(x,y){
+		let $cell = self.$el.find('[c="'+x+'"][r="'+y+'"]');
+		console.log($cell);
+		if($cell.length) $cell.click();
+	}
 
 	
 }

@@ -1,37 +1,50 @@
 unscramble{
-	font-size: calc(var(--grid)/2);
+	font-size: calc( var(--grid)*0.9);
 	font-weight: bold;
 	text-align: center;
 	display: block;
 	line-height: var(--grid);
-
-	text-align: center;
-	margin-top: var(--grid);
-}
-
-unscramble seq-c{
+	text-align: left;
+	margin: calc(var(--grid)*2);
+	width: calc(var(--grid)*8);
+	height: calc(var(--grid)*8);
 	
 }
 
-unscramble h2{
-	font: inherit;
+unscramble row{
+	display: block;
+}
+
+unscramble cell{
+	text-align: center;
+	background: none;
+	overflow: hidden;
+	position: relative;
+	display: inline-block;
+	width: var(--grid);
+	height: var(--grid);
+}
+
+unscramble header{
+	display: block;
 	color: var(--pink);
 	text-transform:  uppercase;
 	height: var(--grid);
 	padding: 0px;
 	margin: 0px;
+	margin-bottom: var(--grid);
 }
 
-unscramble button{
+unscramble verify{
 	display: inline-block;
 	width: 100%;
 	padding: 0px;
 	margin: 0px;
 	font: inherit;
 	border: none;
-	background: var(--cyan);
-	border-top: 6px solid black;
+	color: var(--cyan);
+	
 	width: 400px;
 
-
+	margin-top: var(--grid);
 }

@@ -1,12 +1,16 @@
 window.Rubix = function(){
 
-
+	const audio = new AudioContext();
+	audio.add('blip','./audio/sfx-blip.mp3');
+	audio.add('correct','./audio/sfx-correct.mp3');
 
 	let colors = ['red','orange','yellow','green','blue','pink','purple'];
 	colors = ['yellow','green','pink','purple'];
 	
 	let self = this;
 	self.$el = $('<rubix>');
+
+	let isComplete = false;
 
 	let map = [];
 
@@ -22,6 +26,12 @@ window.Rubix = function(){
 	}
 
 	function repaint(){
+
+		if(isComplete) return;
+
+		let by = true;
+		let bx = true;
+
 		launchpad.clear();
 		for(var y=0; y<map.length; y++){
 
@@ -30,20 +40,31 @@ window.Rubix = function(){
 
 			for(var x=0; x<map[y].length; x++){
 				self.$el.find(`cell[x=${x}][y=${y}]`).attr('bg',colors[map[y][x]]);
+
+				by = by && map[y][x] == map[0][x];
+				bx = bx && map[y][x] == map[y][0];
+
 				launchpad.setXY(x+1,y+1,colors[map[y][x]]);
 			}
 		}
 
-
+		if(bx || by){
+			isComplete = true;
+			setTimeout(function(){
+				audio.play('correct');
+				self.callbackComplete();
+				launchpad.clear();
+			},750);
+		}
 	}
-
-	repaint();
 
 	self.$el.find('[color=blue]').click(onShuffle);
 	self.$el.find('[x=-1][color=blue]').text('→');
 	self.$el.find('[y=-1][color=blue]').text('↓');
 
 	function onShuffle(e){
+
+		audio.play('blip');
 
 		let x = $(this).attr('x');
 		let y = $(this).attr('y');
@@ -58,7 +79,6 @@ window.Rubix = function(){
 		if( x == -1 ){
 			map[y].unshift(map[y][map[y].length-1]);
 			map[y].pop();
-
 		}
 
 		if( y == -1 ){
@@ -102,7 +122,7 @@ window.Rubix = function(){
 	}
 
 	
-	//self.$el.find('[x=-1][y=-1]').click(reverse);
+	self.$el.find('[x=-1][y=-1]').click(reverse);
 	
 	self.triggerXY = function(x,y){
 		let $c = self.$el.find(`cell[x=${x-1}][y=${y-1}]`);

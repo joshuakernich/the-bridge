@@ -258,7 +258,7 @@ window.PowerDiverter = function( puzzle ){
 	audio.add('blip','./audio/sfx-blip.mp3');
 	audio.add('error','./audio/sfx-error.mp3');
 	audio.add('correct','./audio/sfx-correct.mp3');
-	audio.add('vent','./audio/sfx-vent.mp3', 0.2);
+	audio.add('vent','./audio/sfx-vent.mp3', 0.5);
 	audio.add('powerup','./audio/sfx-powerup.mp3', 1);
 	audio.add('good','./audio/sfx-good.mp3', 1);
 

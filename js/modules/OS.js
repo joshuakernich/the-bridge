@@ -194,13 +194,13 @@ window.OS = function(){
 	$('<button>PLASMA FIRE</button>').appendTo('debug').click(function(){
 		doDamage('PLASMA<br>FIRE', { color:'pink', name:'FIRE SUPRESSION', toy:new PowerDiverter( FireSuppressionPuzzles[0] ) } );
 	})
+	
+	$('<button>DATA FRAGMENTATION</button>').appendTo('debug').click(function(){
+		doDamage('DATA<br>FRAGMENTATION', { color:'blue', name:'DEFRAGGLETISER', toy:new Rubix() } );
+	})
 
 	$('<button>ENCRYPTED TRANSMISSION</button>').appendTo('debug').click(function(){
 		doDamage('ENCRYPTED<br>TRANSMISSION', { color:'blue', name:'UNCRYPTONATOR', toy:new Unscramble() } );
-	})
-
-	$('<button>DATA FRAGMENTATION</button>').appendTo('debug').click(function(){
-		doDamage('DATA<br>FRAGMENTATION', { color:'blue', name:'DEFRAGGLETISER', toy:new Rubix() } );
 	})
 
 	window.launchpad.listen(function(x,y){

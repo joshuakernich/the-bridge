@@ -5,7 +5,7 @@ window.Rubix = function(){
 	audio.add('correct','./audio/sfx-correct.mp3');
 
 	let colors = ['red','orange','yellow','green','blue','pink','purple'];
-	colors = ['yellow','green','pink','purple'];
+	colors = ['yellow','pink','green','purple'];
 	
 	let self = this;
 	self.$el = $('<rubix>');
@@ -14,7 +14,7 @@ window.Rubix = function(){
 
 	let map = [];
 
-	let grid = 3; 
+	let grid = 7; 
 	for(var y=0; y<grid+1; y++){
 		let $r = $('<row>').appendTo(self.$el);
 		if(y>0) map[y-1] = [];
@@ -39,12 +39,15 @@ window.Rubix = function(){
 			launchpad.setXY(y+1,0,'blue');
 
 			for(var x=0; x<map[y].length; x++){
-				self.$el.find(`cell[x=${x}][y=${y}]`).attr('bg',colors[map[y][x]]);
+				let c = colors[map[y][x]%colors.length];
+				self.$el.find(`cell[x=${x}][y=${y}]`).attr('bg',c);
 
 				by = by && map[y][x] == map[0][x];
 				bx = bx && map[y][x] == map[y][0];
 
-				launchpad.setXY(x+1,y+1,colors[map[y][x]]);
+
+
+				launchpad.setXY(x+1,y+1,c);
 			}
 		}
 
@@ -109,7 +112,7 @@ window.Rubix = function(){
 		}
 	}
 
-	shuffleRandom(map.length);
+	shuffleRandom(1);
 	repaint();
 
 	function reverse(){

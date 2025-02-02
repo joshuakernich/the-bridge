@@ -1,0 +1,24 @@
+rubix{
+	display: block;
+	width:  calc( var(--grid) * 8 );
+	height: calc( var(--grid) * 8 );
+	padding: calc( var(--grid) * 2 );
+	text-align: left;
+}
+
+rubix row{
+	display: block;
+
+}
+
+rubix cell{
+	display: inline-block;
+	width: var(--grid);
+	height: var(--grid);
+	vertical-align: middle;
+	text-align: center;
+	line-height: var(--grid);
+	font-size: calc( var(--grid) * 0.8 );
+	font-weight: bold;
+
+}

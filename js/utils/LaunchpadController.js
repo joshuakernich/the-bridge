@@ -3,8 +3,8 @@ window.LaunchpadController = function(){
 
 	const RGB = {
 		yellow:[255, 255, 0],
-		green:[147, 254, 136],
-		blue:[0, 255, 255],
+		green:[0, 255, 0],
+		blue:[0, 127, 255],
 		cyan:[0, 255, 255],
 		purple:[127, 0, 255],
 		pink:[255, 0, 127],

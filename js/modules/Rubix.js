@@ -1,5 +1,7 @@
 window.Rubix = function(){
 
+
+
 	let colors = ['red','orange','yellow','green','blue','pink','purple'];
 	colors = ['yellow','green','pink','purple'];
 	
@@ -14,35 +16,39 @@ window.Rubix = function(){
 		if(y>0) map[y-1] = [];
 		for(var x=0; x<grid+1; x++){	
 			let $c = $('<cell>').appendTo($r).attr('x',x-1).attr('y',y-1);
-			if(x!=y && (x==0||y==0)) $c.attr('bg','blue');
+			if(x!=y && (x==0||y==0)) $c.attr('color','blue');
 			if(y>0&&x>0) map[y-1][x-1] = x-1;
 		}
 	}
 
 	function repaint(){
+		launchpad.clear();
 		for(var y=0; y<map.length; y++){
+
+			launchpad.setXY(0,y+1,'blue');
+			launchpad.setXY(y+1,0,'blue');
+
 			for(var x=0; x<map[y].length; x++){
-				
 				self.$el.find(`cell[x=${x}][y=${y}]`).attr('bg',colors[map[y][x]]);
+				launchpad.setXY(x+1,y+1,colors[map[y][x]]);
 			}
 		}
+
+
 	}
 
 	repaint();
-	
 
-	self.$el.find('[bg=blue]').click(onShuffle);
-	self.$el.find('[x=-1][bg=blue]').text('⇨');
-	self.$el.find('[y=-1][bg=blue]').text('⇩');
+	self.$el.find('[color=blue]').click(onShuffle);
+	self.$el.find('[x=-1][color=blue]').text('→');
+	self.$el.find('[y=-1][color=blue]').text('↓');
 
 	function onShuffle(e){
 
 		let x = $(this).attr('x');
 		let y = $(this).attr('y');
 
-		
 		shuffle(x,y);
-
 		repaint();
 	}
 
@@ -65,7 +71,6 @@ window.Rubix = function(){
 			for( let i=0; i<map.length; i++ ) map[i][x] = was[i];
 		}
 
-		console.log('shuffle',x,y);
 		if(bRecord) record.push([x,y]);
 	}
 
@@ -97,7 +102,10 @@ window.Rubix = function(){
 	}
 
 	
-	self.$el.find('[x=-1][y=-1]').click(reverse);
+	//self.$el.find('[x=-1][y=-1]').click(reverse);
 	
-
+	self.triggerXY = function(x,y){
+		let $c = self.$el.find(`cell[x=${x-1}][y=${y-1}]`);
+		if($c.length) $c.click();
+	}
 }

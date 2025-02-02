@@ -23,8 +23,6 @@ window.Unscramble = function(){
 		
 	]
 
-
-
 	function toArrays(m){
 		let out = [];
 		let rows = m.split('|');

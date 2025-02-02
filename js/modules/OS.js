@@ -4,6 +4,8 @@ window.OS = function(){
 
 	let colors = ['yellow','cyan','purple','pink'];
 
+	let box;
+
 	/*let toysLeft = [
 		{ title:"DIVERT POWER", color:'yellow', instance:new PowerDiverter() },
 		{ title:"DECODER", color:'pink', instance:new Unscramble() },
@@ -77,7 +79,7 @@ window.OS = function(){
 		warning.$el.appendTo('alerts');
 
 		if(tiedTo){
-			let box = new OSBox( tiedTo.color, tiedTo.name, tiedTo.toy );
+			box = new OSBox( tiedTo.color, tiedTo.name, tiedTo.toy );
 			box.$el.css({top:800}).animate({top:0});
 			box.$el.appendTo('screen[position="left"]');
 			box.warning = warning;
@@ -138,9 +140,10 @@ window.OS = function(){
 
 		toy.callbackComplete = function(){
 			sendEvent(n++,'circuit_fixed');
-			
 			onCompleteBox(self);
 		}
+
+		self.toy = toy;
 	}
 
 	function sendEvent(id,evt){
@@ -192,7 +195,23 @@ window.OS = function(){
 		doDamage('PLASMA<br>FIRE', { color:'pink', name:'FIRE SUPRESSION', toy:new PowerDiverter( FireSuppressionPuzzles[0] ) } );
 	})
 
+	$('<button>ENCRYPTED TRANSMISSION</button>').appendTo('debug').click(function(){
+		doDamage('ENCRYPTED<br>TRANSMISSION', { color:'blue', name:'UNCRYPTONATOR', toy:new Unscramble() } );
+	})
+
 	$('<button>DATA FRAGMENTATION</button>').appendTo('debug').click(function(){
-		doDamage('DATA<br>FRAGMENTATION', { color:'blue', name:'DEFRAGGLETISER', toy:new Unscramble() } );
+		doDamage('DATA<br>FRAGMENTATION', { color:'blue', name:'DEFRAGGLETISER', toy:new Rubix() } );
+	})
+
+	window.launchpad.listen(function(x,y){
+
+		if(!box) return;
+
+		//ripples.push({x:x,y:y,size:0,color:[255,255,255]});
+
+
+		box.toy.triggerXY(x,y);
+
+		
 	})
 }

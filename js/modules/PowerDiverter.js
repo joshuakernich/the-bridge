@@ -548,19 +548,13 @@ window.PowerDiverter = function( puzzle ){
 		
 	}
 
-	window.launchpad.listen(function(x,y){
-
-		//TO DO make a splash
-		if(!model) return;
-
-		ripples.push({x:x,y:y,size:0,color:[255,255,255]});
-
+	self.triggerXY = function(x,y){
 		for(var a in model.actors){
 			if( model.actors[a].type != 'system' && 
 				model.actors[a].x-model.x == x && 
 				model.actors[a].y-model.y == y) return model.actors[a].$el.click();
 		}
-	})
+	}
 
 	function ventAirlock(door){
 

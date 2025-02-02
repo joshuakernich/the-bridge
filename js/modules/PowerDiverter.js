@@ -111,6 +111,7 @@ window.PowerDiverter = function(){
 
 		's-core':{type:'power',dir:0,x:8,y:6},
 		's-thru':{type:'system',dir:0,x:10,y:6, $link:$svgMap.find('use[*|href="#SYSTEM_THRUSTER_0_Layer0_0_FILL"]').eq(0)},
+		's-stab':{type:'system',dir:0,x:8,y:1, $link:$svgMap.find('use[*|href="#WingStabiliser_0_Layer0_0_FILL"]').eq(0)},
 
 		's-cannon':{type:'system',dir:0,x:2,y:6, $link:$svgMap.find('use[*|href="#SYSTEM_CANNON_0_Layer0_0_FILL"]').eq(0)},
 		'p-cannon':{type:'system',dir:0,x:2,y:10, $link:$svgMap.find('use[*|href="#SYSTEM_CANNON_0_Layer0_0_FILL"]').eq(1)},
@@ -162,6 +163,17 @@ window.PowerDiverter = function(){
 	let MAP = 
 	[
 		{
+			x:5,y:0,
+			actors:[
+				{type:'damage',x:8,y:3},
+				{type:'diverter',x:7,y:5,dir:0},
+				{type:'diverter',x:7,y:2,dir:0},
+				's-core',
+				's-stab',
+			],
+		},
+		{
+
 			x:5,y:5,
 			actors:[
 				'p-core','p-thru',
@@ -375,8 +387,9 @@ window.PowerDiverter = function(){
 			actor.$el.css({transform:'rotate('+actor.dir*45+'deg)'});
 
 			let color = (actor.type=='power'||actor.powered)?'blue':'red';
-			if(actor.type=='fire') color = 'yellow';
+			if(actor.type=='fire' || actor.type=='damage') color = 'yellow';
 			if(actor.type=='door') color = (actor.open)?'pink':'blue';
+
 
 			window.launchpad.setXY(actor.x-model.x,actor.y-model.y,color);
 		}

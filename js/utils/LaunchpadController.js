@@ -1,5 +1,18 @@
 window.LaunchpadController = function(){
 
+	const RGB = {
+		yellow:[255, 255, 0],
+		green:[147, 254, 136],
+		blue:[0, 255, 255],
+		cyan:[0, 255, 255],
+		purple:[127, 0, 255],
+		pink:[255, 0, 127],
+		red:[255, 0, 127],
+		gray:[0, 0, 0],
+		off:[0, 0, 0],
+		'0':[0, 0, 0],
+	}
+
 	let launchpad;
 	let self = this;
 	let listeners = [];
@@ -166,6 +179,8 @@ window.LaunchpadController = function(){
 
   self.setXYRGBA = function(x,y,r,g,b,a){
 
+  	
+
   	if(isRotate) y = [x, x = 7-y][0]; // fancy code to swap two variables
 
   	map[y][x] = [r,g,b,a];
@@ -173,10 +188,12 @@ window.LaunchpadController = function(){
   	let id = 81-y*10+x;
   	if(launchpad) launchpad.send([
   		240,0,32,41,2,isX?12:13,3,
-  		3,id,r*a,g*a,b*a,
+  		3,id,r/2*a,g/2*a,b/2*a,
   		247]);
 
-  	self.$el.find('[x="'+x+'"][y="'+y+'"]').css({'background':`rgba(${r},${g},${b},${a}})`});
+  	console.log(`rgba(${r},${g},${b},${a})`);
+
+  	self.$el.find('[x="'+x+'"][y="'+y+'"]').css({'background':`rgba(${r},${g},${b},${a})`});
   }
 
 
@@ -184,17 +201,16 @@ window.LaunchpadController = function(){
 
   	if(x<0 || y<0 || x>=8 || y>=8) return;
 
-  	if(isRotate) y = [x, x = 7-y][0]; // fancy code to swap two variables
-  	
+  	let rgb = RGB[colorName];
+
+  	self.setXYRGBA(x,y,rgb[0],rgb[1],rgb[2],1);
+
+  	/*if(isRotate) y = [x, x = 7-y][0]; // fancy code to swap two variables	
   	if(map[y]) map[y][x] = colorName;
-
   	let color = colors[colorName];
-
   	let id = 81-y*10+x;
   	if(launchpad) launchpad.send([144,id,color]);
-  	
-  	
-  	self.$el.find('[x="'+x+'"][y="'+y+'"]').css({'background':hex[colorName]});
+  	self.$el.find('[x="'+x+'"][y="'+y+'"]').css({'background':hex[colorName]});*/
   }
 
   self.set = function(coord,color){

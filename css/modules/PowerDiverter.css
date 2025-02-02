@@ -156,8 +156,8 @@ power .power-frame{
 }
 
 power .power-network path{
-	stroke: var(--cyan);
-	stroke-width: var(--border);
+	stroke: var(--purple);
+	stroke-width: 2;
 	fill: none;
 }
 
@@ -216,8 +216,9 @@ power-cell:before{
 }
 
 power-cell.powered:before{
-	border: 2px solid var(--cyan);
-	width: 15%;
-	height: 15%;
+	border: 2px solid var(--purple);
+	background: var(--cyan);
+	width: 20%;
+	height: 20%;
 	opacity: 1;
 }

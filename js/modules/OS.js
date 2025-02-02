@@ -61,7 +61,7 @@ window.OS = function(){
 
 		$('chapter')
 		.css({'opacity':0})
-		.animate({'opacity':1},1000)
+		.animate({'opacity':1},100)
 		.delay(3000)
 		.animate({'opacity':0},1000);
 
@@ -97,28 +97,6 @@ window.OS = function(){
 		box.$el.delay(500).animate({top:800},{ duration:500, complete:function(){ box.$el.remove(); }});
 		box.warning.$el.remove();
 		audio.stop('alarm');
-	}
-
-	let WormHoleSimulator = function(){
-		let self = this;
-
-		audio.add('music','./audio/music-wormhole.mp3',0.5,true);
-
-		self.start = function(){
-
-			$(`<video autoplay loop muted>
-			  <source src="./video/video-wormhole.mp4" type="video/mp4">
-			</video>`).appendTo('bg');
-
-			audio.play('music');
-
-			setTimeout(function(){ doDamage('CIRCUIT<br>DAMAGE', {name:'POWER DIVERTER', color:'yellow', toy:new PowerDiverter( PowerDiversionPuzzles[0] )}) }, 5000);
-			
-
-			showChapter(2,'THE WORMHOLE');
-		}
-
-		
 	}
 
 	let OSWarning = function(text){
@@ -194,15 +172,23 @@ window.OS = function(){
 	},1000);
 
 	
-	$('<button>DO WORMHOLE</button>').appendTo('debug').click(function(){
-		new WormHoleSimulator().start();
+	$('<button>INITIATE WORMHOLE</button>').appendTo('debug').click(function(){
+		
+		audio.add('music','./audio/music-wormhole.mp3',0.5,true);
+
+		$(`<video autoplay loop muted>
+		  <source src="./video/video-wormhole.mp4" type="video/mp4">
+		</video>`).appendTo('bg');
+
+		setTimeout( function(){ audio.play('music') } );
+		setTimeout( function(){ showChapter(2,'THE WORMHOLE'); }, 1000 );
 	})
 
-	$('<button>DO CIRCUIT DAMAGE</button>').appendTo('debug').click(function(){
+	$('<button>CIRCUIT DAMAGE</button>').appendTo('debug').click(function(){
 		doDamage('CIRCUIT<br>DAMAGE', { color:'yellow', name:'POWER DIVERTER', toy:new PowerDiverter( PowerDiversionPuzzles[0] ) } );
 	})
 
-	$('<button>DO FIRE</button>').appendTo('debug').click(function(){
+	$('<button>PLASMA FIRE</button>').appendTo('debug').click(function(){
 		doDamage('PLASMA<br>FIRE', { color:'pink', name:'FIRE SUPRESSION', toy:new PowerDiverter( FireSuppressionPuzzles[0] ) } );
 	})
 

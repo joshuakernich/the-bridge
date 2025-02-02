@@ -304,7 +304,7 @@ button{
 }
 
 button:after{
-	content: ">";
+	content: "→";
 	position: absolute;
 	right: 0px;
 }
@@ -318,6 +318,7 @@ chapter{
 	left: 50vw;
 	transform: translate(-50%, -50%);
 	opacity: 0;
+	font-size: 50px;
 }
 
 chapterline{

@@ -1,5 +1,11 @@
 window.Unscramble = function(){
 
+	const self = this;
+	self.$el = $('<unscramble>');
+
+	const synth = window.speechSynthesis;
+	const voices = synth.getVoices();
+
 	const audio = new AudioContext();
 	audio.add('blip','./audio/sfx-blip.mp3');
 	audio.add('correct','./audio/sfx-correct.mp3');
@@ -43,8 +49,7 @@ window.Unscramble = function(){
 		return out;
 	}
 
-	const self = this;
-	self.$el = $('<unscramble>');
+	
 
 	self.turnOnOff = function(){
 
@@ -56,7 +61,6 @@ window.Unscramble = function(){
 	let messageLive;
 	let group;
 	let anims;
-	let patternWidth = 0;
 	function doLevel(){
 
 		level = levels[iLevel];
@@ -108,6 +112,10 @@ window.Unscramble = function(){
 		//for(let a in anims) anims[a].$el.offset(anims[a].o);
 		//setTimeout(onMove,300);
 		validate();
+
+		
+
+
 	}
 
 	function onMove(){
@@ -121,12 +129,26 @@ window.Unscramble = function(){
 		for(var r in messageLive) for(var c in messageLive[r]) if(messageLive[r][c] != messageTarget[r][c]) isCorrect = false;
 		
 		if(isCorrect){
+			
 			audio.play('correct');
 			self.$el.find('cell').off('click').attr('color','yellow');
+
+			self.isComplete = true;
+			repaintLaunchpad();
+
+			setTimeout(function(){
+				let v = synth.getVoices();
+				 const utterThis = new SpeechSynthesisUtterance(level.message);
+				 utterThis.voice = v[0];
+				 utterThis.rate = 0.5;
+				 synth.speak(utterThis);
+			},1000)
+			
+
 			setTimeout(function(){
 				launchpad.clear();
 				self.callbackComplete();
-			},1000)
+			},2500)
 		}
 
 		
@@ -140,6 +162,8 @@ window.Unscramble = function(){
 	}
 
 	function scramble(c,r){
+
+
 		let messageWas = clone(messageLive);
 		let anchor = [Math.floor(c/level.patternWidth)*level.patternWidth,0];
 		anims = []; 
@@ -163,6 +187,22 @@ window.Unscramble = function(){
 			$to.text(messageLive[to[1]][to[0]]);
 
 			anims[iTo] = { o:$from.offset(), $el:$to }; //capture the animations required
+		}
+
+		repaintLaunchpad();
+	}
+
+	function repaintLaunchpad(){
+
+		launchpad.clear();
+		for(let y=0; y<messageLive.length; y++){
+			for(let x=0; x<messageLive[y].length; x++){
+				let isBlank = (messageLive[y][x] == ' ');
+				let iColor = Math.floor(x/level.patternWidth);
+				let color = self.isComplete?'yellow':colors[iColor];
+
+				launchpad.setXY(x,y,color,isBlank?0.5:1);
+			}
 		}
 	}
 

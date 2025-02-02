@@ -196,13 +196,13 @@ window.LaunchpadController = function(){
   }
 
 
-  self.setXY = function(x,y,colorName){
+  self.setXY = function(x,y,colorName,alpha=1){
 
   	if(x<0 || y<0 || x>=8 || y>=8) return;
 
   	let rgb = RGB[colorName];
 
-  	self.setXYRGBA(x,y,rgb[0],rgb[1],rgb[2],1);
+  	self.setXYRGBA(x,y,rgb[0],rgb[1],rgb[2],alpha);
 
   	/*if(isRotate) y = [x, x = 7-y][0]; // fancy code to swap two variables	
   	if(map[y]) map[y][x] = colorName;

@@ -111,25 +111,10 @@
 
 
 
-	const MAP = 
+	const ARCHIVE = 
 	[
-		{
-			x:5,y:0,
-			actors:[
-				{type:'damage',x:8,y:3},
-				{type:'diverter',x:7,y:5,dir:0},
-				{type:'diverter',x:7,y:2,dir:0},
-				's-core',
-				's-stab',
-			],
-		},
-		{
-			x:2,y:2,
-			includeDoors:true,
-			actors:[
-				{type:'fire',x:8,y:3,intensity:50},
-			]
-		},
+		
+		
 		{
 			x:2,y:2,
 			includeDoors:true,
@@ -171,42 +156,76 @@
 		}
 	]
 
-	window.PowerDiverterPuzzles = [];
+	window.PowerDiversionPuzzles = makePuzzles(
+		[
+			{
+				x:5,y:0,
+				actors:[
+					{type:'damage',x:8,y:3},
+					{type:'diverter',x:7,y:5,dir:0},
+					{type:'diverter',x:7,y:2,dir:0},
+					's-core',
+					's-stab',
+				],
+			},
+		]
+	);
 
-	for(var l in MAP){
+	window.FireSuppressionPuzzles = makePuzzles(
+		[
+			{
+				x:2,y:2,
+				includeDoors:true,
+				actors:[
+					{type:'fire',x:6,y:8,intensity:50},
+				]
+			},
+		]
+	)
 
-		PowerDiverterPuzzles[l] = {
-			x:MAP[l].x, 
-			y:MAP[l].y, 
-			actors:{},
-		}
+	function makePuzzles(MAP){
 
-		if(MAP[l].includeDoors){
-			for(var s in SYSTEMS){
-				if(
-					SYSTEMS[s].type=='door' && 
-					SYSTEMS[s].x >= PowerDiverterPuzzles[l].x &&
-					SYSTEMS[s].x < PowerDiverterPuzzles[l].x+8 && 
-					SYSTEMS[s].y >= PowerDiverterPuzzles[l].y && 
-					SYSTEMS[s].y < PowerDiverterPuzzles[l].y+8
-					){
-					PowerDiverterPuzzles[l].actors[s] = SYSTEMS[s];
+		let puzzles = [];
+
+		for(var l in MAP){
+
+			puzzles[l] = {
+				x:MAP[l].x, 
+				y:MAP[l].y, 
+				actors:{},
+			}
+
+			if(MAP[l].includeDoors){
+				for(var s in SYSTEMS){
+					if(
+						SYSTEMS[s].type=='door' && 
+						SYSTEMS[s].x >= puzzles[l].x &&
+						SYSTEMS[s].x < puzzles[l].x+8 && 
+						SYSTEMS[s].y >= puzzles[l].y && 
+						SYSTEMS[s].y < puzzles[l].y+8
+						){
+						puzzles[l].actors[s] = SYSTEMS[s];
+					}
 				}
 			}
-		}
 
-		for(var a in MAP[l].actors){
-			
-			let iActor = MAP[l].actors[a];
+			for(var a in MAP[l].actors){
+				
+				let iActor = MAP[l].actors[a];
 
-			if(typeof(iActor) == 'string'){
-				PowerDiverterPuzzles[l].actors[iActor] = SYSTEMS[iActor];
-			} else {
-				PowerDiverterPuzzles[l].actors['anon-'+Math.random()] = iActor;
+				if(typeof(iActor) == 'string'){
+					puzzles[l].actors[iActor] = SYSTEMS[iActor];
+				} else {
+					puzzles[l].actors['anon-'+Math.random()] = iActor;
+				}
+				
 			}
-			
 		}
+
+		return puzzles;
 	}
+
+	
 }
 
 window.PowerDiverter = function( puzzle ){

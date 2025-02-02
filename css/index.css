@@ -242,6 +242,8 @@ toy osicon{
 
 osbox{
 	display: inline-block;
+	position: relative;
+	top: 0px;
 }
 
 oswarning{

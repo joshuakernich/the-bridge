@@ -78,6 +78,7 @@ window.OS = function(){
 
 		if(tiedTo){
 			let box = new OSBox( tiedTo.color, tiedTo.name, tiedTo.toy );
+			box.$el.css({top:800}).animate({top:0});
 			box.$el.appendTo('screen[position="left"]');
 			box.warning = warning;
 		}
@@ -92,8 +93,8 @@ window.OS = function(){
 	}
 
 	function onCompleteBox(box){
-		console.log(box);
-		box.$el.remove();
+		
+		box.$el.delay(500).animate({top:800},{ duration:500, complete:function(){ box.$el.remove(); }});
 		box.warning.$el.remove();
 		audio.stop('alarm');
 	}
@@ -111,7 +112,7 @@ window.OS = function(){
 
 			audio.play('music');
 
-			setTimeout(function(){ doDamage('CIRCUIT<br>DAMAGE', {name:'POWER DIVERTER', color:'yellow', toy:new PowerDiverter( PowerDiverterPuzzles[0] )}) }, 5000);
+			setTimeout(function(){ doDamage('CIRCUIT<br>DAMAGE', {name:'POWER DIVERTER', color:'yellow', toy:new PowerDiverter( PowerDiversionPuzzles[0] )}) }, 5000);
 			
 
 			showChapter(2,'THE WORMHOLE');
@@ -174,7 +175,7 @@ window.OS = function(){
 	
 	window.socket.on('circuit_damage',function(params){
 		//osRight.toToy('DIVERT POWER',params);
-		doDamage('CIRCUIT<br>DAMAGE', { color:'yellow', name:'POWER DIVERTER', toy:new PowerDiverter( PowerDiverterPuzzles[0] ) } );
+		doDamage('CIRCUIT<br>DAMAGE', { color:'yellow', name:'POWER DIVERTER', toy:new PowerDiverter( PowerDiversionPuzzles[0] ) } );
 	})
 
 	const WIDTH = 3000;
@@ -198,11 +199,11 @@ window.OS = function(){
 	})
 
 	$('<button>DO CIRCUIT DAMAGE</button>').appendTo('debug').click(function(){
-		doDamage('CIRCUIT<br>DAMAGE', { color:'yellow', name:'POWER DIVERTER', toy:new PowerDiverter( PowerDiverterPuzzles[0] ) } );
+		doDamage('CIRCUIT<br>DAMAGE', { color:'yellow', name:'POWER DIVERTER', toy:new PowerDiverter( PowerDiversionPuzzles[0] ) } );
 	})
 
 	$('<button>DO FIRE</button>').appendTo('debug').click(function(){
-		doDamage('PLASMA<br>FIRE', { color:'pink', name:'FIRE SUPRESSION', toy:new PowerDiverter( PowerDiverterPuzzles[1] ) } );
+		doDamage('PLASMA<br>FIRE', { color:'pink', name:'FIRE SUPRESSION', toy:new PowerDiverter( FireSuppressionPuzzles[0] ) } );
 	})
 
 	$('<button>DATA FRAGMENTATION</button>').appendTo('debug').click(function(){

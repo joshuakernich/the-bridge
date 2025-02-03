@@ -26,20 +26,16 @@
 		
 
 		'p-core':{type:'power',dir:0,x:8,y:10},
-		'p-thru':{type:'system',dir:0,x:10,y:10, link:'use[*|href="#SYSTEM_THRUSTER_0_Layer0_0_FILL"]:last-of-type'},
+		'p-thru':{type:'system',dir:0,x:10,y:10, link:'use[*|href="#SYSTEM_THRUSTER_0_Layer0_0_FILL"]:nth-of-type(1)', nLink:1 },
 
 		's-core':{type:'power',dir:0,x:8,y:6},
-		's-thru':{type:'system',dir:0,x:10,y:6, link:'use[*|href="#SYSTEM_THRUSTER_0_Layer0_0_FILL"]:first-of-type'},
-		's-stab':{type:'system',dir:0,x:8,y:1, link:'use[*|href="#WingStabiliser_0_Layer0_0_FILL"]:last-of-type'},
+		's-thru':{type:'system',dir:0,x:10,y:6, link:'use[*|href="#SYSTEM_THRUSTER_0_Layer0_0_FILL"]', nLink:0},
+		's-stab':{type:'system',dir:0,x:8,y:1, link:'use[*|href="#WingStabiliser_0_Layer0_0_FILL"]', nLink:0},
 
-		's-cannon':{type:'system',dir:0,x:2,y:6, link:'use[*|href="#SYSTEM_CANNON_0_Layer0_0_FILL"]:first-of-type'},
-		'p-cannon':{type:'system',dir:0,x:2,y:10, link:'use[*|href="#SYSTEM_CANNON_0_Layer0_0_FILL"]:last-of-type'},
+		's-cannon':{type:'system',dir:0,x:2,y:6, link:'use[*|href="#SYSTEM_CANNON_0_Layer0_0_FILL"]', nLink:0},
+		'p-cannon':{type:'system',dir:0,x:2,y:10, link:'use[*|href="#SYSTEM_CANNON_0_Layer0_0_FILL"]', nLink:1},
 
-		'r-stab':{type:'system',dir:0,x:12,y:8, link:'use[*|href="#SYSTEM_STABILISER_0_Layer0_0_FILL"]'},
-
-		's-dive-1':{type:'diverter',x:7,y:7,dir:0},
-		'p-dive-1':{type:'diverter',x:7,y:9,dir:0},
-		'c-dive':{type:'diverter',x:6,y:8,dir:0},
+		'r-stab':{type:'system',dir:0,x:12,y:8, link:'use[*|href="#SYSTEM_STABILISER_0_Layer0_0_FILL"]', nLink:0},
 	}
 
 	window.ShipLayout = [
@@ -47,7 +43,7 @@
 		'******  B*******',
 		'**** 9  +*******',
 		'***  9 AA+******',
-		'**+A+9+AA ******',
+		'**+G+9+AA ******',
 		'**  3+ 555******',
 		'** 333+5557*****',
 		'**  3+ 555+*****',
@@ -159,14 +155,34 @@
 	window.PowerDiversionPuzzles = makePuzzles(
 		[
 			{
+				x:5,y:5,
+				actors:[
+					{type:'damage',x:8,y:6},
+					'p-core','s-thru',{type:'diverter',x:7,y:9,dir:0},
+				],
+			},
+			{
 				x:5,y:0,
 				actors:[
 					{type:'damage',x:8,y:3},
-					{type:'diverter',x:7,y:5,dir:0},
-					{type:'diverter',x:7,y:2,dir:0},
+					{type:'diverter',x:5,y:3,dir:0},
+					{type:'diverter',x:6,y:3,dir:0},
 					's-core',
 					's-stab',
 				],
+			},
+			{
+				x:5,y:4,
+				actors:[
+					'p-core',
+					's-thru','r-stab',
+					{type:'power',dir:2,x:8,y:6},
+					{type:'damage',x:8,y:8},
+					{type:'damage',x:9,y:6},
+					{type:'diverter',x:8,y:4,dir:0},
+					{type:'diverter',x:10,y:8,dir:0},
+					{type:'diverter',x:6,y:8,dir:0},
+				]
 			},
 		]
 	);
@@ -174,10 +190,25 @@
 	window.FireSuppressionPuzzles = makePuzzles(
 		[
 			{
-				x:2,y:2,
+				x:0,y:0,
 				includeDoors:true,
 				actors:[
-					{type:'fire',x:6,y:8,intensity:50},
+					{type:'fire',x:5,y:3,intensity:50},
+				]
+			},
+			{
+				x:0,y:2,
+				includeDoors:true,
+				actors:[
+					{type:'fire',x:5,y:6,intensity:50},
+				]
+			},
+			{
+				x:4,y:2,
+				includeDoors:true,
+				actors:[
+					{type:'fire',x:5,y:3,intensity:50},
+					{type:'fire',x:10,y:8,intensity:50},
 				]
 			},
 		]
@@ -228,7 +259,11 @@
 	
 }
 
-window.PowerDiverter = function( puzzle ){
+window.PowerDiverter = function( nPuzzle, isFirePuzzle ){
+
+	let puzzle = isFirePuzzle?
+	FireSuppressionPuzzles[nPuzzle%FireSuppressionPuzzles.length]:
+	PowerDiversionPuzzles[nPuzzle%PowerDiversionPuzzles.length];
 
 	let self = this;
 	self.$el = $('<power>');
@@ -486,7 +521,8 @@ window.PowerDiverter = function( puzzle ){
 			model.actors[n] = {};
 			for(var v in source) model.actors[n][v] = source[v];
 
-			if( model.actors[n].link ) model.actors[n].$link = $svgMap.find( model.actors[n].link );
+			if( model.actors[n].link != undefined ) model.actors[n].$link = $svgMap.find( model.actors[n].link );
+			if( model.actors[n].nLink != undefined ) model.actors[n].$link = model.actors[n].$link.eq( model.actors[n].nLink );
 		}
 
 		$svg.find('g').attr('transform','translate('+model.x+' '+model.y+')');
@@ -567,10 +603,10 @@ window.PowerDiverter = function( puzzle ){
 
 			let doors = ShipRooms[iRoom].doors;
 
+
 			for(var d in doors){
 
 				let iDoor = doors[d];
-
 
 				if( model.actors[iDoor].open ){
 					model.actors[iDoor].isSealed = false;
@@ -620,7 +656,7 @@ window.PowerDiverter = function( puzzle ){
 
 	
 		if(isSealedRoom || isSealedDoor) actorSource.intensity += 5;
-		else actorSource.intensity--;
+		else actorSource.intensity -= 5;
 
 		actorSource.$el.css('transform','scale('+actorSource.intensity/100+')');
 

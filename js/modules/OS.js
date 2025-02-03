@@ -174,6 +174,10 @@ window.OS = function(){
 
 	},1000);
 
+
+	$('<button>RESET EVERYTHING</button>').appendTo('debug').click(function(){
+		window.location = window.location;
+	})
 	
 	$('<button>INITIATE WORMHOLE</button>').appendTo('debug').click(function(){
 		
@@ -187,20 +191,22 @@ window.OS = function(){
 		setTimeout( function(){ showChapter(2,'THE WORMHOLE'); }, 1000 );
 	})
 
+	let N = {circuit:0,fire:0,defrag:0,decrypt:0}
+
 	$('<button>CIRCUIT DAMAGE</button>').appendTo('debug').click(function(){
-		doDamage('CIRCUIT<br>DAMAGE', { color:'yellow', name:'POWER DIVERTER', toy:new PowerDiverter( PowerDiversionPuzzles[0] ) } );
+		doDamage('CIRCUIT<br>DAMAGE', { color:'yellow', name:'POWER DIVERTER', toy:new PowerDiverter( N.circuit++ ) } );
 	})
 
 	$('<button>PLASMA FIRE</button>').appendTo('debug').click(function(){
-		doDamage('PLASMA<br>FIRE', { color:'pink', name:'FIRE SUPRESSION', toy:new PowerDiverter( FireSuppressionPuzzles[0] ) } );
+		doDamage('PLASMA<br>FIRE', { color:'pink', name:'FIRE SUPRESSION', toy:new PowerDiverter( N.fire++, true ) } );
 	})
-	
+
 	$('<button>DATA FRAGMENTATION</button>').appendTo('debug').click(function(){
-		doDamage('DATA<br>FRAGMENTATION', { color:'blue', name:'DEFRAGGLETISER', toy:new Rubix() } );
+		doDamage('DATA<br>FRAGMENTATION', { color:'blue', name:'DEFRAGGLETISER', toy:new Rubix( N.defrag++ ) } );
 	})
 
 	$('<button>ENCRYPTED TRANSMISSION</button>').appendTo('debug').click(function(){
-		doDamage('ENCRYPTED<br>TRANSMISSION', { color:'blue', name:'UNCRYPTONATOR', toy:new Unscramble() } );
+		doDamage('ENCRYPTED<br>TRANSMISSION', { color:'blue', name:'UNCRYPTONATOR', toy:new Unscramble( N.decrypt++ ) } );
 	})
 
 	window.launchpad.listen(function(x,y){

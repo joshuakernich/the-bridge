@@ -70,6 +70,8 @@ window.OS = function(){
 		audio.play('boom',true);
 	}
 
+	let queue = [];
+
 	function doDamage( whatKind, tiedTo ){
 
 		audio.play('boom',true);
@@ -79,41 +81,58 @@ window.OS = function(){
 		warning.$el.appendTo('alerts');
 
 		if(tiedTo){
-			box = new OSBox( tiedTo.color, tiedTo.name, tiedTo.toy, tiedTo.type );
-			box.$el.css({top:800}).animate({top:0});
-			box.$el.appendTo('screen[position="left"]');
-			box.warning = warning;
+			tiedTo.warning = warning;
+			queue.push(tiedTo);
 		}
 		
-
 		$('container')
 		.animate({bottom:-10,left:-10},20)
 		.animate({bottom:10,left:10},20)
 		.animate({bottom:-20,left:-50},20)
 		.animate({bottom:-20,left:-10},20)
 		.animate({bottom:0,left:0},20);
+
+		console.log('hasBox',box);
+		if(!box) doNextQueue();
 	}
 
-	function onCompleteBox(box){
+	function doNextQueue(){
+
+		if(!queue.length) return;
+
+		let tiedTo = queue.shift();
+
+		box = new OSBox( tiedTo.type, tiedTo.color, tiedTo.name, tiedTo.toy, tiedTo.params );
+		box.$el.css({top:800}).animate({top:0});
+		box.$el.appendTo('screen[position="left"]');
+		box.warning = tiedTo.warning;
+	}
+
+	function onCompleteBox(){
 		
 		if(!box) return;
 
+		box.$el.delay(500).animate({top:800},{ duration:500, complete:function(){ 
+			box.$el.remove(); 
+			box.warning.$el.remove();
+			box = undefined;
+			console.log('kill the box');
+			if( queue.length ){
+				doNextQueue();
+			} else {
+				audio.stop('alarm');
+			}
+		}});
 		
-		box.$el.delay(500).animate({top:800},{ duration:500, complete:function(){ $(this).remove(); }});
-		box.warning.$el.remove();
-		audio.stop('alarm');
-
-		box = undefined;
 	}
 
 	let OSWarning = function(text){
 		let self = this;
 		self.$el = $('<oswarning>').html(text);
-
 	}
 
 	let n = 1000;
-	let OSBox = function(color,header,toy,typeDamage){
+	let OSBox = function(type,color,header,toy,params){
 		
 		let self = this;
 		let w = 14;
@@ -123,10 +142,6 @@ window.OS = function(){
 		let $t = makeTable(w,h,true).appendTo($el);
 
 		self.$el = $el;
-
-		let paint = [
-			''
-		]
 
 		$('<h1>').appendTo($el.find('[c=2][r=0]'));
 		
@@ -141,14 +156,18 @@ window.OS = function(){
 		self.reskin(header,color);
 		self.$toy = $('<toy>').appendTo($el.find('[r=1][c=1]'));
 
-		toy.$el.appendTo(self.$toy);
+		//janky way of passing params
+		if(!params) params = [];
+		console.log(params);
+		let instance = new toy(params[0],params[1],params[2]);
+		instance.$el.appendTo(self.$toy);
 
-		toy.callbackComplete = function(){
-			sendEvent(n++,'fix_'+typeDamage);
-			onCompleteBox(self);
+		instance.callbackComplete = function(){
+			sendEvent(n++,'fix_'+type);
+			onCompleteBox();
 		}
 
-		self.toy = toy;
+		self.instance = instance;
 	}
 
 	function sendEvent(id,evt){
@@ -209,19 +228,19 @@ window.OS = function(){
 	window.socket.on('warn_encrypt', doEncryptedTransmission );
 
 	function doCircuitDamage(){
-		doDamage('CIRCUIT<br>DAMAGE', { type:'circuit', color:'yellow', name:'POWER DIVERTER', toy:new PowerDiverter( N.circuit++ ) } );
+		doDamage('CIRCUIT<br>DAMAGE', { type:'circuit', color:'yellow', name:'POWER DIVERTER', toy:PowerDiverter, params:[N.circuit++] } );
 	}
 
 	function doPlasmaFire(){
-		doDamage('PLASMA<br>FIRE', { type:'fire', color:'pink', name:'FIRE SUPRESSION', toy:new PowerDiverter( N.fire++, true ) } );
+		doDamage('PLASMA<br>FIRE', { type:'fire', color:'pink', name:'FIRE SUPRESSION', toy:PowerDiverter, params:[N.fire++, true] } );
 	}
 
 	function doDataFrag(){
-		doDamage('DATA<br>FRAGMENTATION', { type:'fragment', color:'blue', name:'DEFRAGGLETISER', toy:new Rubix( N.defrag++ ) } );
+		doDamage('DATA<br>FRAGMENTATION', { type:'fragment', color:'blue', name:'DEFRAGGLETISER', toy:Rubix, params:[N.defrag++] } );
 	}
 
 	function doEncryptedTransmission(){
-		doDamage('ENCRYPTED<br>TRANSMISSION', { type:'encrypt', color:'blue', name:'UNCRYPTONATOR', toy:new Unscramble( N.decrypt++ ) } );
+		doDamage('ENCRYPTED<br>TRANSMISSION', { type:'encrypt', color:'blue', name:'UNCRYPTONATOR', toy:Unscramble, params:[N.decrypt++] } );
 	}
 
 	window.launchpad.listen(function(x,y,b){
@@ -233,8 +252,8 @@ window.OS = function(){
 		//ripples.push({x:x,y:y,size:0,color:[255,255,255]});
 
 
-		if(b) box.toy.triggerXY(x,y);
-		if(!b && box.toy.untriggerXY )  box.toy.untriggerXY(x,y);
+		if(b) box.instance.triggerXY(x,y);
+		if(!b && box.instance.untriggerXY )  box.instance.untriggerXY(x,y);
 		
 	})
 }

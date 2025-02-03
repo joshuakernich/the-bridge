@@ -65,6 +65,12 @@ window.HASocket = function(){
 	 			"event_type": "warn_encrypt"
 	 		})
 
+	 		self.send({
+	 			"id": 500,
+	 			"type": "subscribe_events",
+	 			"event_type": "reset"
+	 		})
+
 	 		/*self.send({
 	 			"id": 200,
 	 			"type": "subscribe_triggers",

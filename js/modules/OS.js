@@ -158,7 +158,7 @@ window.OS = function(){
 
 		//janky way of passing params
 		if(!params) params = [];
-		console.log(params);
+
 		let instance = new toy(params[0],params[1],params[2]);
 		instance.$el.appendTo(self.$toy);
 
@@ -199,9 +199,7 @@ window.OS = function(){
 	},1000);
 
 
-	$('<button>RESET EVERYTHING</button>').appendTo('debug').click(function(){
-		window.location = window.location;
-	})
+	$('<button>RESET EVERYTHING</button>').appendTo('debug').click(reset);
 	
 	$('<button>INITIATE WORMHOLE</button>').appendTo('debug').click(function(){
 		
@@ -222,10 +220,15 @@ window.OS = function(){
 	$('<button>DATA FRAGMENTATION</button>').appendTo('debug').click(doDataFrag);
 	$('<button>ENCRYPTED TRANSMISSION</button>').appendTo('debug').click(doEncryptedTransmission);
 
+	window.socket.on('reset', reset );
 	window.socket.on('warn_circuit', doCircuitDamage );
 	window.socket.on('warn_fire', doPlasmaFire );
 	window.socket.on('warn_fragment', doDataFrag );
 	window.socket.on('warn_encrypt', doEncryptedTransmission );
+	
+	function reset(){
+		window.location = window.location;
+	}
 
 	function doCircuitDamage(){
 		doDamage('CIRCUIT<br>DAMAGE', { type:'circuit', color:'yellow', name:'POWER DIVERTER', toy:PowerDiverter, params:[N.circuit++] } );

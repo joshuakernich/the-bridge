@@ -154,10 +154,9 @@ window.OS = function(){
 		});
 	}
 	
-	window.socket.on('circuit_damage',function(params){
-		//osRight.toToy('DIVERT POWER',params);
-		doDamage('CIRCUIT<br>DAMAGE', { color:'yellow', name:'POWER DIVERTER', toy:new PowerDiverter( PowerDiversionPuzzles[0] ) } );
-	})
+	
+
+
 
 	const WIDTH = 3000;
 	setInterval(function(){
@@ -193,21 +192,31 @@ window.OS = function(){
 
 	let N = {circuit:0,fire:0,defrag:0,decrypt:0}
 
-	$('<button>CIRCUIT DAMAGE</button>').appendTo('debug').click(function(){
+	$('<button>CIRCUIT DAMAGE</button>').appendTo('debug').click(doCircuitDamage);
+	$('<button>PLASMA FIRE</button>').appendTo('debug').click(doPlasmaFire);
+	$('<button>DATA FRAGMENTATION</button>').appendTo('debug').click(doDataFrag);
+	$('<button>ENCRYPTED TRANSMISSION</button>').appendTo('debug').click(doEncryptedTransmission);
+
+	window.socket.on('circuit_damage', doCircuitDamage );
+	window.socket.on('plasma_fire', doPlasmaFire );
+	window.socket.on('data_frag', doDataFrag );
+	window.socket.on('encypt_trans', doEncryptedTransmission );
+
+	function doCircuitDamage(){
 		doDamage('CIRCUIT<br>DAMAGE', { color:'yellow', name:'POWER DIVERTER', toy:new PowerDiverter( N.circuit++ ) } );
-	})
+	}
 
-	$('<button>PLASMA FIRE</button>').appendTo('debug').click(function(){
+	function doPlasmaFire(){
 		doDamage('PLASMA<br>FIRE', { color:'pink', name:'FIRE SUPRESSION', toy:new PowerDiverter( N.fire++, true ) } );
-	})
+	}
 
-	$('<button>DATA FRAGMENTATION</button>').appendTo('debug').click(function(){
+	function doDataFrag(){
 		doDamage('DATA<br>FRAGMENTATION', { color:'blue', name:'DEFRAGGLETISER', toy:new Rubix( N.defrag++ ) } );
-	})
+	}
 
-	$('<button>ENCRYPTED TRANSMISSION</button>').appendTo('debug').click(function(){
+	function doEncryptedTransmission(){
 		doDamage('ENCRYPTED<br>TRANSMISSION', { color:'blue', name:'UNCRYPTONATOR', toy:new Unscramble( N.decrypt++ ) } );
-	})
+	}
 
 	window.launchpad.listen(function(x,y){
 

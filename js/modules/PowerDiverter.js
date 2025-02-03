@@ -228,13 +228,7 @@
 
 			if(MAP[l].includeDoors){
 				for(var s in SYSTEMS){
-					if(
-						SYSTEMS[s].type=='door' && 
-						SYSTEMS[s].x >= puzzles[l].x &&
-						SYSTEMS[s].x < puzzles[l].x+8 && 
-						SYSTEMS[s].y >= puzzles[l].y && 
-						SYSTEMS[s].y < puzzles[l].y+8
-						){
+					if(SYSTEMS[s].type=='door'){
 						puzzles[l].actors[s] = SYSTEMS[s];
 					}
 				}
@@ -418,9 +412,12 @@ window.PowerDiverter = function( nPuzzle, isFirePuzzle ){
 		}
 
 		let countPower = 0;
+
+		let isDoorOpen = {};
 		for(var a in model.actors){
 
 			let actor = model.actors[a];
+			let idLocation = actor.x + '-' +actor.y;
 
 			let icon = (actor.subtype?actor.subtype:actor.type) + (actor.powered?'-powered':'');
 			actor.$el.css('background-image','url(./img/icon/icon-'+icon+'.svg)')
@@ -443,8 +440,11 @@ window.PowerDiverter = function( nPuzzle, isFirePuzzle ){
 
 			let color = (actor.type=='power'||actor.powered)?'blue':'red';
 			if(actor.type=='fire' || actor.type=='damage') color = 'yellow';
-			if(actor.type=='door') color = (actor.open)?'pink':'blue';
-
+			
+			// doors override fires
+			if(actor.type=='door') isDoorOpen[ idLocation ] = actor.open; 
+			if( isDoorOpen[ idLocation ] != undefined ) color = isDoorOpen[ idLocation ]?'pink':'blue';
+			
 
 			window.launchpad.setXY(actor.x-model.x,actor.y-model.y,color);
 		}
@@ -584,7 +584,21 @@ window.PowerDiverter = function( nPuzzle, isFirePuzzle ){
 		
 	}
 
+	self.untriggerXY = function(x,y){
+
+		if(!model) return;
+
+		for(var a in model.actors){
+			if( model.actors[a].type == 'door' && 
+				model.actors[a].x-model.x == x && 
+				model.actors[a].y-model.y == y) return model.actors[a].$el.click();
+		}
+	}
+
 	self.triggerXY = function(x,y){
+
+		if(!model) return;
+
 		for(var a in model.actors){
 			if( model.actors[a].type != 'system' && 
 				model.actors[a].x-model.x == x && 

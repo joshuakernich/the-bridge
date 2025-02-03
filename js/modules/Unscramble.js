@@ -201,7 +201,7 @@ window.Unscramble = function(){
 				let iColor = Math.floor(x/level.patternWidth);
 				let color = self.isComplete?'yellow':colors[iColor];
 
-				launchpad.setXY(x,y,color,isBlank?0.5:1);
+				launchpad.setXY(x,y,color,isBlank?0.1:1);
 			}
 		}
 	}

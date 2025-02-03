@@ -96,9 +96,14 @@ window.OS = function(){
 
 	function onCompleteBox(box){
 		
-		box.$el.delay(500).animate({top:800},{ duration:500, complete:function(){ box.$el.remove(); }});
+		if(!box) return;
+
+		
+		box.$el.delay(500).animate({top:800},{ duration:500, complete:function(){ $(this).remove(); }});
 		box.warning.$el.remove();
 		audio.stop('alarm');
+
+		box = undefined;
 	}
 
 	let OSWarning = function(text){
@@ -218,15 +223,17 @@ window.OS = function(){
 		doDamage('ENCRYPTED<br>TRANSMISSION', { color:'blue', name:'UNCRYPTONATOR', toy:new Unscramble( N.decrypt++ ) } );
 	}
 
-	window.launchpad.listen(function(x,y){
+	window.launchpad.listen(function(x,y,b){
+
+
 
 		if(!box) return;
 
 		//ripples.push({x:x,y:y,size:0,color:[255,255,255]});
 
 
-		box.toy.triggerXY(x,y);
-
+		if(b) box.toy.triggerXY(x,y);
+		if(!b && box.toy.untriggerXY )  box.toy.untriggerXY(x,y);
 		
 	})
 }

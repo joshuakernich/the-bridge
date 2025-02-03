@@ -155,12 +155,14 @@ window.LaunchpadController = function(){
   function onLaunchpadMessage(msg){
   	let d = msg.data;
 
-  	//strange combo that signifies a "toucstart" on Launchpad X
-  	let bTrigger = d[0]==144 && d[2] > 0;
+  	//strange combo that signifies a "touchstart" on Launchpad X
+  	let bDown = d[0]==144 && d[2] > 0;
+  	//strange combo that signifies a "touchend" on Launchpad X
+  	let bUp = d[0]==144 && d[2] == 0;
 
-  	if(bTrigger){
+  	if(bUp || bDown){
   		let coord = toCoord(d);
-  		for(var l in listeners) listeners[l](coord.x,coord.y);
+  		for(var l in listeners) listeners[l](coord.x,coord.y,bDown);
   	}
   }
 
@@ -203,13 +205,6 @@ window.LaunchpadController = function(){
   	let rgb = RGB[colorName];
 
   	self.setXYRGBA(x,y,rgb[0],rgb[1],rgb[2],alpha);
-
-  	/*if(isRotate) y = [x, x = 7-y][0]; // fancy code to swap two variables	
-  	if(map[y]) map[y][x] = colorName;
-  	let color = colors[colorName];
-  	let id = 81-y*10+x;
-  	if(launchpad) launchpad.send([144,id,color]);
-  	self.$el.find('[x="'+x+'"][y="'+y+'"]').css({'background':hex[colorName]});*/
   }
 
   self.set = function(coord,color){

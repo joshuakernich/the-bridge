@@ -3,13 +3,13 @@ window.HASocket = function(){
 	let self = this;
 	let listeners = {};
 
-	//const URL = 'http://192.168.1.141:8123/api/websocket';
-	const URL = 'https://localhost:8123/api/websocket';
+	const URL = 'http://starcrew.local:8123/api/websocket';
+	//const URL = 'https://localhost:8123/api/websocket';
 	const protocols = 'nothingHere';
 	const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJmMzRjZWI1OTNlOTY0OTJhYThjYzNlNmMwNGUyYjY1MiIsImlhdCI6MTcyNjg5NjE3NCwiZXhwIjoyMDQyMjU2MTc0fQ.ru0S-BHJCClCRKkpMNbNfwRvi8QUfVy8NznFT-80L_c';
 
-	//let s = new WebSocket(URL);
-	let s = {};
+	let s = new WebSocket(URL);
+	//let s = {};
 
 	s.onopen = function(e){
 		console.log('SOCKET OPEN!');
@@ -39,11 +39,29 @@ window.HASocket = function(){
 	 	}
 
 	 	if(data.type=='auth_ok'){
-	 		console.log('SOCKET GOOD! away we go');
+	 		//console.log('SOCKET GOOD! away we go');
 	 		self.send({
 	 			"id": 100,
 	 			"type": "subscribe_events",
-	 			"event_type": "circuit_damage"
+	 			"event_type": "warn_circuit"
+	 		})
+
+	 		self.send({
+	 			"id": 200,
+	 			"type": "subscribe_events",
+	 			"event_type": "warn_fire"
+	 		})
+
+	 		self.send({
+	 			"id": 300,
+	 			"type": "subscribe_events",
+	 			"event_type": "warn_fragment"
+	 		})
+
+	 		self.send({
+	 			"id": 400,
+	 			"type": "subscribe_events",
+	 			"event_type": "warn_encrypt"
 	 		})
 
 	 		/*self.send({
@@ -71,6 +89,9 @@ window.HASocket = function(){
 	};
 
 	self.send = function(msg){
+
+		console.log(msg);
+
 		msg = JSON.stringify(msg);
 		console.log("SEND",msg);
 		if(s.send) s.send(msg);

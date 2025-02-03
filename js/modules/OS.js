@@ -79,7 +79,7 @@ window.OS = function(){
 		warning.$el.appendTo('alerts');
 
 		if(tiedTo){
-			box = new OSBox( tiedTo.color, tiedTo.name, tiedTo.toy );
+			box = new OSBox( tiedTo.color, tiedTo.name, tiedTo.toy, tiedTo.type );
 			box.$el.css({top:800}).animate({top:0});
 			box.$el.appendTo('screen[position="left"]');
 			box.warning = warning;
@@ -112,8 +112,8 @@ window.OS = function(){
 
 	}
 
-	let n = 0;
-	let OSBox = function(color,header,toy){
+	let n = 1000;
+	let OSBox = function(color,header,toy,typeDamage){
 		
 		let self = this;
 		let w = 14;
@@ -144,7 +144,7 @@ window.OS = function(){
 		toy.$el.appendTo(self.$toy);
 
 		toy.callbackComplete = function(){
-			sendEvent(n++,'circuit_fixed');
+			sendEvent(n++,'fix_'+typeDamage);
 			onCompleteBox(self);
 		}
 
@@ -152,6 +152,7 @@ window.OS = function(){
 	}
 
 	function sendEvent(id,evt){
+
 		window.socket.send({
 			"id": id,
 			type:'fire_event',
@@ -202,25 +203,25 @@ window.OS = function(){
 	$('<button>DATA FRAGMENTATION</button>').appendTo('debug').click(doDataFrag);
 	$('<button>ENCRYPTED TRANSMISSION</button>').appendTo('debug').click(doEncryptedTransmission);
 
-	window.socket.on('circuit_damage', doCircuitDamage );
-	window.socket.on('plasma_fire', doPlasmaFire );
-	window.socket.on('data_frag', doDataFrag );
-	window.socket.on('encypt_trans', doEncryptedTransmission );
+	window.socket.on('warn_circuit', doCircuitDamage );
+	window.socket.on('warn_fire', doPlasmaFire );
+	window.socket.on('warn_fragment', doDataFrag );
+	window.socket.on('warn_encrypt', doEncryptedTransmission );
 
 	function doCircuitDamage(){
-		doDamage('CIRCUIT<br>DAMAGE', { color:'yellow', name:'POWER DIVERTER', toy:new PowerDiverter( N.circuit++ ) } );
+		doDamage('CIRCUIT<br>DAMAGE', { type:'circuit', color:'yellow', name:'POWER DIVERTER', toy:new PowerDiverter( N.circuit++ ) } );
 	}
 
 	function doPlasmaFire(){
-		doDamage('PLASMA<br>FIRE', { color:'pink', name:'FIRE SUPRESSION', toy:new PowerDiverter( N.fire++, true ) } );
+		doDamage('PLASMA<br>FIRE', { type:'fire', color:'pink', name:'FIRE SUPRESSION', toy:new PowerDiverter( N.fire++, true ) } );
 	}
 
 	function doDataFrag(){
-		doDamage('DATA<br>FRAGMENTATION', { color:'blue', name:'DEFRAGGLETISER', toy:new Rubix( N.defrag++ ) } );
+		doDamage('DATA<br>FRAGMENTATION', { type:'fragment', color:'blue', name:'DEFRAGGLETISER', toy:new Rubix( N.defrag++ ) } );
 	}
 
 	function doEncryptedTransmission(){
-		doDamage('ENCRYPTED<br>TRANSMISSION', { color:'blue', name:'UNCRYPTONATOR', toy:new Unscramble( N.decrypt++ ) } );
+		doDamage('ENCRYPTED<br>TRANSMISSION', { type:'encrypt', color:'blue', name:'UNCRYPTONATOR', toy:new Unscramble( N.decrypt++ ) } );
 	}
 
 	window.launchpad.listen(function(x,y,b){

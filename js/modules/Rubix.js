@@ -1,4 +1,4 @@
-window.Rubix = function(){
+window.Rubix = function( nPuzzle ){
 
 	const audio = new AudioContext();
 	audio.add('blip','./audio/sfx-blip.mp3');
@@ -14,7 +14,8 @@ window.Rubix = function(){
 
 	let map = [];
 
-	let grid = 7; 
+	let grid = 3 + (nPuzzle)%4; 
+	console.log('Rubix grid',grid);
 	for(var y=0; y<grid+1; y++){
 		let $r = $('<row>').appendTo(self.$el);
 		if(y>0) map[y-1] = [];
@@ -42,10 +43,8 @@ window.Rubix = function(){
 				let c = colors[map[y][x]%colors.length];
 				self.$el.find(`cell[x=${x}][y=${y}]`).attr('bg',c);
 
-				by = by && map[y][x] == map[0][x];
-				bx = bx && map[y][x] == map[y][0];
-
-
+				by = by && map[y][x]%colors.length == map[0][x]%colors.length;
+				bx = bx && map[y][x]%colors.length == map[y][0]%colors.length;
 
 				launchpad.setXY(x+1,y+1,c);
 			}

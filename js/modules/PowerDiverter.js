@@ -258,6 +258,25 @@
 					{type:'fire',x:10,y:8,intensity:50},
 				]
 			},
+			{
+				x:2,y:5,
+				includeDoors:true,
+				actors:[
+
+					{type:'fire',x:10,y:8,intensity:50},
+					{type:'fire',x:5,y:4,intensity:50},
+				]
+			},
+			{
+				x:4,y:6,
+				includeDoors:true,
+				actors:[
+					{type:'fire',x:10,y:6,intensity:50},
+					{type:'fire',x:7,y:5,intensity:50},
+					{type:'fire',x:3,y:12,intensity:50},
+				]
+			},
+			
 		]
 	)
 

@@ -14,6 +14,8 @@ window.LaunchpadController = function(){
 		'0':[0, 0, 0],
 	}
 
+	let outputs = [];
+
 	let launchpad;
 	let self = this;
 	let listeners = [];

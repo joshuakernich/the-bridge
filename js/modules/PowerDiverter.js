@@ -31,11 +31,13 @@
 		's-core':{type:'power',dir:0,x:8,y:6},
 		's-thru':{type:'system',dir:0,x:10,y:6, link:'use[*|href="#SYSTEM_THRUSTER_0_Layer0_0_FILL"]', nLink:0},
 		's-stab':{type:'system',dir:0,x:8,y:1, link:'use[*|href="#WingStabiliser_0_Layer0_0_FILL"]', nLink:0},
+		's-shield':{type:'system',dir:0,x:5,y:2, link:'use[*|href="#Shield_0_Layer0_0_FILL"]', nLink:0},
 
 		's-cannon':{type:'system',dir:0,x:2,y:6, link:'use[*|href="#SYSTEM_CANNON_0_Layer0_0_FILL"]', nLink:0},
 		'p-cannon':{type:'system',dir:0,x:2,y:10, link:'use[*|href="#SYSTEM_CANNON_0_Layer0_0_FILL"]', nLink:1},
 
 		'r-stab':{type:'system',dir:0,x:12,y:8, link:'use[*|href="#SYSTEM_STABILISER_0_Layer0_0_FILL"]', nLink:0},
+		'deflector':{type:'system',dir:0,x:3,y:8, link:'use[*|href="#SYSTEM_DEFLECTOR_0_Layer0_0_FILL"]'},
 	}
 
 	window.ShipLayout = [
@@ -184,6 +186,51 @@
 					{type:'diverter',x:6,y:8,dir:0},
 				]
 			},
+			{
+				x:1,y:2,
+				actors:[
+					
+					{type:'power',dir:6,x:8,y:10},
+					's-core',
+					'deflector',
+					's-shield',
+					{type:'diverter',x:3,y:4,dir:2},
+					{type:'diverter',x:4,y:6,dir:0},
+					{type:'diverter',x:7,y:9,dir:0},
+					{type:'diverter',x:7,y:8,dir:0},
+					{type:'diverter',x:5,y:4,dir:6},
+					{type:'diverter',x:5,y:10,dir:0},
+					{type:'diverter',x:8,y:4,dir:6},
+					{type:'damage',x:5,y:3},
+				]
+			},
+			{
+				x:4,y:5,
+				actors:[
+					
+					{type:'power',dir:6,x:8,y:10},
+					{type:'power',dir:6,x:8,y:6},
+					's-thru',
+					'p-thru',
+				
+					{type:'diverter',x:8,y:7,dir:6},
+					{type:'diverter',x:8,y:12,dir:7},
+					{type:'diverter',x:3,y:12,dir:2},
+					{type:'diverter',x:5,y:6,dir:2},
+					{type:'diverter',x:8,y:4,dir:3},
+					{type:'diverter',x:5,y:8,dir:3},
+					{type:'diverter',x:4,y:10,dir:3},
+
+					{type:'diverter',x:7,y:5,dir:4},
+					{type:'diverter',x:7,y:7,dir:2},
+					
+					{type:'damage',x:8,y:8},
+					{type:'damage',x:9,y:10},
+					{type:'damage',x:9,y:7},
+					{type:'damage',x:8,y:11},
+				]
+			},
+
 		]
 	);
 

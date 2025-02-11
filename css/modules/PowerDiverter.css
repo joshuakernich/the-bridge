@@ -17,6 +17,7 @@ power msg{
 	line-height: var(--grid);
 	font-size: calc( var(--grid)/2 );
 	z-index: 1;
+	display: none;
 }
 
 power scroller{

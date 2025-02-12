@@ -66,14 +66,21 @@ video{
   filter: invert(1) brightness(60%) contrast(2);
 }
 
+launchpadname{
+	display: block;
+	color: white;
+	text-transform: uppercase;
+}
+
 launchpadsim{
 	display: inline-block;
 	text-align: left;
+	margin: calc( var(--grid)/2 );
+
 }
 
 launchpadsim td{
-	background: var(--gray);
-	box-shadow: inset 0px 0px 10px black;
+	box-shadow: inset 0px 0px 10px rgba(255,255,255,0.2);
 	width: 20px;
 	height: 20px;
 }

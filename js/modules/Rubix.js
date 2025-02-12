@@ -1,4 +1,4 @@
-window.Rubix = function( nPuzzle ){
+window.Rubix = function( nLaunchpad, nPuzzle ){
 
 	const audio = new AudioContext();
 	audio.add('blip','./audio/sfx-blip.mp3');
@@ -33,7 +33,7 @@ window.Rubix = function( nPuzzle ){
 		let by = true;
 		let bx = true;
 
-		launchpad.clear();
+		launchpad.clear( nLaunchpad );
 		for(var y=0; y<map.length; y++){
 
 			launchpad.setXY(0,y+1,'blue');
@@ -46,7 +46,7 @@ window.Rubix = function( nPuzzle ){
 				by = by && map[y][x]%colors.length == map[0][x]%colors.length;
 				bx = bx && map[y][x]%colors.length == map[y][0]%colors.length;
 
-				launchpad.setXY(x+1,y+1,c);
+				launchpad.setXY(nLaunchpad, x+1,y+1,c);
 			}
 		}
 
@@ -55,7 +55,7 @@ window.Rubix = function( nPuzzle ){
 			setTimeout(function(){
 				audio.play('correct');
 				self.callbackComplete();
-				launchpad.clear();
+				launchpad.clear(nLaunchpad);
 			},750);
 		}
 	}

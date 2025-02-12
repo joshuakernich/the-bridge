@@ -4,7 +4,7 @@ window.OS = function(){
 
 	let colors = ['yellow','cyan','purple','pink'];
 
-	let box;
+	let boxes = [undefined,undefined];
 
 	/*let toysLeft = [
 		{ title:"DIVERT POWER", color:'yellow', instance:new PowerDiverter() },
@@ -92,8 +92,8 @@ window.OS = function(){
 		.animate({bottom:-20,left:-10},20)
 		.animate({bottom:0,left:0},20);
 
-		console.log('hasBox',box);
-		if(!box) doNextQueue();
+		
+		for(var b in boxes) if(!boxes[b]) doNextQueue();
 	}
 
 	function doNextQueue(){
@@ -102,21 +102,26 @@ window.OS = function(){
 
 		let tiedTo = queue.shift();
 
-		box = new OSBox( tiedTo.type, tiedTo.color, tiedTo.name, tiedTo.toy, tiedTo.params );
+		let n = -1;
+		for(var b=0; b<boxes.length; b++) if(!boxes[b]) n = b;
+
+		let box = new OSBox( n, tiedTo.type, tiedTo.color, tiedTo.name, tiedTo.toy, tiedTo.params );
 		box.$el.css({top:800}).animate({top:0});
-		box.$el.appendTo('screen[position="left"]');
+		box.$el.appendTo(`screen[position="${n==0?'left':'right'}"]`);
 		box.warning = tiedTo.warning;
+
+		boxes[n] = box;
 	}
 
-	function onCompleteBox(){
+	function onCompleteBox(n){
 		
-		if(!box) return;
+		if(!boxes[n]) return;
 
-		box.$el.delay(500).animate({top:800},{ duration:500, complete:function(){ 
-			box.$el.remove(); 
-			box.warning.$el.remove();
-			box = undefined;
-			console.log('kill the box');
+		boxes[n].$el.delay(500).animate({top:800},{ duration:500, complete:function(){ 
+			boxes[n].$el.remove(); 
+			boxes[n].warning.$el.remove();
+			boxes[n] = undefined;
+
 			if( queue.length ){
 				doNextQueue();
 			} else {
@@ -132,7 +137,7 @@ window.OS = function(){
 	}
 
 	let n = 1000;
-	let OSBox = function(type,color,header,toy,params){
+	let OSBox = function(nBox,type,color,header,toy,params){
 		
 		let self = this;
 		let w = 14;
@@ -159,12 +164,12 @@ window.OS = function(){
 		//janky way of passing params
 		if(!params) params = [];
 
-		let instance = new toy(params[0],params[1],params[2]);
+		let instance = new toy(nBox,params[0],params[1],params[2]);
 		instance.$el.appendTo(self.$toy);
 
 		instance.callbackComplete = function(){
 			sendEvent(n++,'fix_'+type);
-			onCompleteBox();
+			onCompleteBox(nBox);
 		}
 
 		self.instance = instance;
@@ -246,17 +251,16 @@ window.OS = function(){
 		doDamage('ENCRYPTED<br>TRANSMISSION', { type:'encrypt', color:'blue', name:'UNCRYPTONATOR', toy:Unscramble, params:[N.decrypt++] } );
 	}
 
-	window.launchpad.listen(function(x,y,b){
+	window.launchpad.listen(function(n,x,y,b){
 
 
-
-		if(!box) return;
+		if(!boxes[n]) return;
 
 		//ripples.push({x:x,y:y,size:0,color:[255,255,255]});
 
 
-		if(b) box.instance.triggerXY(x,y);
-		if(!b && box.instance.untriggerXY )  box.instance.untriggerXY(x,y);
+		if(b) boxes[n].instance.triggerXY(x,y);
+		if(!b && boxes[n].instance.untriggerXY )  boxes[n].instance.untriggerXY(x,y);
 		
 	})
 }

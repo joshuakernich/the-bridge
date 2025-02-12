@@ -125,7 +125,9 @@ window.OS = function(){
 			if( queue.length ){
 				doNextQueue();
 			} else {
-				audio.stop('alarm');
+				let isCrisisOver = true;
+				for(var b in boxes) if(boxes[b]) isCrisisOver = false;
+				if(isCrisisOver) audio.stop('alarm');
 			}
 		}});
 		

@@ -255,6 +255,8 @@ window.LaunchpadController = function(){
 
 
   self.setXY = function(n,x,y,colorName,alpha=1){
+  	console.log('setXY',n,x,y,colorName,alpha);
+  	console.log(colorName,RGB,RGB[colorName]);
   	if(x<0 || y<0 || x>=8 || y>=8) return;
   	let rgb = RGB[colorName];
   	launchpads[n].setXYRGBA(x,y,rgb[0],rgb[1],rgb[2],alpha);

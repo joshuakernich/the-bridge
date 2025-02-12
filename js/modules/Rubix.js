@@ -36,8 +36,8 @@ window.Rubix = function( nLaunchpad, nPuzzle ){
 		launchpad.clear( nLaunchpad );
 		for(var y=0; y<map.length; y++){
 
-			launchpad.setXY(0,y+1,'blue');
-			launchpad.setXY(y+1,0,'blue');
+			launchpad.setXY(nLaunchpad,0,y+1,'blue');
+			launchpad.setXY(nLaunchpad,y+1,0,'blue');
 
 			for(var x=0; x<map[y].length; x++){
 				let c = colors[map[y][x]%colors.length];

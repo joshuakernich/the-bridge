@@ -1,4 +1,4 @@
-window.Unscramble = function(){
+window.Unscramble = function( nLaunchpad ){
 
 	const self = this;
 	self.$el = $('<unscramble>');
@@ -73,7 +73,7 @@ window.Unscramble = function(){
 
 		$('<header>').appendTo(self.$el).text(level.name);
 
-		launchpad.clear();
+		launchpad.clear( nLaunchpad );
 
 		for(var r = 0; r < messageLive.length; r++){
 			$r = $('<row>').appendTo(self.$el);
@@ -86,7 +86,7 @@ window.Unscramble = function(){
 				.text(messageLive[r][c])
 				.on('click',onCell);
 
-				launchpad.setXY(c,r,colors[Math.floor(c/level.patternWidth)])
+				launchpad.setXY(nLaunchpad, c,r,colors[Math.floor(c/level.patternWidth)])
 			}
 		}
 
@@ -146,7 +146,7 @@ window.Unscramble = function(){
 			
 
 			setTimeout(function(){
-				launchpad.clear();
+				launchpad.clear( nLaunchpad );
 				self.callbackComplete();
 			},2500)
 		}
@@ -194,14 +194,14 @@ window.Unscramble = function(){
 
 	function repaintLaunchpad(){
 
-		launchpad.clear();
+		launchpad.clear( nLaunchpad );
 		for(let y=0; y<messageLive.length; y++){
 			for(let x=0; x<messageLive[y].length; x++){
 				let isBlank = (messageLive[y][x] == ' ');
 				let iColor = Math.floor(x/level.patternWidth);
 				let color = self.isComplete?'yellow':colors[iColor];
 
-				launchpad.setXY(x,y,color,isBlank?0.1:1);
+				launchpad.setXY(nLaunchpad, x,y,color,isBlank?0.1:1);
 			}
 		}
 	}

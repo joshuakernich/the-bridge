@@ -319,7 +319,7 @@
 	
 }
 
-window.PowerDiverter = function( nPuzzle, isFirePuzzle ){
+window.PowerDiverter = function( nLaunchpad, nPuzzle, isFirePuzzle ){
 
 	let puzzle = isFirePuzzle?
 	FireSuppressionPuzzles[nPuzzle%FireSuppressionPuzzles.length]:
@@ -397,7 +397,7 @@ window.PowerDiverter = function( nPuzzle, isFirePuzzle ){
 	let nRedraw = 0;
 	function redraw(){
 
-		window.launchpad.clear();
+		window.launchpad.clear( nLaunchpad );
 
 		if(!model) return;
 
@@ -473,7 +473,7 @@ window.PowerDiverter = function( nPuzzle, isFirePuzzle ){
 				
 				self.$el.find('power-cell[x="'+(paths[n][p].x)+'"][y="'+(paths[n][p].y)+'"]').addClass('powered');
 
-				window.launchpad.setXY(paths[n][p].x-model.x,paths[n][p].y-model.y,'purple');
+				window.launchpad.setXY( nLaunchpad, paths[n][p].x-model.x,paths[n][p].y-model.y,'purple');
 			}
 		}
 
@@ -512,14 +512,14 @@ window.PowerDiverter = function( nPuzzle, isFirePuzzle ){
 			if( isDoorOpen[ idLocation ] != undefined ) color = isDoorOpen[ idLocation ]?'pink':'blue';
 			
 
-			window.launchpad.setXY(actor.x-model.x,actor.y-model.y,color);
+			window.launchpad.setXY( nLaunchpad, actor.x-model.x,actor.y-model.y,color);
 		}
 
 		$svg.find('.laser').attr('d',d);
 		
 		if(isAllPowered && !isFire){
 			model = undefined;
-			$('power-actor').off();
+			self.$el.find('power-actor').off();
 			setTimeout(doCompleteLevel,700);
 		}
 	}
@@ -563,7 +563,7 @@ window.PowerDiverter = function( nPuzzle, isFirePuzzle ){
 		$svgMap.find('.active').removeClass('active powered');
 		
 		$svg.find('.laser').attr('d','');
-		window.launchpad.clear();
+		window.launchpad.clear( nLaunchpad );
 
 		model = undefined;
 	}

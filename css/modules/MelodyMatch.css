@@ -1,4 +1,4 @@
-pitchrecorder{
+melodymatch{
 	height: calc(var(--grid)*10);
 	position: relative;
 	display: inline-block;
@@ -6,7 +6,7 @@ pitchrecorder{
 	padding: calc( var(--grid) * 2);
 }
 
-pitchrecorder.disabled:after{
+melodymatch.disabled:after{
 	content: "Click to Enable";
 	position: absolute;
 	top:0px;

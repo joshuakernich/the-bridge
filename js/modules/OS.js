@@ -1,4 +1,9 @@
 window.OS = function(){
+
+	
+
+	
+
 	window.launchpad = new LaunchpadController();
 	window.socket = new HASocket();
 
@@ -228,18 +233,20 @@ window.OS = function(){
 		setTimeout( function(){ showChapter(2,'THE WORMHOLE'); }, 1000 );
 	})
 
-	let N = {circuit:0,fire:0,defrag:0,decrypt:0};
+	let N = {circuit:0,fire:0,defrag:0,decrypt:0,melody:0};
 
 	$('<button>CIRCUIT DAMAGE</button>').appendTo('debug').click(doCircuitDamage);
 	$('<button>PLASMA FIRE</button>').appendTo('debug').click(doPlasmaFire);
 	$('<button>DATA FRAGMENTATION</button>').appendTo('debug').click(doDataFrag);
 	$('<button>ENCRYPTED TRANSMISSION</button>').appendTo('debug').click(doEncryptedTransmission);
+	$('<button>WHALE SONG</button>').appendTo('debug').click(doMelodyMatch);
 
 	window.socket.on('reset', reset );
 	window.socket.on('warn_circuit', doCircuitDamage );
 	window.socket.on('warn_fire', doPlasmaFire );
 	window.socket.on('warn_fragment', doDataFrag );
 	window.socket.on('warn_encrypt', doEncryptedTransmission );
+	window.socket.on('warn_whale', doMelodyMatch );
 	
 	function reset(){
 		window.location = window.location;
@@ -259,6 +266,10 @@ window.OS = function(){
 
 	function doEncryptedTransmission(){
 		doDamage('ENCRYPTED<br>TRANSMISSION', { type:'encrypt', color:'blue', name:'UNCRYPTONATOR', toy:Unscramble, params:[N.decrypt++] } );
+	}
+
+	function doMelodyMatch(){
+		doDamage('PHONIC<br>TRANSMISSION', { type:'echo', color:'blue', name:'PHONICULATOR', toy:MelodyMatch, params:[N.melody++] } );
 	}
 
 	window.launchpad.listen(function(n,x,y,b){

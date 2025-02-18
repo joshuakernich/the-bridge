@@ -1,10 +1,30 @@
-window.PitchRecorder = function(){
+window.MelodyMatch = function(){
+
+
+	async function setupTone(){
+		await Tone.start()
+
+		let meter = new Tone.Meter();
+		window.mic = new Tone.UserMedia().connect(meter);
+
+		mic.open().then(() => {
+			console.log("mic open");
+			self.turnOnOff(true);
+			
+		}).catch(e => {
+			console.log("mic not open",e);
+		});
+
+
+	}
+	
+	setupTone();
+
 
 	let self = this;
 	let colors = ['green','blue','purple','pink','red','orange','yellow','white'];
 
 	let range = 8;
-	
 	
 
 	let low = 'D3';
@@ -23,7 +43,7 @@ window.PitchRecorder = function(){
 
 	chart.length = range;
 
-	self.$el = $('<pitchrecorder>');
+	self.$el = $('<melodymatch>');
 	let $pc;
 	for(var i=0; i<range; i++){
 
@@ -87,5 +107,7 @@ window.PitchRecorder = function(){
 			clearInterval(interval);
 		}
 	}
+
+	
 	
 }

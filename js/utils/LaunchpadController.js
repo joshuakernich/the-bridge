@@ -192,7 +192,7 @@ window.LaunchpadController = function(){
 
 	function getNforID(id){
 		
-		for(var l=0; l<launchpads; l++) if(launchpads[l].id==output.id) return l;
+		for(var l=0; l<launchpads.length; l++) if(launchpads[l].id == output.id) return l;
 		for(var l=0; l<launchpads.length; l++) if(launchpads[l].id == undefined) return l;
 
 		console.error("The launchpad controller is full. This probably shouldn't happen.");

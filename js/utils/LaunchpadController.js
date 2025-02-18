@@ -45,8 +45,8 @@ window.LaunchpadInstance = function(n,callback){
 
 		// enter programmer mode
        	// different message depending on type of device
-		if(isX) launchpad.send([240,0,32,41,2,12,0,127,247]);
-       	else launchpad.send([240,0,32,41,2,13,14,1,247]);
+		if(isX) output.send([240,0,32,41,2,12,0,127,247]);
+       	else output.send([240,0,32,41,2,13,14,1,247]);
 
        	$name.text(output.name);
 	}
@@ -56,7 +56,7 @@ window.LaunchpadInstance = function(n,callback){
 		self.input = input;
 		input.onmidimessage = onLaunchpadMessage;
 
-		$msg.text(input.name);
+		$name.text(input.name);
 	}
 
 	self.clear = function( ){
@@ -189,6 +189,8 @@ window.LaunchpadController = function(){
 
 	function getNforID(id){
 		
+		
+
 		for(var l=0; l<launchpads.length; l++) if(launchpads[l].id == id) return l;
 		for(var l=0; l<launchpads.length; l++) if(launchpads[l].id == undefined) return l;
 
@@ -201,17 +203,21 @@ window.LaunchpadController = function(){
 		
 		//TODO check if something has been removed
 
+		let nOutput = 0;
+		let nInput = 0;
+
 		for (var output of midiAccess.outputs.values()){
-			if(output.name.includes("LP")){
-				let n = getNforID(output.id);
-				launchpads[n].setOutput(output);
+			if(output.name.includes("LP") && output.name.includes("MIDI")){
+				launchpads[nOutput%launchpads.length].setOutput(output);
+				nOutput++;
 			}
 		}
 
         for (var input of midiAccess.inputs.values()){
-			if(input.name.includes("LP")){
-				let n = getNforID(output.id);
-				launchpads[n].setInput(output);
+
+			if(input.name.includes("LP") && input.name.includes("MIDI")){
+				launchpads[nInput%launchpads.length].setInput(input);
+				nInput++;
 			}
         }
 

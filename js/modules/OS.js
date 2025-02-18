@@ -15,6 +15,15 @@ window.OS = function(){
 
 	]*/
 
+	function makeEdge(){
+		let $f = $(`
+			<osframe>
+
+			</osframe>
+		`);
+
+	}
+
 	function makeTable(w,h,hasInner){
 
 		let $t = $('<table>');
@@ -202,7 +211,6 @@ window.OS = function(){
 			$('container').css('transform','scale(1)');
 		}
 	
-
 	},1000);
 
 
@@ -220,7 +228,7 @@ window.OS = function(){
 		setTimeout( function(){ showChapter(2,'THE WORMHOLE'); }, 1000 );
 	})
 
-	let N = {circuit:0,fire:0,defrag:0,decrypt:0}
+	let N = {circuit:0,fire:0,defrag:0,decrypt:0};
 
 	$('<button>CIRCUIT DAMAGE</button>').appendTo('debug').click(doCircuitDamage);
 	$('<button>PLASMA FIRE</button>').appendTo('debug').click(doPlasmaFire);

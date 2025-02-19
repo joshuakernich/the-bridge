@@ -3,6 +3,7 @@
 window.OS = function(){
 
 	const GRID = 40;
+	const WIDTH = 4000;
 
 	window.launchpad = new LaunchpadController();
 	window.socket = new HASocket();
@@ -59,12 +60,12 @@ window.OS = function(){
 
 	let frame = new OSPanel();
 	frame.$el.appendTo($bg).css({position:'absolute', top:'0px', left:'0px', right:'0px', bottom: '0px', margin:GRID })
-
-	let debug = new OSPanel();
-	debug.$el.appendTo($fg).css({position:'absolute', top:'0px', left:'0px', margin:'50px'});
-
-	let $debug = debug.$inner;
-	$debug.css('padding','var(--grid)');
+	1
+	let $debug = frame.$inner;
+	$debug.css({
+		
+		'z-index':'1',
+	});
 
 	window.launchpad.$el.appendTo($debug);
 
@@ -249,7 +250,7 @@ window.OS = function(){
 
 
 
-	const WIDTH = 3000;
+	
 	setInterval(function(){
 
 		let w = $('body').width();

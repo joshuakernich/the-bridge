@@ -5,10 +5,12 @@ oscontainer{
 	right: 0px;
 	top: 0px;
 	bottom: 0px;
-	transform-origin: bottom left;
-	min-width: 3000px;
+	transform-origin: top left;
+	min-width: 4000px;
 	padding-bottom: var(--grid);
 	white-space: nowrap;
+	margin:  auto;
+	overflow: hidden;
 }
 
 oswarning{

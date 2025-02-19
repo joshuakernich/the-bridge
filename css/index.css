@@ -44,11 +44,10 @@ body{
 
 
 	user-select: none;
-	
 	width: 100vw;
 	height: 100vh;
-	overflow: hidden;
 	background: black;
+	overflow: hidden;
 }
 
 bg{
@@ -86,31 +85,7 @@ launchpadsim td{
 }
 
 
-container{
-	display: block;
-	position: absolute;
 
-	
-	left: 0px;
-	right: 0px;
-	bottom: 0px;
-
-	transform-origin: bottom left;
-	min-width: 3000px;
-
-	padding-bottom: var(--grid);
-
-	white-space: nowrap;
-}
-
-screen{
-	width: 33.3%;
-	height: 100%;
-	display: inline-block;
-	position: relative;
-	white-space: normal;
-	text-align: center;
-}
 
 
 table{
@@ -132,6 +107,18 @@ td{
 
 	
 }
+
+[size=squish] td{ height: calc( var(--grid)/2 ); }
+
+[border=cyan]{ border-color: var(--cyan); }
+[border=red]{ border-color: var(--red); }
+[border=blue]{ border-color: var(--blue); }
+[border=green]{ border-color: var(--green); }
+[border=purple]{ border-color: var(--purple); }
+[border=pink]{ border-color: var(--pink); }
+[border=orange]{ border-color: var(--orange); }
+[border=yellow]{ border-color: var(--yellow); }
+[border=white]{ border-color: var(--white); }
 
 [bg=cyan]{ background: var(--cyan); }
 [bg=red]{ background: var(--red); }
@@ -223,10 +210,6 @@ h1:empty{
 
 toy{
 	display: block;
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	z-index: 1;
 	width: calc(var(--grid) * 12);
 	height: calc(var(--grid) * 12);
 	overflow: hidden;
@@ -248,30 +231,8 @@ toy osicon{
 	display: block;
 }
 
-osbox{
-	display: inline-block;
-	position: relative;
-	top: 0px;
-}
 
-oswarning{
-	display: inline-block;
-	color: var(--pink);
 
-	white-space: normal;
-	width: calc( var(--grid)*4 );
-	background: url('../img/icon/icon-alert-triangle.svg');
-	background-size: calc( var(--grid)*2 );
-	background-position: top center;
-	background-repeat: no-repeat;
-	padding-top: calc( var(--grid)*2 );
-
-}
-
-alerts{
-	display: block;
-	animation: throb infinite 0.5s;
-}
 
 @keyframes throb{
 	0%{
@@ -287,13 +248,6 @@ alerts{
 	}
 }
 
-debug{
-	position: fixed;
-	top: 0px;
-	left: 0px;
-	padding: var(--grid);
-	text-align: left;
-}
 
 midi-message{
 	display: block;
@@ -307,9 +261,10 @@ button{
 	border: none;
 	padding: 0px;
 	margin: 0px;
-	width: 200px;
+	width: 250px;
 	text-align: left;
 	display: block;
+	position: relative;
 }
 
 button:after{

@@ -135,7 +135,7 @@ window.LaunchpadController = function(){
 	const COUNT = 2;
 
 	let self = this;
-	self.$el = $('<div>').appendTo('debug');
+	self.$el = $('<div>');
 
 	let launchpads = [];
 	while(launchpads.length < COUNT){

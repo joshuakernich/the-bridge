@@ -1,8 +1,8 @@
+
+
 window.OS = function(){
 
-	
-
-	
+	const GRID = 40;
 
 	window.launchpad = new LaunchpadController();
 	window.socket = new HASocket();
@@ -20,16 +20,57 @@ window.OS = function(){
 
 	]*/
 
-	function makeEdge(){
-		let $f = $(`
-			<osframe>
-
-			</osframe>
+	function OSPanel( c ){
+		let self = this;
+		self.$el = $(`
+			<ospanel>
+				<osvert bg=${c}></osvert>		
+				<osmiddle>
+					<oshorz bg=${c}></oshorz>
+					<osinner>
+						<osframe border=${c}></osframe>
+					</osinner>
+					<oshorz bg=${c}></oshorz>
+				</osmiddle>	
+				<osvert bg=${c}></osvert>			
+			</ospanel>
 		`);
 
+		self.$inner = self.$el.find('osinner');
 	}
 
-	function makeTable(w,h,hasInner){
+	let $container = $(`<oscontainer>
+		<osbg>
+			<osgradient></osgradient>
+		</osbg>
+		<osfg>
+			<osscreen position='left'></osscreen><osscreen position='center'>
+				<osalerts></osalerts>
+			</osscreen><osscreen position='right'></osscreen>
+		</osfg>
+	</oscontainer>`).appendTo('body');
+
+
+	let $bg = $container.find('osbg');
+	let $fg = $container.find('osfg');
+	let $alerts = $container.find('osalerts');
+	let $left = $container.find('[position="left"]');
+	let $right = $container.find('[position="right"]');
+
+	let frame = new OSPanel();
+	frame.$el.appendTo($bg).css({position:'absolute', top:'0px', left:'0px', right:'0px', bottom: '0px', margin:GRID })
+
+	let debug = new OSPanel();
+	debug.$el.appendTo($fg).css({position:'absolute', top:'0px', left:'0px', margin:'50px'});
+
+	let $debug = debug.$inner;
+	$debug.css('padding','var(--grid)');
+
+	window.launchpad.$el.appendTo($debug);
+
+
+
+	/* function makeTable(w,h,hasInner){
 
 		let $t = $('<table>');
 
@@ -64,7 +105,7 @@ window.OS = function(){
 			[c=1][r=1]`).attr('paint','true');
 
 		return $t;
-	}
+	}*/
 
 	let audio = new AudioContext();
 	audio.add('alert','./audio/sfx-alert.mp3',0.5);
@@ -92,14 +133,14 @@ window.OS = function(){
 		audio.play('alert',true);
 		audio.play('alarm');
 		let warning = new OSWarning(whatKind);
-		warning.$el.appendTo('alerts');
+		warning.$el.appendTo($alerts);
 
 		if(tiedTo){
 			tiedTo.warning = warning;
 			queue.push(tiedTo);
 		}
 		
-		$('container')
+		$($container)
 		.animate({bottom:-10,left:-10},20)
 		.animate({bottom:10,left:10},20)
 		.animate({bottom:-20,left:-50},20)
@@ -120,8 +161,8 @@ window.OS = function(){
 		for(var b=0; b<boxes.length; b++) if(!boxes[b]) n = b;
 
 		let box = new OSBox( n, tiedTo.type, tiedTo.color, tiedTo.name, tiedTo.toy, tiedTo.params );
-		box.$el.css({top:800}).animate({top:0});
-		box.$el.appendTo(`screen[position="${n==0?'left':'right'}"]`);
+		box.$el.css({bottom:-800}).animate({bottom:GRID});
+		box.$el.appendTo(n==0?$left:$right);
 		box.warning = tiedTo.warning;
 
 		boxes[n] = box;
@@ -160,13 +201,17 @@ window.OS = function(){
 		let h = 14;
 
 		let $el = $('<osbox>');
-		let $t = makeTable(w,h,true).appendTo($el);
+
+		let panel = new OSPanel(color);
+		panel.$el.appendTo($el);
+
+		//let $t = makeTable(w,h,true).appendTo($el);
 
 		self.$el = $el;
 
 		$('<h1>').appendTo($el.find('[c=2][r=0]'));
 		
-		$(`[r=6][c=${w-1}]`).attr('bordered','vert');
+		/*$(`[r=6][c=${w-1}]`).attr('bordered','vert');
 		$(`[r=7][c=${w-1}]`).attr('bordered','vert');
 
 		self.reskin = function(title,color){
@@ -174,8 +219,8 @@ window.OS = function(){
 			$el.find('h1').attr('color',color).text(title);
 		}
 
-		self.reskin(header,color);
-		self.$toy = $('<toy>').appendTo($el.find('[r=1][c=1]'));
+		self.reskin(header,color);*/
+		self.$toy = $('<toy>').appendTo(panel.$inner);
 
 		//janky way of passing params
 		if(!params) params = [];
@@ -211,9 +256,9 @@ window.OS = function(){
 		if(w<WIDTH){
 			let scale = w/WIDTH;
 			
-			$('container').css('transform','scale('+scale+')');
+			$($container).css('transform','scale('+scale+')');
 		} else {
-			$('container').css('transform','scale(1)');
+			$($container).css('transform','scale(1)');
 		}
 	
 	},1000);
@@ -235,11 +280,11 @@ window.OS = function(){
 
 	let N = {circuit:0,fire:0,defrag:0,decrypt:0,melody:0};
 
-	$('<button>CIRCUIT DAMAGE</button>').appendTo('debug').click(doCircuitDamage);
-	$('<button>PLASMA FIRE</button>').appendTo('debug').click(doPlasmaFire);
-	$('<button>DATA FRAGMENTATION</button>').appendTo('debug').click(doDataFrag);
-	$('<button>ENCRYPTED TRANSMISSION</button>').appendTo('debug').click(doEncryptedTransmission);
-	$('<button>WHALE SONG</button>').appendTo('debug').click(doMelodyMatch);
+	$('<button>CIRCUIT DAMAGE</button>').appendTo($debug).click(doCircuitDamage);
+	$('<button>PLASMA FIRE</button>').appendTo($debug).click(doPlasmaFire);
+	$('<button>DATA FRAGMENTATION</button>').appendTo($debug).click(doDataFrag);
+	$('<button>ENCRYPTED TRANSMISSION</button>').appendTo($debug).click(doEncryptedTransmission);
+	$('<button>WHALE SONG</button>').appendTo($debug).click(doMelodyMatch);
 
 	window.socket.on('reset', reset );
 	window.socket.on('warn_circuit', doCircuitDamage );

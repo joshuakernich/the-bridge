@@ -12,15 +12,6 @@ window.OS = function(){
 
 	let boxes = [undefined,undefined];
 
-	/*let toysLeft = [
-		{ title:"DIVERT POWER", color:'yellow', instance:new PowerDiverter() },
-		{ title:"DECODER", color:'pink', instance:new Unscramble() },
-		{ title:"SYNTH SIGNAL", color:'pink', instance:new Sequencer() },
-		{ title:"VOCAL SIGNAL", color:'blue', instance:new PitchRecorder() },
-		{ title:"TRANSLATOR", color:'blue', instance:new BrokenChat() },
-
-	]*/
-
 	function OSPanel( c, label ){
 		let self = this;
 		self.$el = $(`
@@ -57,6 +48,7 @@ window.OS = function(){
 	let $bg = $container.find('osbg');
 	let $fg = $container.find('osfg');
 	let $alerts = $container.find('osalerts');
+	let $center = $container.find('[position="center"]');
 	let $left = $container.find('[position="left"]');
 	let $right = $container.find('[position="right"]');
 
@@ -70,45 +62,6 @@ window.OS = function(){
 	});
 
 	window.launchpad.$el.appendTo($debug);
-
-
-
-	/* function makeTable(w,h,hasInner){
-
-		let $t = $('<table>');
-
-		for(var r=0; r<h; r++ ){
-			let $tr = $('<tr>').appendTo($t);
-			for(let c=0; c<w; c++){
-				let $td = $('<td>').appendTo($tr).attr('c',c).attr('r',r);
-			}
-		}
-
-		//outer corners
-		$t.find(`[c=0][r=0]`).attr('corner','tl');
-		$t.find(`[c=${w-1}][r=0]`).attr('corner','tr');
-		$t.find(`[c=${w-1}][r=${h-1}]`).attr('corner','br');
-		$t.find(`[c=0][r=${h-1}]`).attr('corner','bl');
-
-		if(hasInner){
-			//inner corners
-			$t.find(`[c=1][r=1]`).attr('cornice','tl');
-			$t.find(`[c=${w-2}][r=1]`).attr('cornice','tr');
-			$t.find(`[c=${w-2}][r=${h-2}]`).attr('cornice','br');
-			$t.find(`[c=1][r=${h-2}]`).attr('cornice','bl');
-
-			$t.find(`
-			[c=${w-2}][r=1], 
-			[c=${w-2}][r=${h-2}],
-			[c=1][r=${h-2}]`).attr('paint','true');
-		}
-		
-
-		$t.find(`[c=0], [r=0], [c=${w-1}], [r=${h-1}],
-			[c=1][r=1]`).attr('paint','true');
-
-		return $t;
-	}*/
 
 	let audio = new AudioContext();
 	audio.add('alert','./audio/sfx-alert.mp3',0.5);
@@ -208,21 +161,8 @@ window.OS = function(){
 		let panel = new OSPanel(color, header);
 		panel.$el.appendTo($el);
 
-		//let $t = makeTable(w,h,true).appendTo($el);
-
 		self.$el = $el;
 
-		//$('<h1>').appendTo($el.find('[c=2][r=0]'));
-		
-		/*$(`[r=6][c=${w-1}]`).attr('bordered','vert');
-		$(`[r=7][c=${w-1}]`).attr('bordered','vert');
-
-		self.reskin = function(title,color){
-			$el.find('[paint]').attr('bg',color);
-			$el.find('h1').attr('color',color).text(title);
-		}
-
-		self.reskin(header,color);*/
 		self.$toy = $('<toy>').appendTo(panel.$inner);
 
 		//janky way of passing params
@@ -247,10 +187,6 @@ window.OS = function(){
 			event_type:evt
 		});
 	}
-	
-	
-
-
 
 	
 	setInterval(function(){
@@ -267,6 +203,14 @@ window.OS = function(){
 
 
 	$('<button>RESET EVERYTHING</button>').appendTo($debug).click(reset);
+
+	$('<button>INITIATE TRANSMISSION</button>').appendTo($debug).click(function(){
+		let panel = new OSPanel('blue', 'INCOMING TRANSMISSION');
+		panel.$el.appendTo($center);
+		$('<video src="./video/klingon.mp4" autoplay/>').appendTo(panel.$inner)[0].addEventListener('ended',function(){
+			panel.$el.remove();
+		},false);
+	});
 	
 	$('<button>INITIATE WORMHOLE</button>').appendTo($debug).click(function(){
 		

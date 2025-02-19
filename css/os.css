@@ -108,6 +108,10 @@ osinner{
 	box-sizing: border-box;
 }
 
+osinner video{
+	border-radius: var(--grid);
+}
+
 osframe{
 	border-radius: calc( var(--grid) * 2 );
 	border: var(--grid) solid var(--black);

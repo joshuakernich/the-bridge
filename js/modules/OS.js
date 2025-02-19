@@ -21,13 +21,15 @@ window.OS = function(){
 
 	]*/
 
-	function OSPanel( c ){
+	function OSPanel( c, label ){
 		let self = this;
 		self.$el = $(`
 			<ospanel>
 				<osvert bg=${c}></osvert>		
 				<osmiddle>
-					<oshorz bg=${c}></oshorz>
+					<oshorz size=${label?'thicc':'thin'} bg=${c}>
+						<osh color=${c}>${label}</osh>
+					</oshorz>
 					<osinner>
 						<osframe border=${c}></osframe>
 					</osinner>
@@ -203,14 +205,14 @@ window.OS = function(){
 
 		let $el = $('<osbox>');
 
-		let panel = new OSPanel(color);
+		let panel = new OSPanel(color, header);
 		panel.$el.appendTo($el);
 
 		//let $t = makeTable(w,h,true).appendTo($el);
 
 		self.$el = $el;
 
-		$('<h1>').appendTo($el.find('[c=2][r=0]'));
+		//$('<h1>').appendTo($el.find('[c=2][r=0]'));
 		
 		/*$(`[r=6][c=${w-1}]`).attr('bordered','vert');
 		$(`[r=7][c=${w-1}]`).attr('bordered','vert');

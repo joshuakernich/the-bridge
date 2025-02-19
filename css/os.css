@@ -13,6 +13,10 @@ oscontainer{
 	overflow: hidden;
 }
 
+osh{
+
+}
+
 oswarning{
 	display: inline-block;
 	color: var(--pink);
@@ -121,4 +125,20 @@ oshorz{
 	height: calc( var(--grid) / 2);
 	background: var( --black );
 	width: 100%;
+	box-sizing: border-box;
+	padding: 0px var(--grid);
+	text-align: left;
+
+}
+
+oshorz[size=thicc]{
+	height: var(--grid);
+}
+
+osh{
+	text-align: left;
+	background: black;
+	padding: 0px var(--border);
+	font-size: var(--grid);
+	line-height: 35px;
 }

@@ -265,9 +265,9 @@ window.OS = function(){
 	},1000);
 
 
-	$('<button>RESET EVERYTHING</button>').appendTo('debug').click(reset);
+	$('<button>RESET EVERYTHING</button>').appendTo($debug).click(reset);
 	
-	$('<button>INITIATE WORMHOLE</button>').appendTo('debug').click(function(){
+	$('<button>INITIATE WORMHOLE</button>').appendTo($debug).click(function(){
 		
 		audio.add('music','./audio/music-wormhole.mp3',0.5,true);
 

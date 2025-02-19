@@ -28,7 +28,7 @@ window.OS = function(){
 				<osvert bg=${c}></osvert>		
 				<osmiddle>
 					<oshorz size=${label?'thicc':'thin'} bg=${c}>
-						<osh color=${c}>${label}</osh>
+						${label?`<osh color=${c}>${label}</osh>`:``}
 					</oshorz>
 					<osinner>
 						<osframe border=${c}></osframe>
@@ -258,7 +258,6 @@ window.OS = function(){
 		let w = $('body').width();
 		if(w<WIDTH){
 			let scale = w/WIDTH;
-			
 			$($container).css('transform','scale('+scale+')');
 		} else {
 			$($container).css('transform','scale(1)');

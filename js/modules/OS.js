@@ -54,7 +54,7 @@ window.OS = function(){
 
 	let frame = new OSPanel();
 	frame.$el.appendTo($bg).css({position:'absolute', top:'0px', left:'0px', right:'0px', bottom: '0px', margin:GRID })
-	1
+	
 	let $debug = frame.$inner;
 	$debug.css({
 		
@@ -87,7 +87,7 @@ window.OS = function(){
 
 		audio.play('boom',true);
 		audio.play('alert',true);
-		audio.play('alarm');
+		//audio.play('alarm');
 		let warning = new OSWarning(whatKind);
 		warning.$el.appendTo($alerts);
 
@@ -207,6 +207,7 @@ window.OS = function(){
 	$('<button>INITIATE TRANSMISSION</button>').appendTo($debug).click(function(){
 		let panel = new OSPanel('blue', 'INCOMING TRANSMISSION');
 		panel.$el.appendTo($center);
+		panel.$el.css({margin:GRID});
 		$('<video src="./video/klingon.mp4" autoplay/>').appendTo(panel.$inner)[0].addEventListener('ended',function(){
 			panel.$el.remove();
 		},false);

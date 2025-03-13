@@ -1,9 +1,9 @@
 melodymatch{
-	height: calc(var(--grid)*10);
+
 	position: relative;
 	display: inline-block;
 	
-	padding: calc( var(--grid) * 2);
+	padding: calc( var(--grid) * 2) 0px;
 }
 
 melodymatch.disabled:after{
@@ -18,16 +18,34 @@ melodymatch.disabled:after{
 	line-height: 200px;
 }
 
+pitch-goal{
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	border-top: var(--border) solid var(--yellow);
+}
+
 pitch-c{
 	display: inline-block;
-	width: var(--grid);
+	width: calc( var(--grid)*2);
 	height: calc(var(--grid)*8);
-	background: var(--purple-opaque);
+	background: rgba(255,255,255,0.05);
 	vertical-align: bottom;
 	box-sizing: border-box;
 	border-left: 2px solid black;
 	border-right: 2px solid black;
 	position: relative;
+}
+
+pitch-c:nth-of-type(1),
+pitch-c:nth-of-type(6)
+{
+	opacity: 0.5;
+}
+
+pitch-c.active{
+	background: rgba(255,255,255,0.2);
 }
 
 pitch-fill{

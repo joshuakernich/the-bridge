@@ -1,5 +1,27 @@
 window.MelodyMatch = function(){
 
+	const OCTAVE = ['A','A#','B','C','C#','D','D#','E','F','F#','G','G#'];
+	const LOW = 'C4';
+	const RANGE = 4;	// how many notes are we supporting
+	const INTERVAL = 3  // interval between each suppored note
+
+
+	function getNoteIndex(name){
+		let note = name.substr(0,name.length-1);
+		let oct = parseInt( name[name.length-1] );
+		return OCTAVE.length*(oct)+OCTAVE.indexOf(note);
+	}
+
+	const iLow = getNoteIndex(LOW);
+	const iHigh = iLow + RANGE * INTERVAL;
+
+
+	const audio = new AudioContext();
+	audio.add('blip','./audio/sfx-blip.mp3', 0.2);
+	audio.add('error','./audio/sfx-error.mp3');
+	audio.add('correct','./audio/sfx-correct.mp3');
+	audio.add('powerup','./audio/sfx-powerup.mp3', 1);
+	audio.add('good','./audio/sfx-good.mp3', 1);
 
 	async function setupTone(){
 		await Tone.start()
@@ -33,29 +55,9 @@ window.MelodyMatch = function(){
 	]
 	
 
-	let low = 'D3';
-
-	let chart = [];
-	let EVERY_NTH_NOTE = 3;
-	let nSkip = 0;
-	let isInRange = false;
-	for(var f in FREQ){
-		if(f==low) isInRange = true;
-		if(isInRange && !nSkip--){
-			chart.push({name:f,freq:FREQ[f]});
-			nSkip = EVERY_NTH_NOTE;
-		}
-	}
-
-	const FREQMIN = chart[0].freq;
-	const FREQMAX = chart[chart.length-1].freq;
-	const FREQRANGE = FREQMAX - FREQMIN;
-
-
-
-	chart.length = colors.length;
-
 	self.$el = $('<melodymatch>');
+	let iLevel = 0;
+	let level = LEVELS[iLevel];
 	let $pcs = [];
 	for(var i=0; i<BEATS; i++){
 
@@ -65,16 +67,10 @@ window.MelodyMatch = function(){
 			</pitch-c>`).appendTo(this.$el);
 
 
+		$pcs[i].find('pitch-goal').css('height',level[i]/(RANGE)*100+'%');
 
-		$pcs[i].find('pitch-goal').css('height',LEVELS[0][i]/(chart.length-1)*100+'%');
+		if(level[i]==-1) $pcs[i].find('pitch-goal').css('opacity',0);
 	}
-
-	let $svg = $(`<svg viewBox='0 0 100 100' preserveAspectRatio='none'>
-			<path fill='none' stroke='var( --yellow )' d='M 0,100 L 100,0'/>
-		</svg>
-		`).appendTo(self.$el).css({position:'absolute',top:0,left:0, width:12*40, height:8*40, marginTop:80 });
-
-	let $path = $svg.find('path');
 
 	let $frame = $(`<toyframe>
 			<toycorner></toycorner>
@@ -83,7 +79,6 @@ window.MelodyMatch = function(){
 			<toycorner></toycorner>
 		</toyframe>`).appendTo(self.$el);
 
-	//$pc.addClass('live');
 
 	let sampleRate;
 	let meter;
@@ -99,105 +94,76 @@ window.MelodyMatch = function(){
 
 
 	let iFreqMax = 0;
+
 	function pulse(){
 
 		nPulse++;
 
 		let nBeat = Math.floor( nPulse/FPS ) % history.length;
 
-		if(nBeat != nBeatWas){
-			nBeatWas = nBeat;
-			iFreqMax = 0;
+		if(nBeat != nBeatWas){ //changed beat
+			
+			audio.play('blip',true);
+
+			//check to see if we finished in the right place
+			if(nBeatWas>-1 && history[nBeatWas] == level[nBeatWas]){
+				let amt = level[nBeatWas]/RANGE;
+				$pcs[nBeatWas].find('pitch-fill').css({ height:amt*100+'%' }).attr('bg','yellow');
+				
+			}
+
+
+			if(nBeat==0){
+				//reset
+				for( var h in history){
+					history[h] = -1;
+					self.$el.find('pitch-fill').css('height',0);
+				}
+			} else if( nBeat == BEATS-1){
+				//cycle complete. test complete.
+
+				let isComplete = true;
+				for( var h in history){
+					if(level[h] != -1 && history[h] != level[h]) isComplete = false;
+				}
+				self.$el.find('pitch-fill').attr('bg',isComplete?'green':'red');
+
+				if(isComplete){
+					audio.play('correct',true);
+					self.$el.find('pitch-fill').first().css('height',0);
+					self.$el.find('pitch-fill').last().css('height',0);
+					self.turnOnOff(false);
+					if( self.callbackComplete ) self.callbackComplete();
+				} else {
+					
+				}
+			}
+
+			nCorrect = 0;
 
 			self.$el.find('pitch-c').removeClass('active');
 			$pcs[nBeat%history.length].addClass('active');
+
+			nBeatWas = nBeat;
 		}
 
 
 		let wave = waveform.getValue();
 		let freq = yin(wave,sampleRate);
+		
+		let nNoteFromA0 = 12 * Math.log2(freq / 440) + 69;
+		let nNote = (nNoteFromA0 - iLow)/INTERVAL;
+		let nNoteRound = Math.round(nNote);
 
-		//console.log(FREQMIN, freq, FREQMAX);
+		if(nNoteRound == level[nBeat]) nCorrect++;
+		let bCorrect = (nCorrect>5);
+		if(bCorrect) nNote = nNoteRound = level[nBeat];
 
-		let min = 9999;
-		let iFreq = 0;
-		while(iFreq<chart.length-1 && freq > (chart[iFreq].freq + chart[iFreq+1].freq)/2) iFreq++;
-
-		//if(iFreq>chart.length) iFreq = chart.length;
-
+		history[nBeat] = nNoteRound;
+		let amt = nNote/RANGE;
+		$pcs[nBeat].find('pitch-fill').css({ height:amt*100+'%' }).attr('bg',bCorrect?'yellow':'blue');
 
 		
-		//console.log(iFreq);
-
-		if(iFreq > iFreqMax) iFreqMax = iFreq;
-		
-		history[nBeat] = iFreqMax;
-
-		// need to quantize this
-		pulses[nPulse%pulses.length] = freq;
-
-
-		let amt = history[nBeat]/(chart.length-1);
-
-		$pcs[nBeat].find('pitch-fill').css({ height:amt*100+'%' }).attr('bg',colors[history[nBeat]]);
-
-		let d = '';
-		for(var i=0; i<pulses.length; i++){
-
-			let f = pulses[i];
-
-
-			let iy = -1;
-			for(var n=0; n<chart.length; n++) if( f > chart[n].freq ) iy = n;
-
-			let y = 0;
-
-			if(iy>=0){
-
-				let y = iy/(chart.length-1);
-
-				let next = chart[iy+1]?chart[iy+1].freq:chart[iy].freq;
-				let gap = next - chart[iy].freq;
-				let extra = f - chart[iy].freq;
-
-				let progress = extra/gap;
-
-				y += progress;
-			}
-
-
-
-
-
-
-			/*let y = ( pulses[i] - FREQMIN ) / FREQRANGE;
-		
-			if( isNaN(y) || y <= 0 ) y = 0.1;
-
-			console.log(y);*/
-			
-			d += (i==0?' M ':' L ') + (i) + ',' + (100-y*100);
-
-		}
-
-	
-
-		$path.attr('d',d);
-		
-		/*if(nPulse%FPS==0){
-
-			
-
-			history.push(iFreq);
-			while(history.length>range) history.shift();
-		}*/
-
-		//history[history.length-1] = iFreq;
-
-		/*self.$el.find('pitch-c pitch-fill').each(function(n){
-			let amt = (history[n]+1)/chart.length;
-			$(this).css({'height':amt*100+'%'}).attr('bg',colors[history[n]]);
-		})*/
 
 	}
 

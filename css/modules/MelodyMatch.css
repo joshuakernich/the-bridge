@@ -57,7 +57,8 @@ pitch-fill{
 	left: 0px;
 	right: 0px;
 	height: 50%;
-	
+	transition: 0.05s all;
+	background: var(--blue);
 }
 
 pitch-c.live pitch-fill{

@@ -18,19 +18,29 @@ window.OS = function(){
 			<ospanel>
 				<osvert bg=${c}></osvert>		
 				<osmiddle>
-					<oshorz size=${label?'thicc':'thin'} bg=${c}>
+					<oshorz padded size=${label?'thicc':'thin'} bg=${c}>
 						${label?`<osh color=${c}>${label}</osh>`:``}
 					</oshorz>
 					<osinner>
 						<osframe border=${c}></osframe>
 					</osinner>
-					<oshorz bg=${c}></oshorz>
+					<oshorz>
+						<ossegment bg=${c}></ossegment>
+						<ossegment></ossegment>
+						<ossegment bg=${c}></ossegment>
+					</oshorz>
 				</osmiddle>	
 				<osvert bg=${c}></osvert>			
 			</ospanel>
 		`);
 
 		self.$inner = self.$el.find('osinner');
+
+		self.reskin = function(c){
+			self.$el.find('[bg]').attr('bg',c);
+			self.$el.find('[border]').attr('border',c);
+		}
+
 	}
 
 	let $container = $(`<oscontainer>
@@ -52,12 +62,12 @@ window.OS = function(){
 	let $left = $container.find('[position="left"]');
 	let $right = $container.find('[position="right"]');
 
-	let frame = new OSPanel();
-	frame.$el.appendTo($bg).css({position:'absolute', top:'0px', left:'0px', right:'0px', bottom: '0px', margin:GRID })
+	let frame = new OSPanel( );
+	frame.$el.appendTo($bg).css({position:'absolute', top:'0px', left:'0px', right:'0px', bottom: '0px', margin:GRID });
 	
-	let $debug = frame.$inner;
+	
+	let $debug = $('<div>').appendTo("body");
 	$debug.css({
-		
 		'z-index':'1',
 	});
 
@@ -103,6 +113,8 @@ window.OS = function(){
 		.animate({bottom:-20,left:-10},20)
 		.animate({bottom:0,left:0},20);
 
+		frame.reskin('red');
+
 		
 		for(var b in boxes) if(!boxes[b]) doNextQueue();
 	}
@@ -136,9 +148,13 @@ window.OS = function(){
 			if( queue.length ){
 				doNextQueue();
 			} else {
+				
 				let isCrisisOver = true;
 				for(var b in boxes) if(boxes[b]) isCrisisOver = false;
-				if(isCrisisOver) audio.stop('alarm');
+				if(isCrisisOver){
+					frame.reskin('');
+					audio.stop('alarm');
+				}
 			}
 		}});
 		
@@ -227,6 +243,7 @@ window.OS = function(){
 
 	let N = {circuit:0,fire:0,defrag:0,decrypt:0,melody:0};
 
+	
 	$('<button>CIRCUIT DAMAGE</button>').appendTo($debug).click(doCircuitDamage);
 	$('<button>PLASMA FIRE</button>').appendTo($debug).click(doPlasmaFire);
 	$('<button>DATA FRAGMENTATION</button>').appendTo($debug).click(doDataFrag);

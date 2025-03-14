@@ -148,19 +148,41 @@ osframe{
 	margin: calc( -1 * var(--grid) );
 }
 
+oshorz[padded]{
+	padding-left: var(--grid);
+}
+
 oshorz{
-	display: block;
+	display: flex;
 	height: calc( var(--grid) / 2);
-	background: var( --black );
+	
 	width: 100%;
 	box-sizing: border-box;
-	padding: 0px var(--grid);
+	
 	text-align: left;
+	position: relative;
+}
 
+oshorz ossegment{
+	height: 100%;
+	flex-grow: 1;
+}
+
+oshorz ossegment:first-of-type{
+	width: calc( var(--grid) * 3 );
+	flex-grow: 0;
+	border-radius: 0px calc( var(--grid) / 4) calc( var(--grid) / 4) 0px;
+}
+
+oshorz ossegment:last-of-type{
+	width: calc( var(--grid) * 3 );
+	flex-grow: 0;
+	border-radius: calc( var(--grid) / 4) 0px 0px calc( var(--grid) / 4);
 }
 
 oshorz[size=thicc]{
 	height: var(--grid);
+
 }
 
 osh{

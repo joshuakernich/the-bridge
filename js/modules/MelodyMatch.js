@@ -29,7 +29,7 @@ window.MelodyMatch = function(){
 	const BEATS = 6;
 
 	const LEVELS = [
-		[-1,1,2,3,4,-1]
+		[-1,2,1,3,4,-1]
 	]
 	
 
@@ -66,7 +66,7 @@ window.MelodyMatch = function(){
 
 
 
-		$pcs[i].find('pitch-goal').css('height',LEVELS[0][i]/chart.length*100+'%');
+		$pcs[i].find('pitch-goal').css('height',LEVELS[0][i]/(chart.length-1)*100+'%');
 	}
 
 	let $svg = $(`<svg viewBox='0 0 100 100' preserveAspectRatio='none'>

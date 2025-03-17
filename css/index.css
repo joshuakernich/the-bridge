@@ -73,12 +73,16 @@ launchpadname{
 	display: block;
 	color: white;
 	text-transform: uppercase;
+	width: calc( var(--grid) * 4 );
+	overflow: hidden;
+	white-space: nowrap;
 }
 
 launchpadsim{
 	display: inline-block;
 	text-align: left;
 	margin: calc( var(--grid)/2 );
+	position: relative;
 
 }
 

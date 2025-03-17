@@ -73,13 +73,14 @@ window.LaunchpadInstance = function(n,callback){
 
 		map[y][x] = [r,g,b,a];
 
-		let id = 81-y*10+x;
+		/*let id = 81-y*10+x;
 		if(self.output) self.output.send([
 			240,0,32,41,2,isX?12:13,3,
 			3,id,r/2*a,g/2*a,b/2*a,
-			247]);
+			247]);*/
 
 		self.$el.find('[x="'+x+'"][y="'+y+'"]').css({'background':`rgba(${r},${g},${b},${a})`});
+		self.$el.attr('dirty','true');
 	}
 
 	function onLaunchpadSimulation(){
@@ -128,6 +129,24 @@ window.LaunchpadInstance = function(n,callback){
 	  }
 
 	 self.clear();
+	 
+	 self.commit = function(){
+	 	for(var x=0; x<8; x++){
+  			for(var y=0; y<8; y++){
+  				let cell = map[y][x];
+  				commitXYRGBA(x,y,cell[0],cell[1],cell[2],cell[3]);
+  			}
+  		}
+  		self.$el.attr('dirty','false');
+	 }
+
+	 function commitXYRGBA(x,y,r,g,b,a){
+	 	let id = 81-y*10+x;
+		if(self.output) self.output.send([
+			240,0,32,41,2,isX?12:13,3,
+			3,id,r/2*a,g/2*a,b/2*a,
+			247]);
+	 }
 }
 
 window.LaunchpadController = function(){
@@ -152,6 +171,7 @@ window.LaunchpadController = function(){
 		purple:[127, 0, 255],
 		pink:[255, 0, 127],
 		red:[255, 0, 127],
+		white:[255, 255, 255],
 		gray:[0, 0, 0],
 		off:[0, 0, 0],
 		'0':[0, 0, 0],
@@ -258,11 +278,13 @@ window.LaunchpadController = function(){
 
 
   self.setXY = function(n,x,y,colorName,alpha=1){
-  	console.log('setXY',n,x,y,colorName,alpha);
-  	console.log(colorName,RGB,RGB[colorName]);
   	if(x<0 || y<0 || x>=8 || y>=8) return;
   	let rgb = RGB[colorName];
   	launchpads[n].setXYRGBA(x,y,rgb[0],rgb[1],rgb[2],alpha);
+  }
+
+  self.commit = function(n){
+  	launchpads[n].commit();
   }
 
   /*self.set = function(coord,color){

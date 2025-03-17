@@ -522,6 +522,8 @@ window.PowerDiverter = function( nLaunchpad, nPuzzle, isFirePuzzle ){
 			self.$el.find('power-actor').off();
 			setTimeout(doCompleteLevel,700);
 		}
+
+		window.launchpad.commit( nLaunchpad );
 	}
 
 	
@@ -563,7 +565,9 @@ window.PowerDiverter = function( nLaunchpad, nPuzzle, isFirePuzzle ){
 		$svgMap.find('.active').removeClass('active powered');
 		
 		$svg.find('.laser').attr('d','');
+
 		window.launchpad.clear( nLaunchpad );
+		window.launchpad.commit( nLaunchpad );
 
 		model = undefined;
 	}

@@ -64,6 +64,11 @@ video{
   object-fit: cover;
 }
 
+launchpadsim[dirty="true"] launchpadname:after{
+	content: " *";
+	color: var(--red);
+}
+
 launchpadname{
 	display: block;
 	color: white;

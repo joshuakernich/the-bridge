@@ -16,7 +16,11 @@ window.OS = function(){
 		let self = this;
 		self.$el = $(`
 			<ospanel>
-				<osvert bg=${c}></osvert>		
+				<osvert>
+					<ossegment bg=${c}></ossegment>
+					<ossegment bg=${c} style="opacity:0.8; margin: var(--border) 0px var(--border)"></ossegment>
+					<ossegment bg=${c}></ossegment>
+				</osvert>		
 				<osmiddle>
 					<oshorz padded size=${label?'thicc':'thin'} bg=${c}>
 						${label?`<osh color=${c}>${label}</osh>`:``}
@@ -30,7 +34,11 @@ window.OS = function(){
 						<ossegment bg=${c}></ossegment>
 					</oshorz>
 				</osmiddle>	
-				<osvert bg=${c}></osvert>			
+				<osvert>
+					<ossegment bg=${c}></ossegment>
+					<ossegment bg=${c} style="opacity:0.8; margin: var(--border) 0px var(--border)"></ossegment>
+					<ossegment bg=${c}></ossegment>
+				</osvert>			
 			</ospanel>
 		`);
 

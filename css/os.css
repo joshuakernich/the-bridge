@@ -106,8 +106,10 @@ ospanel{
 }
 
 osvert{
-	background: var( --black );
+	display: flex;
+	flex-direction: column;
 	width: var( --grid );
+	overflow: hidden;
 }
 
 osvert:first-of-type{
@@ -161,6 +163,11 @@ oshorz{
 	
 	text-align: left;
 	position: relative;
+}
+
+osvert ossegment{
+	width: 100%;
+	flex-grow: 1;
 }
 
 oshorz ossegment{

@@ -15,7 +15,7 @@ window.Rubix = function( nLaunchpad, nPuzzle ){
 	let map = [];
 
 	let grid = 3 + (nPuzzle)%4; 
-	console.log('Rubix grid',grid);
+	
 	for(var y=0; y<grid+1; y++){
 		let $r = $('<row>').appendTo(self.$el);
 		if(y>0) map[y-1] = [];
@@ -50,12 +50,15 @@ window.Rubix = function( nLaunchpad, nPuzzle ){
 			}
 		}
 
+		launchpad.commit(nLaunchpad);
+
 		if(bx || by){
 			isComplete = true;
 			setTimeout(function(){
 				audio.play('correct');
 				self.callbackComplete();
 				launchpad.clear(nLaunchpad);
+				launchpad.commit(nLaunchpad);
 			},750);
 		}
 	}

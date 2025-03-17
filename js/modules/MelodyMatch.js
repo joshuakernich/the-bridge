@@ -1,4 +1,4 @@
-window.MelodyMatch = function(){
+window.MelodyMatch = function( nLaunchpad, nPuzzle ){
 
 	const OCTAVE = ['A','A#','B','C','C#','D','D#','E','F','F#','G','G#'];
 	const LOW = 'C4';
@@ -51,12 +51,14 @@ window.MelodyMatch = function(){
 	const BEATS = 6;
 
 	const LEVELS = [
-		[-1,2,1,3,4,-1]
+		[-1,1,2,2,1,-1],
+		[-1,1,2,3,4,-1],
+		[-1,2,1,3,4,-1],
 	]
 	
 
 	self.$el = $('<melodymatch>');
-	let iLevel = 0;
+	let iLevel = nPuzzle%LEVELS.length;
 	let level = LEVELS[iLevel];
 	let $pcs = [];
 	for(var i=0; i<BEATS; i++){
@@ -84,10 +86,13 @@ window.MelodyMatch = function(){
 	let meter;
 	let waveform;
 
+	let nBeat = -2;
 	let nBeatWas = -1;
 	let nPulse = 0;
 	let history = [];
+	let corrects = [];
 	let pulses = [];
+	let isGameComplete = false;
 
 	while(history.length<BEATS) history.push(0);
 	while(pulses.length<BEATS*FPS) pulses.push(0);
@@ -97,9 +102,11 @@ window.MelodyMatch = function(){
 
 	function pulse(){
 
+		
+
 		nPulse++;
 
-		let nBeat = Math.floor( nPulse/FPS ) % history.length;
+		nBeat = Math.floor( nPulse/FPS ) % history.length;
 
 		if(nBeat != nBeatWas){ //changed beat
 			
@@ -107,6 +114,7 @@ window.MelodyMatch = function(){
 
 			//check to see if we finished in the right place
 			if(nBeatWas>-1 && history[nBeatWas] == level[nBeatWas]){
+				corrects[nBeat] = true;
 				let amt = level[nBeatWas]/RANGE;
 				$pcs[nBeatWas].find('pitch-fill').css({ height:amt*100+'%' }).attr('bg','yellow');
 				
@@ -117,23 +125,33 @@ window.MelodyMatch = function(){
 				//reset
 				for( var h in history){
 					history[h] = -1;
+					corrects[h] = false;
 					self.$el.find('pitch-fill').css('height',0);
 				}
 			} else if( nBeat == BEATS-1){
 				//cycle complete. test complete.
 
-				let isComplete = true;
+				isGameComplete = true;
 				for( var h in history){
-					if(level[h] != -1 && history[h] != level[h]) isComplete = false;
+					if(level[h] != -1 && history[h] != level[h]) isGameComplete = false;
 				}
-				self.$el.find('pitch-fill').attr('bg',isComplete?'green':'red');
 
-				if(isComplete){
+
+				self.$el.find('pitch-fill').attr('bg',isGameComplete?'green':'red');
+
+				if(isGameComplete){
 					audio.play('correct',true);
 					self.$el.find('pitch-fill').first().css('height',0);
 					self.$el.find('pitch-fill').last().css('height',0);
 					self.turnOnOff(false);
-					if( self.callbackComplete ) self.callbackComplete();
+
+					setTimeout(function(){
+						window.launchpad.clear( nLaunchpad );
+						window.launchpad.commit( nLaunchpad );
+						if( self.callbackComplete ) self.callbackComplete();
+					},500)
+
+					
 				} else {
 					
 				}
@@ -160,11 +178,49 @@ window.MelodyMatch = function(){
 		if(bCorrect) nNote = nNoteRound = level[nBeat];
 
 		history[nBeat] = nNoteRound;
+		corrects[nBeat] = bCorrect;
 		let amt = nNote/RANGE;
 		$pcs[nBeat].find('pitch-fill').css({ height:amt*100+'%' }).attr('bg',bCorrect?'yellow':'blue');
 
 		
+		redrawLaunchpad();
+	}
 
+	function redrawLaunchpad(){
+
+		// code here is a bit janky because of the double thickness grid
+		// but I'm at peace with that
+
+		window.launchpad.clear( nLaunchpad );
+
+		if( nBeat > 0 && nBeat < 5 ){
+			for(var y=0; y<8; y++){
+				let yTarget = level[nBeat];
+				window.launchpad.setXY( nLaunchpad, (nBeat-1)*2, y, 'white', 0.5);
+				window.launchpad.setXY( nLaunchpad, (nBeat-1)*2 + 1, y, 'white', 0.5);
+			}
+		}
+
+		for( var iBeat=1; iBeat<BEATS-1; iBeat++ ){
+			let x = (iBeat-1)*2;
+			let isBeatCorrect = corrects[iBeat];
+			let yHeight = history[iBeat]*2;
+			for(var iHeight=0; iHeight<yHeight; iHeight++){
+				let y = (8-iHeight-1);
+
+				let color = isBeatCorrect?'yellow':'blue';
+				if(nBeat==5) color = isGameComplete?'green':'red';
+
+				window.launchpad.setXY( nLaunchpad, x, y, color, 1);
+				window.launchpad.setXY( nLaunchpad, x + 1, y, color, 1);
+			}
+
+			let yTarget = (8-level[iBeat]*2);
+			window.launchpad.setXY( nLaunchpad, x, yTarget, 'white', 1);
+			window.launchpad.setXY( nLaunchpad, x + 1, yTarget, 'white', 1);
+		}
+
+		window.launchpad.commit( nLaunchpad );
 	}
 
 	let interval;

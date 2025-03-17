@@ -93,6 +93,8 @@ window.Unscramble = function( nLaunchpad ){
 		group = level.pattern.split(' ');
 		for(let n=0; n<messageTarget[0].length/level.patternWidth; n++) randomScramble(n*level.patternWidth,0);
 
+
+		launchpad.commit(nLaunchpad);
 		//$('<verify>').appendTo(self.$el).text('VERIFY').click(validate);
 	}
 	doLevel();
@@ -147,6 +149,7 @@ window.Unscramble = function( nLaunchpad ){
 
 			setTimeout(function(){
 				launchpad.clear( nLaunchpad );
+				launchpad.commit(nLaunchpad);
 				self.callbackComplete();
 			},2500)
 		}
@@ -204,6 +207,7 @@ window.Unscramble = function( nLaunchpad ){
 				launchpad.setXY(nLaunchpad, x,y,color,isBlank?0.1:1);
 			}
 		}
+		launchpad.commit(nLaunchpad);
 	}
 
 	self.triggerXY = function(x,y){

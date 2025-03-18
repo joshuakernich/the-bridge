@@ -49,6 +49,9 @@ window.LaunchpadInstance = function(n,callback){
        	else output.send([240,0,32,41,2,13,14,1,247]);
 
        	$name.text(output.name);
+
+       	self.clear();
+       	self.commit();
 	}
 
 	self.setInput = function(input){

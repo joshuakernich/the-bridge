@@ -48,27 +48,45 @@ window.HASocket = function(){
 	 		})
 
 	 		self.send({
-	 			"id": 200,
+	 			"id": 110,
 	 			"type": "subscribe_events",
 	 			"event_type": "warn_fire"
 	 		})
 
 	 		self.send({
-	 			"id": 300,
+	 			"id": 120,
 	 			"type": "subscribe_events",
 	 			"event_type": "warn_fragment"
 	 		})
 
 	 		self.send({
-	 			"id": 400,
+	 			"id": 130,
 	 			"type": "subscribe_events",
 	 			"event_type": "warn_encrypt"
 	 		})
 
 	 		self.send({
-	 			"id": 500,
+	 			"id": 140,
+	 			"type": "subscribe_events",
+	 			"event_type": "warn_whale"
+	 		})
+
+	 		self.send({
+	 			"id": 150,
 	 			"type": "subscribe_events",
 	 			"event_type": "reset"
+	 		})
+
+	 		self.send({
+	 			"id": 160,
+	 			"type": "subscribe_events",
+	 			"event_type": "init"
+	 		})
+
+	 		self.send({
+	 			"id": 170,
+	 			"type": "subscribe_events",
+	 			"event_type": "msg"
 	 		})
 
 	 		/*self.send({

@@ -244,6 +244,7 @@ window.OS = function(){
 
 	$('<button>RESET EVERYTHING</button>').appendTo($debug).click(reset);
 	$('<button>INITIALIZE</button>').appendTo($debug).click(init);
+	$('<button>DO SENTENCE</button>').appendTo($debug).click(doSentence);
 
 	$('<button>INITIATE TRANSMISSION</button>').appendTo($debug).click(function(){
 		let panel = new OSPanel('blue', 'INCOMING TRANSMISSION');
@@ -277,6 +278,7 @@ window.OS = function(){
 
 	window.socket.on('reset', reset );
 	window.socket.on('init', init );
+	window.socket.on('msg', msg );
 	window.socket.on('warn_circuit', doCircuitDamage );
 	window.socket.on('warn_fire', doPlasmaFire );
 	window.socket.on('warn_fragment', doDataFrag );
@@ -289,6 +291,32 @@ window.OS = function(){
 
 	function init(){
 		if( !window.meter ) window.setupTone();
+	}
+
+	function msg(e){
+		let txt = e.text;
+		let arr = txt.split(' ');
+
+		console.log(arr);
+
+		let $msg = $('<osmsg>').appendTo($center);
+
+		for(var n=0; n<arr.length; n++){
+			$('<osmsgword>').text(arr[n]).appendTo($msg)
+			.css({opacity:0,top:50})
+			.delay(n*250)
+			.animate({opacity:1,top:0})
+			.delay(3000)
+			.animate({opacity:0,top:-50});
+		}
+
+		setTimeout(function(){
+			$msg.remove();
+		}, 4000 + n*250);
+	}
+
+	function doSentence(){
+		msg({text:'Song friend home burned. Metal friend flee metal hunter.'})
 	}
 
 	function doCircuitDamage(){

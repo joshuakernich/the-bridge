@@ -9,6 +9,22 @@ toyframe{
 	box-sizing: border-box;
 }
 
+osmsg{
+	display: block;
+	padding:  calc( var(--grid)*5 ) var(--grid);
+	color: white;
+	z-index: 100;
+	text-align: center;
+}
+
+osmsgword{
+	display: inline-block;
+	position: relative;
+	color: white;
+	margin: 0px 5px;
+	text-transform: uppercase;
+}
+
 toycorner{
 	width: calc( var(--grid) * 1.5 );
 	height: calc( var(--grid) * 1.5 );

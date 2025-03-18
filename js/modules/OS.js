@@ -18,6 +18,8 @@ window.OS = function(){
 		});
 	}
 
+	window.setupTone();
+
 	const GRID = 40;
 	const WIDTH = 4000;
 

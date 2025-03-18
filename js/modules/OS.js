@@ -143,14 +143,20 @@ window.OS = function(){
 		for(var b in boxes) if(!boxes[b]) doNextQueue();
 	}
 
+	function getOpenSlot(){
+		for(var b=0; b<boxes.length; b++) if(!boxes[b]) return b;
+		return -1;
+	}
+
 	function doNextQueue(){
 
 		if(!queue.length) return;
 
 		let tiedTo = queue.shift();
 
-		let n = -1;
-		for(var b=0; b<boxes.length; b++) if(!boxes[b]) n = b;
+		let n = getOpenSlot();
+		
+		console.log(n);
 
 		let box = new OSBox( n, tiedTo.type, tiedTo.color, tiedTo.name, tiedTo.toy, tiedTo.params );
 		box.$el.css({bottom:-800}).animate({bottom:GRID});

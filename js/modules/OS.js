@@ -2,6 +2,26 @@
 
 window.OS = function(){
 
+	async function setupTone(){
+		await Tone.start()
+
+		window.meter = new Tone.Meter();
+		window.mic = new Tone.UserMedia().connect(meter);
+		window.sampleRate = Tone.getContext().sampleRate;
+		window.waveform = new Tone.Waveform();
+		
+		mic.open().then(() => {
+			console.log("mic open");
+			window.mic.connect(meter).connect(waveform);
+		}).catch(e => {
+			console.log("mic not open",e);
+		});
+
+		$(document).off( 'click', setupTone );
+	}
+	
+	$(document).on( 'click', setupTone );
+
 	const GRID = 40;
 	const WIDTH = 4000;
 

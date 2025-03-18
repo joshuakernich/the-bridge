@@ -207,19 +207,10 @@ window.LaunchpadController = function(){
         reviseMidi();
 	}
 
-	function getNforID(id){
-		
-		
+	
+	function reviseMidi(e) {
 
-		for(var l=0; l<launchpads.length; l++) if(launchpads[l].id == id) return l;
-		for(var l=0; l<launchpads.length; l++) if(launchpads[l].id == undefined) return l;
-
-		console.error("The launchpad controller is full. This probably shouldn't happen.");
-
-		return 0;
-	}
-
-	function reviseMidi() {
+		console.log('reviseMidi',e);
 		
 		//TODO check if something has been removed
 
@@ -227,17 +218,22 @@ window.LaunchpadController = function(){
 		let nInput = 0;
 
 		for (var output of midiAccess.outputs.values()){
+
 			if(output.name.includes("LP") && output.name.includes("MIDI")){
 				launchpads[nOutput%launchpads.length].setOutput(output);
 				nOutput++;
+
+				console.log('output',output.name, output.id);
 			}
 		}
 
         for (var input of midiAccess.inputs.values()){
-
+        	
 			if(input.name.includes("LP") && input.name.includes("MIDI")){
 				launchpads[nInput%launchpads.length].setInput(input);
 				nInput++;
+
+				console.log('input',input.name, input.id);
 			}
         }
 

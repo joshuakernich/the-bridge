@@ -23,24 +23,7 @@ window.MelodyMatch = function( nLaunchpad, nPuzzle ){
 	audio.add('powerup','./audio/sfx-powerup.mp3', 1);
 	audio.add('good','./audio/sfx-good.mp3', 1);
 
-	async function setupTone(){
-		await Tone.start()
-
-		let meter = new Tone.Meter();
-		window.mic = new Tone.UserMedia().connect(meter);
-
-		mic.open().then(() => {
-			console.log("mic open");
-			self.turnOnOff(true);
-			
-		}).catch(e => {
-			console.log("mic not open",e);
-		});
-
-
-	}
 	
-	setupTone();
 
 
 	const FPS = 20;
@@ -82,9 +65,7 @@ window.MelodyMatch = function( nLaunchpad, nPuzzle ){
 		</toyframe>`).appendTo(self.$el);
 
 
-	let sampleRate;
-	let meter;
-	let waveform;
+	
 
 	let nBeat = -2;
 	let nBeatWas = -1;
@@ -166,8 +147,8 @@ window.MelodyMatch = function( nLaunchpad, nPuzzle ){
 		}
 
 
-		let wave = waveform.getValue();
-		let freq = yin(wave,sampleRate);
+		let wave = window.waveform.getValue();
+		let freq = yin(wave,window.sampleRate);
 		
 		let nNoteFromA0 = 12 * Math.log2(freq / 440) + 69;
 		let nNote = (nNoteFromA0 - iLow)/INTERVAL;
@@ -226,18 +207,14 @@ window.MelodyMatch = function( nLaunchpad, nPuzzle ){
 	let interval;
 	self.turnOnOff = function(b){
 
-		if(b && !meter)
-			sampleRate = Tone.getContext().sampleRate;
-			meter = new Tone.Meter();
-			waveform = new Tone.Waveform();
+
 		if(b){
-			window.mic.connect(meter).connect(waveform);
 			interval = setInterval(pulse, 1000/FPS);
 		} else {
 			clearInterval(interval);
 		}
 	}
 
-	
+	self.turnOnOff(true);
 	
 }

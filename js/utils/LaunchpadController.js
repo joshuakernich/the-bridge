@@ -18,7 +18,7 @@ window.LaunchpadInstance = function(n,callback){
 
 	let self = this;
 	self.id = undefined;
-	
+	self.input = self.output = undefined;
 
 	let map = [];
 	let isX = false;
@@ -35,6 +35,12 @@ window.LaunchpadInstance = function(n,callback){
 			map[i][j] = 0;
 			let $td = $('<td>').appendTo($tr).attr('x',j).attr('y',i).click(onLaunchpadSimulation);
 		}
+	}
+
+	self.reset = function(){
+		if(self.input) self.input.onmidimessage = undefined;
+		self.input = self.output = undefined;
+		$name.text('no launchpad');
 	}
 
 	self.setOutput = function(output){
@@ -214,6 +220,8 @@ window.LaunchpadController = function(){
 	function reviseMidi(e) {
 
 		console.log('reviseMidi',e);
+
+		for(var l in launchpads) launchpads[l].reset();
 		
 		//TODO check if something has been removed
 

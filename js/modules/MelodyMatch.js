@@ -1,25 +1,9 @@
 window.MelodyMatch = function( nLaunchpad, nPuzzle ){
 
 
-	async function setupTone(){
-		await Tone.start()
-
-		window.meter = new Tone.Meter();
-		window.mic = new Tone.UserMedia().connect(meter);
-		window.sampleRate = Tone.getContext().sampleRate;
-		window.waveform = new Tone.Waveform();
-		
-		mic.open().then(() => {
-			console.log("mic open");
-			window.mic.connect(meter).connect(waveform);
-		}).catch(e => {
-			console.log("mic not open",e);
-		});
-
-		
-	}
 	
-	if( !window.meter ) setupTone();
+	
+	
 
 	const OCTAVE = ['A','A#','B','C','C#','D','D#','E','F','F#','G','G#'];
 	const LOW = 'C4';

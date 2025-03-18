@@ -2,7 +2,21 @@
 
 window.OS = function(){
 
-	
+	window.setupTone = async function(){
+		await Tone.start()
+
+		window.meter = new Tone.Meter();
+		window.mic = new Tone.UserMedia().connect(meter);
+		window.sampleRate = Tone.getContext().sampleRate;
+		window.waveform = new Tone.Waveform();
+		
+		mic.open().then(() => {
+			console.log("mic open");
+			window.mic.connect(meter).connect(waveform);
+		}).catch(e => {
+			console.log("mic not open",e);
+		});
+	}
 
 	const GRID = 40;
 	const WIDTH = 4000;
@@ -229,6 +243,7 @@ window.OS = function(){
 
 
 	$('<button>RESET EVERYTHING</button>').appendTo($debug).click(reset);
+	$('<button>INITIALIZE</button>').appendTo($debug).click(init);
 
 	$('<button>INITIATE TRANSMISSION</button>').appendTo($debug).click(function(){
 		let panel = new OSPanel('blue', 'INCOMING TRANSMISSION');
@@ -261,6 +276,7 @@ window.OS = function(){
 	$('<button>WHALE SONG</button>').appendTo($debug).click(doMelodyMatch);
 
 	window.socket.on('reset', reset );
+	window.socket.on('init', init );
 	window.socket.on('warn_circuit', doCircuitDamage );
 	window.socket.on('warn_fire', doPlasmaFire );
 	window.socket.on('warn_fragment', doDataFrag );
@@ -269,6 +285,10 @@ window.OS = function(){
 	
 	function reset(){
 		window.location = window.location;
+	}
+
+	function init(){
+		if( !window.meter ) window.setupTone();
 	}
 
 	function doCircuitDamage(){

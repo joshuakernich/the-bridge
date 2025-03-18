@@ -336,7 +336,7 @@ window.OS = function(){
 	}
 
 	function doMelodyMatch(){
-		doDamage('PHONIC<br>TRANSMISSION', { type:'echo', color:'blue', name:'PHONICULATOR', toy:MelodyMatch, params:[N.melody++] } );
+		doDamage('PHONIC<br>TRANSMISSION', { type:'whale', color:'blue', name:'PHONICULATOR', toy:MelodyMatch, params:[N.melody++] } );
 	}
 
 	window.launchpad.listen(function(n,x,y,b){

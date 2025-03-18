@@ -1,10 +1,5 @@
 window.MelodyMatch = function( nLaunchpad, nPuzzle ){
 
-
-	
-	
-	
-
 	const OCTAVE = ['A','A#','B','C','C#','D','D#','E','F','F#','G','G#'];
 	const LOW = 'C4';
 	const RANGE = 4;	// how many notes are we supporting
@@ -27,8 +22,6 @@ window.MelodyMatch = function( nLaunchpad, nPuzzle ){
 	audio.add('correct','./audio/sfx-correct.mp3');
 	audio.add('powerup','./audio/sfx-powerup.mp3', 1);
 	audio.add('good','./audio/sfx-good.mp3', 1);
-
-	
 
 
 	const FPS = 20;

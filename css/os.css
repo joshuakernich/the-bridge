@@ -11,10 +11,11 @@ toyframe{
 
 osmsg{
 	display: block;
-	padding:  calc( var(--grid)*5 ) var(--grid);
+	padding:  calc( var(--grid)*8 ) var(--grid);
 	color: white;
 	z-index: 100;
 	text-align: center;
+	font-size: var(--grid);
 }
 
 osmsgword{

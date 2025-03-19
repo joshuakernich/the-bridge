@@ -92,10 +92,8 @@ window.OS = function(){
 	frame.$el.appendTo($bg).css({position:'absolute', top:'0px', left:'0px', right:'0px', bottom: '0px', margin:GRID });
 	
 	
-	let $debug = $('<div>').appendTo("body");
-	$debug.css({
-		'z-index':'1',
-	});
+	let $debug = $('<debug>').appendTo("body");
+	
 
 	window.launchpad.$el.appendTo($debug);
 
@@ -288,8 +286,6 @@ window.OS = function(){
 	addToy( 'fragment', 'DATA<br>FRAGMENTATION', 'DEFRAGGLETISER', Rubix, 'blue' );
 	addToy( 'whale', 'PHONIC<br>TRANSMISSION', 'PHONICULATOR', MelodyMatch, 'blue' );
 
-
-
 	function doTransmission(){
 		let panel = new OSPanel('blue', 'INCOMING TRANSMISSION');
 		panel.$el.appendTo($center);
@@ -311,23 +307,6 @@ window.OS = function(){
 		setTimeout( function(){ showChapter(2,'THE WORMHOLE'); }, 1000 );
 	})*/
 
-	
-
-	
-	/*$('<button>CIRCUIT DAMAGE</button>').appendTo($debug).click(doCircuitDamage);
-	$('<button>PLASMA FIRE</button>').appendTo($debug).click(doPlasmaFire);
-	$('<button>DATA FRAGMENTATION</button>').appendTo($debug).click(doDataFrag);
-	$('<button>ENCRYPTED TRANSMISSION</button>').appendTo($debug).click(doEncryptedTransmission);
-	$('<button>WHALE SONG</button>').appendTo($debug).click(doMelodyMatch);
-
-	window.socket.on('reset', reset );
-	window.socket.on('init', init );
-	window.socket.on('msg', msg );
-	window.socket.on('warn_circuit', doCircuitDamage );
-	window.socket.on('warn_fire', doPlasmaFire );
-	window.socket.on('warn_fragment', doDataFrag );
-	window.socket.on('warn_encrypt', doEncryptedTransmission );
-	window.socket.on('warn_whale', doMelodyMatch );*/
 	
 	function reset(){
 		window.location = window.location;
@@ -360,26 +339,6 @@ window.OS = function(){
 	function doSentence(){
 		msg({text:'Song friend home burned. Metal friend flee metal hunter.'})
 	}
-
-	/*function doCircuitDamage(){
-		doDamage('CIRCUIT<br>DAMAGE', { type:'circuit', color:'yellow', name:'POWER DIVERTER', toy:PowerDiverter, params:[N.circuit++] } );
-	}
-
-	function doPlasmaFire(){
-		doDamage('PLASMA<br>FIRE', { type:'fire', color:'pink', name:'FIRE SUPRESSION', toy:PowerDiverter, params:[N.fire++, true] } );
-	}
-
-	function doDataFrag(){
-		doDamage('DATA<br>FRAGMENTATION', { type:'fragment', color:'blue', name:'DEFRAGGLETISER', toy:Rubix, params:[N.defrag++] } );
-	}
-
-	function doEncryptedTransmission(){
-		doDamage('ENCRYPTED<br>TRANSMISSION', { type:'encrypt', color:'blue', name:'UNCRYPTONATOR', toy:Unscramble, params:[N.decrypt++] } );
-	}
-
-	function doMelodyMatch(){
-		doDamage('PHONIC<br>TRANSMISSION', { type:'whale', color:'blue', name:'PHONICULATOR', toy:MelodyMatch, params:[N.melody++] } );
-	}*/
 
 	window.launchpad.listen(function(n,x,y,b){
 

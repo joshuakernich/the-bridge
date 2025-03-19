@@ -1,3 +1,9 @@
+debug{
+	position: fixed;
+	display: block;
+	margin: calc( var(--grid)*2 ) calc( var(--grid)*5 );
+}
+
 toyframe{
 	display: block;
 	position: absolute;

@@ -1,4 +1,4 @@
-window.Unscramble = function( nLaunchpad ){
+window.Unscramble = function( nLaunchpad, callbackComplete ){
 
 	const self = this;
 	self.$el = $('<unscramble>');
@@ -138,20 +138,20 @@ window.Unscramble = function( nLaunchpad ){
 			self.isComplete = true;
 			repaintLaunchpad();
 
-			setTimeout(function(){
+			/*setTimeout(function(){
 				let v = synth.getVoices();
 				 const utterThis = new SpeechSynthesisUtterance(level.message);
 				 utterThis.voice = v[0];
 				 utterThis.rate = 0.5;
 				 synth.speak(utterThis);
-			},1000)
+			},1000)*/
 			
 
 			setTimeout(function(){
 				launchpad.clear( nLaunchpad );
 				launchpad.commit(nLaunchpad);
-				self.callbackComplete();
-			},2500)
+				callbackComplete();
+			},2000)
 		}
 
 		

@@ -1,4 +1,6 @@
-window.MelodyMatch = function( nLaunchpad, nPuzzle ){
+window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
+
+	if( !window.meter ) window.setupTone();
 
 	const OCTAVE = ['A','A#','B','C','C#','D','D#','E','F','F#','G','G#'];
 	const LOW = 'C4';
@@ -127,7 +129,7 @@ window.MelodyMatch = function( nLaunchpad, nPuzzle ){
 					setTimeout(function(){
 						window.launchpad.clear( nLaunchpad );
 						window.launchpad.commit( nLaunchpad );
-						if( self.callbackComplete ) self.callbackComplete();
+						if( callbackComplete ) callbackComplete();
 					},500)
 
 					

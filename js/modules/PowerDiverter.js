@@ -319,7 +319,7 @@
 	
 }
 
-window.PowerDiverter = function( nLaunchpad, nPuzzle, isFirePuzzle ){
+window.PowerDiverter = function( nLaunchpad, callbackComplete, nPuzzle, isFirePuzzle ){
 
 	let puzzle = isFirePuzzle?
 	FireSuppressionPuzzles[nPuzzle%FireSuppressionPuzzles.length]:
@@ -545,7 +545,7 @@ window.PowerDiverter = function( nLaunchpad, nPuzzle, isFirePuzzle ){
 		dumpLevel();
 		self.turnOnOff(false);
 
-		if( self.callbackComplete ) self.callbackComplete();
+		if( callbackComplete ) callbackComplete();
 	}
 
 	function dumpLevel(){

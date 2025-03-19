@@ -1,4 +1,4 @@
-window.Rubix = function( nLaunchpad, nPuzzle ){
+window.Rubix = function( nLaunchpad, callbackComplete, nPuzzle ){
 
 	const audio = new AudioContext();
 	audio.add('blip','./audio/sfx-blip.mp3');
@@ -56,7 +56,7 @@ window.Rubix = function( nLaunchpad, nPuzzle ){
 			isComplete = true;
 			setTimeout(function(){
 				audio.play('correct');
-				self.callbackComplete();
+				callbackComplete();
 				launchpad.clear(nLaunchpad);
 				launchpad.commit(nLaunchpad);
 			},750);

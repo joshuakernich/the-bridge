@@ -1,6 +1,7 @@
 window.HASocket = function(){
 
 	let self = this;
+	self.ready = false;
 	let listeners = {};
 
 	const URL = 'http://starcrew.local:8123/api/websocket';
@@ -40,8 +41,12 @@ window.HASocket = function(){
 	 	}
 
 	 	if(data.type=='auth_ok'){
+
+	 		self.ready = true;
+	 		doPendingSubscriptions();
+
 	 		//console.log('SOCKET GOOD! away we go');
-	 		self.send({
+	 		/*self.send({
 	 			"id": 100,
 	 			"type": "subscribe_events",
 	 			"event_type": "warn_circuit"
@@ -87,7 +92,7 @@ window.HASocket = function(){
 	 			"id": 170,
 	 			"type": "subscribe_events",
 	 			"event_type": "msg"
-	 		})
+	 		})*/
 
 	 		/*self.send({
 	 			"id": 200,
@@ -113,16 +118,38 @@ window.HASocket = function(){
 	 	}
 	};
 
+	let subscriptions = {};
+	let pendingSubscriptions = [];
+	let id = 100;
+	self.listen = function(type){
+		subscriptions[type] = true;
+		pendingSubscriptions.push(type);
+		doPendingSubscriptions();
+	}
+
+	function doPendingSubscriptions(){
+		while(self.ready && pendingSubscriptions.length){
+			let type = pendingSubscriptions.shift();
+			id += 10;
+			self.send({
+	 			"id": id,
+	 			"type": "subscribe_events",
+	 			"event_type": type,
+	 		})
+		}
+		
+	}
+
 	self.send = function(msg){
-
-		console.log(msg);
-
 		msg = JSON.stringify(msg);
 		console.log("SEND",msg);
 		if(s.send) s.send(msg);
 	}
 
 	self.on = function(type,fn){
+
+		if(!subscriptions[type]) self.listen(type);
+
 		if( !listeners[type] ) listeners[type] = [];
 		listeners[type].push(fn);
 	}

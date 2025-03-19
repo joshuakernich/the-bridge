@@ -216,13 +216,13 @@ window.OS = function(){
 		//janky way of passing params
 		if(!params) params = [];
 
-		let instance = new toy(nBox,params[0],params[1],params[2]);
-		instance.$el.appendTo(self.$toy);
-
-		instance.callbackComplete = function(){
+		let instance = new toy(nBox,function(){
 			sendEvent(n++,'fix_'+type);
 			onCompleteBox(nBox);
-		}
+		},params[0],params[1],params[2]);
+		instance.$el.appendTo(self.$toy);
+
+		
 
 		self.instance = instance;
 	}
@@ -236,7 +236,6 @@ window.OS = function(){
 		});
 	}
 
-	
 	setInterval(function(){
 
 		let w = $('body').width();
@@ -249,21 +248,58 @@ window.OS = function(){
 	
 	},1000);
 
+	//for iterating puzzles
+	let N = {};
 
-	$('<button>RESET EVERYTHING</button>').appendTo($debug).click(reset);
-	$('<button>INITIALIZE</button>').appendTo($debug).click(init);
-	$('<button>DO SENTENCE</button>').appendTo($debug).click(doSentence);
+	function addDebug( type, fn ){
+		$(`<button>${type}</button>`).appendTo($debug).click(fn);
+		window.socket.on( type, fn );
+	}
 
-	$('<button>INITIATE TRANSMISSION</button>').appendTo($debug).click(function(){
+	function addToy( type, nameIssue, nameResolution, typeToy, color ){
+		N[type] = 0;
+		//iterate severity on click
+		$(`<button>warn_${type}</button>`).appendTo($debug).click(function(){
+			doDamage(nameIssue, { 
+				type:type, 
+				color:color, 
+				name:nameResolution, 
+				toy:typeToy, 
+				params:[N[type]++] } );
+		});
+		//otherwise capture severity from message
+		window.socket.on( 'warn_'+type, function(e){
+			doDamage(nameIssue, { 
+				type:type, 
+				color:color, 
+				name:nameResolution, 
+				toy:typeToy, 
+				params:[e.severity] } );
+		} );
+	}
+
+	addDebug( 'reset', reset );
+	addDebug( 'init', init );
+	addDebug( 'msg', doSentence );
+	addDebug( 'trans', doTransmission );
+
+	addToy( 'circuit', 'CIRCUIT<br>DAMAGE', 'POWER DIVERTER', PowerDiverter, 'yellow' );
+	addToy( 'fire', 'PLASMA<br>FIRE', 'FIRE SUPRESSION', FireSuppression, 'pink' );
+	addToy( 'fragment', 'DATA<br>FRAGMENTATION', 'DEFRAGGLETISER', Rubix, 'blue' );
+	addToy( 'whale', 'PHONIC<br>TRANSMISSION', 'PHONICULATOR', MelodyMatch, 'blue' );
+
+
+
+	function doTransmission(){
 		let panel = new OSPanel('blue', 'INCOMING TRANSMISSION');
 		panel.$el.appendTo($center);
 		panel.$el.css({margin:GRID});
 		$('<video src="./video/klingon.mp4" autoplay/>').appendTo(panel.$inner)[0].addEventListener('ended',function(){
 			panel.$el.remove();
 		},false);
-	});
+	};
 	
-	$('<button>INITIATE WORMHOLE</button>').appendTo($debug).click(function(){
+	/*$('<button>INITIATE WORMHOLE</button>').appendTo($debug).click(function(){
 		
 		audio.add('music','./audio/music-wormhole.mp3',0.5,true);
 
@@ -273,12 +309,12 @@ window.OS = function(){
 
 		setTimeout( function(){ audio.play('music') } );
 		setTimeout( function(){ showChapter(2,'THE WORMHOLE'); }, 1000 );
-	})
-
-	let N = {circuit:0,fire:0,defrag:0,decrypt:0,melody:0};
+	})*/
 
 	
-	$('<button>CIRCUIT DAMAGE</button>').appendTo($debug).click(doCircuitDamage);
+
+	
+	/*$('<button>CIRCUIT DAMAGE</button>').appendTo($debug).click(doCircuitDamage);
 	$('<button>PLASMA FIRE</button>').appendTo($debug).click(doPlasmaFire);
 	$('<button>DATA FRAGMENTATION</button>').appendTo($debug).click(doDataFrag);
 	$('<button>ENCRYPTED TRANSMISSION</button>').appendTo($debug).click(doEncryptedTransmission);
@@ -291,7 +327,7 @@ window.OS = function(){
 	window.socket.on('warn_fire', doPlasmaFire );
 	window.socket.on('warn_fragment', doDataFrag );
 	window.socket.on('warn_encrypt', doEncryptedTransmission );
-	window.socket.on('warn_whale', doMelodyMatch );
+	window.socket.on('warn_whale', doMelodyMatch );*/
 	
 	function reset(){
 		window.location = window.location;
@@ -304,8 +340,6 @@ window.OS = function(){
 	function msg(e){
 		let txt = e.text;
 		let arr = txt.split(' ');
-
-		console.log(arr);
 
 		let $msg = $('<osmsg>').appendTo($center);
 
@@ -327,7 +361,7 @@ window.OS = function(){
 		msg({text:'Song friend home burned. Metal friend flee metal hunter.'})
 	}
 
-	function doCircuitDamage(){
+	/*function doCircuitDamage(){
 		doDamage('CIRCUIT<br>DAMAGE', { type:'circuit', color:'yellow', name:'POWER DIVERTER', toy:PowerDiverter, params:[N.circuit++] } );
 	}
 
@@ -345,7 +379,7 @@ window.OS = function(){
 
 	function doMelodyMatch(){
 		doDamage('PHONIC<br>TRANSMISSION', { type:'whale', color:'blue', name:'PHONICULATOR', toy:MelodyMatch, params:[N.melody++] } );
-	}
+	}*/
 
 	window.launchpad.listen(function(n,x,y,b){
 

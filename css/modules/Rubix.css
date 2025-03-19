@@ -20,5 +20,20 @@ rubix cell{
 	line-height: var(--grid);
 	font-size: calc( var(--grid) * 0.8 );
 	font-weight: bold;
+	background-size: 90%;
+	background-position: center;
+	background-repeat: no-repeat;
+}
 
+rubix cell[type='reset']{
+	background-image: url('../../img/icon/icon-rotate-ccw.svg');
+	background-size: 70%;
+}
+
+rubix cell[type='arrow']{
+	background-image: url('../../img/icon/icon-arrow-down.svg');
+}
+
+rubix cell[type='arrow'][x='-1']{
+	transform: rotate(-90deg);
 }

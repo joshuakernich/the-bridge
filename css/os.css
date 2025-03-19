@@ -97,7 +97,7 @@ osalerts{
 	position: absolute;
 	left: 0px;
 	right: 0px;
-	bottom: var(--grid);
+	bottom: calc( var(--grid) * 6);
 }
 
 osbox{

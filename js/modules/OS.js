@@ -285,6 +285,7 @@ window.OS = function(){
 	addToy( 'fire', 'PLASMA<br>FIRE', 'FIRE SUPRESSION', FireSuppression, 'pink' );
 	addToy( 'fragment', 'DATA<br>FRAGMENTATION', 'DEFRAGGLETISER', Rubix, 'blue' );
 	addToy( 'whale', 'PHONIC<br>TRANSMISSION', 'PHONICULATOR', MelodyMatch, 'blue' );
+	addToy( 'docker', 'DOCK<br>LOCKED', 'UNDOCKER', Undocker, 'yellow' );
 
 	function doTransmission(){
 		let panel = new OSPanel('blue', 'INCOMING TRANSMISSION');

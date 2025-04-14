@@ -3,9 +3,9 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 	if( !window.meter ) window.setupTone();
 
 	const OCTAVE = ['A','A#','B','C','C#','D','D#','E','F','F#','G','G#'];
-	const LOW = 'C4';
-	const RANGE = 4;	// how many notes are we supporting
-	const INTERVAL = 3  // interval between each suppored note
+	const LOW = 'D3';
+	const RANGE = 8;	// how many notes are we supporting
+	const INTERVAL = 3;  // interval between each suppored note
 
 
 	function getNoteIndex(name){
@@ -31,12 +31,12 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 	let self = this;
 	let colors = ['transparent','green','blue','pink','yellow'];
 
-	const BEATS = 6;
+	const BEATS = 8;
 
 	const LEVELS = [
-		[-1,1,2,2,1,-1],
-		[-1,1,2,3,4,-1],
-		[-1,2,1,3,4,-1],
+		[-1,-1,3,4,5,6,-1,-1],
+		[-1,-1,3,4,5,6,-1,-1],
+		[-1,-1,5,3,5,3,-1,-1],
 	]
 	
 
@@ -52,7 +52,7 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 			</pitch-c>`).appendTo(this.$el);
 
 
-		$pcs[i].find('pitch-goal').css('height',level[i]/(RANGE)*100+'%');
+		$pcs[i].find('pitch-goal').css('bottom',level[i]/(RANGE)*100+'%');
 
 		if(level[i]==-1) $pcs[i].find('pitch-goal').css('opacity',0);
 	}
@@ -174,31 +174,28 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 
 		window.launchpad.clear( nLaunchpad );
 
-		if( nBeat > 0 && nBeat < 5 ){
-			for(var y=0; y<8; y++){
-				let yTarget = level[nBeat];
-				window.launchpad.setXY( nLaunchpad, (nBeat-1)*2, y, 'white', 0.5);
-				window.launchpad.setXY( nLaunchpad, (nBeat-1)*2 + 1, y, 'white', 0.5);
-			}
+		
+		for(var y=0; y<8; y++){
+			let yTarget = level[nBeat];
+			window.launchpad.setXY( nLaunchpad, nBeat, y, 'white', 0.5);
 		}
+		
 
-		for( var iBeat=1; iBeat<BEATS-1; iBeat++ ){
-			let x = (iBeat-1)*2;
+		for( var iBeat=0; iBeat<BEATS; iBeat++ ){
+			let x = iBeat;
 			let isBeatCorrect = corrects[iBeat];
-			let yHeight = history[iBeat]*2;
+			let yHeight = history[iBeat];
 			for(var iHeight=0; iHeight<yHeight; iHeight++){
 				let y = (8-iHeight-1);
 
 				let color = isBeatCorrect?'yellow':'blue';
-				if(nBeat==5) color = isGameComplete?'green':'red';
+				if(nBeat==BEATS-1) color = isGameComplete?'green':'red';
 
 				window.launchpad.setXY( nLaunchpad, x, y, color, 1);
-				window.launchpad.setXY( nLaunchpad, x + 1, y, color, 1);
 			}
 
-			let yTarget = (8-level[iBeat]*2);
+			let yTarget = (8-level[iBeat]-1);
 			window.launchpad.setXY( nLaunchpad, x, yTarget, 'white', 1);
-			window.launchpad.setXY( nLaunchpad, x + 1, yTarget, 'white', 1);
 		}
 
 		window.launchpad.commit( nLaunchpad );

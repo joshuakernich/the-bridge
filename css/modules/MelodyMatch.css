@@ -23,27 +23,26 @@ pitch-goal{
 	bottom: 0px;
 	left: 0px;
 	right: 0px;
-	border-top: calc( var(--border) * 2) solid var(--white);
+	height: var(--border);
+	background: white;
 	box-sizing: border-box;
 	/*background: linear-gradient( to bottom, var(--yellow), transparent );*/
 }
 
 pitch-c{
 	display: inline-block;
-	width: calc( var(--grid)*2);
+	width: calc( var(--grid));
 	height: calc(var(--grid)*8);
 	background: rgba(255,255,255,0.05);
 	vertical-align: bottom;
 	box-sizing: border-box;
-	border-left: 2px solid black;
-	border-right: 2px solid black;
+	
 	position: relative;
 }
 
-pitch-c:nth-of-type(1),
-pitch-c:nth-of-type(6)
-{
-	opacity: 0.5;
+melodymatch toyframe{
+	margin-left: 0px;
+	margin-right: 0px;
 }
 
 pitch-c.active{

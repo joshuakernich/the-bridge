@@ -1,0 +1,33 @@
+undocker{
+	display: block;
+
+	width: calc(var(--grid)*12);
+	height: calc(var(--grid)*12);
+
+	border-radius: 100%;
+	box-sizing: border-box;
+	position: relative;
+}
+
+undocker floorplan{
+	display: block;
+	position: absolute;
+	top: 70%;
+	left: 50%;
+	transform: rotate(90deg);
+}
+
+undocker svg{
+	display: block;
+	position: absolute;
+	fill: var(--gray);
+	stroke: var(--yellow);
+	vector-effect: non-scaling-stroke;
+	transform: translate(-50%, -50%);
+}
+
+undocker svg path{
+	fill: inherit;
+	stroke: inherit;
+	vector-effect: inherit;
+}

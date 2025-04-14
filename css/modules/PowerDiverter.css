@@ -34,7 +34,6 @@ power floorplan{
 }
 
 power floorplan svg{
-	
 	fill: var(--gray);
 	stroke: var(--purple);
 	vector-effect: non-scaling-stroke;

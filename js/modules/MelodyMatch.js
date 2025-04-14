@@ -3,9 +3,9 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 	if( !window.meter ) window.setupTone();
 
 	const OCTAVE = ['A','A#','B','C','C#','D','D#','E','F','F#','G','G#'];
-	const LOW = 'D3';
+	const LOW = 'F3';
 	const RANGE = 8;	// how many notes are we supporting
-	const INTERVAL = 3;  // interval between each suppored note
+	const INTERVAL = 2;  // interval between each suppored note
 
 
 	function getNoteIndex(name){
@@ -34,9 +34,9 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 	const BEATS = 8;
 
 	const LEVELS = [
-		[-1,-1,3,4,5,6,-1,-1],
-		[-1,-1,3,4,5,6,-1,-1],
-		[-1,-1,5,3,5,3,-1,-1],
+		[-1,-1,4,4,6,6,-1,-1],
+		[-1,-1,6,6,5,4,-1,-1],
+		[-1,-1,4,6,6,4,-1,-1],
 	]
 	
 
@@ -63,9 +63,6 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 			<toycorner></toycorner>
 			<toycorner></toycorner>
 		</toyframe>`).appendTo(self.$el);
-
-
-	
 
 	let nBeat = -2;
 	let nBeatWas = -1;

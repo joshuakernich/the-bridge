@@ -1,8 +1,9 @@
 undocker{
 	display: block;
 
-	width: calc(var(--grid)*12);
-	height: calc(var(--grid)*12);
+	width: calc(var(--grid)*8);
+	height: calc(var(--grid)*8);
+	margin: calc(var(--grid)*2);
 
 	border-radius: 100%;
 	box-sizing: border-box;
@@ -12,7 +13,7 @@ undocker{
 undocker floorplan{
 	display: block;
 	position: absolute;
-	top: 70%;
+	top: 73%;
 	left: 50%;
 	transform: rotate(90deg);
 }
@@ -22,6 +23,7 @@ undocker svg{
 	position: absolute;
 	fill: var(--gray);
 	stroke: var(--yellow);
+	stroke-width: 3px;
 	vector-effect: non-scaling-stroke;
 	transform: translate(-50%, -50%);
 }
@@ -31,3 +33,57 @@ undocker svg path{
 	stroke: inherit;
 	vector-effect: inherit;
 }
+
+
+
+undocker clamp{
+	
+	display: block;
+	position: absolute;
+
+}
+
+
+
+undocker clamp:before{
+	content: "";
+	display: block;
+	position: absolute;
+	width: calc(var(--grid)*1);
+	height: calc(var(--grid)*2);
+	border: 2px solid var(--red);
+	box-sizing: border-box;
+	background: var(--gray);
+	
+	left: calc(var(--grid)*-0.5);
+	top: calc(var(--grid)*-0.5);
+	transform-origin: calc(var(--grid)/2) calc(var(--grid)/2);
+	transform: rotate(-45deg);
+
+	border-radius: var(--grid) var(--grid) calc(var(--grid)/2) calc(var(--grid)/2);
+
+	transition: 0.5s all;
+}
+
+undocker clamp:after{
+	display: block;
+	position: absolute;
+	content: "";
+	width: calc( var(--grid)/2);
+	height: calc( var(--grid)/2);
+	background: var(--red);
+	border-radius: 100%;
+	transform: translate(-50%, -50%);
+
+	transition: 0.5s all;
+}
+
+undocker clamp.open:before{
+	transform: rotate(-225deg);
+	border-color: var(--blue);
+}
+
+undocker clamp.open:after{
+	background: var(--blue);
+}
+

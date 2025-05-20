@@ -88,7 +88,7 @@ window.OS = function(){
 	let $left = $container.find('[position="left"]');
 	let $right = $container.find('[position="right"]');
 
-	let frame = new OSPanel( );
+	let frame = new OSPanel('black');
 	frame.$el.appendTo($bg).css({position:'absolute', top:'0px', left:'0px', right:'0px', bottom: '0px', margin:GRID });
 	
 	
@@ -182,7 +182,7 @@ window.OS = function(){
 				let isCrisisOver = true;
 				for(var b in boxes) if(boxes[b]) isCrisisOver = false;
 				if(isCrisisOver){
-					frame.reskin('');
+					frame.reskin('black');
 					audio.stop('alarm');
 				}
 			}
@@ -243,6 +243,10 @@ window.OS = function(){
 		} else {
 			$($container).css('transform','scale(1)');
 		}
+
+		let timeNow = new Date().getTime();
+		let timeElapsed = timeNow - timeMove;
+		if(timeElapsed>1000) $debug.attr('hidden','true');
 	
 	},1000);
 
@@ -276,10 +280,11 @@ window.OS = function(){
 		} );
 	}
 
-	addDebug( 'reset', reset );
-	addDebug( 'init', init );
-	addDebug( 'msg', doSentence );
-	addDebug( 'trans', doTransmission );
+	addDebug( 'os_reset', reset );
+	addDebug( 'os_init_mic', init );
+	addDebug( 'os_text_message', doSentence );
+	addDebug( 'os_video_transmisson', doTransmission );
+
 
 	addToy( 'circuit', 'CIRCUIT<br>DAMAGE', 'POWER DIVERTER', PowerDiverter, 'yellow' );
 	addToy( 'fire', 'PLASMA<br>FIRE', 'FIRE SUPRESSION', FireSuppression, 'pink' );
@@ -351,6 +356,10 @@ window.OS = function(){
 
 		if(b) boxes[n].instance.triggerXY(x,y);
 		if(!b && boxes[n].instance.untriggerXY )  boxes[n].instance.untriggerXY(x,y);
-		
+	})
+
+	$(document).on('mousemove',function(){
+		timeMove = new Date().getTime();
+		$debug.removeAttr('hidden');
 	})
 }

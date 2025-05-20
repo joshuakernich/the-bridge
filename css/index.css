@@ -137,6 +137,7 @@ td{
 [bg=orange]{ background: var(--orange); }
 [bg=yellow]{ background: var(--yellow); }
 [bg=white]{ background: var(--white); }
+[bg=black]{ background: var(--black); }
 
 [color=cyan]{ color: var(--cyan); }
 [color=red]{ color: var(--red); }

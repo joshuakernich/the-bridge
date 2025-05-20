@@ -1,7 +1,23 @@
 debug{
 	position: fixed;
 	display: block;
-	margin: calc( var(--grid)*2 ) calc( var(--grid)*5 );
+	background: black;
+	margin: auto;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	
+	padding: 0px 20px;
+	width: 500px;
+	height: 500px;
+	border: 1px solid white;
+	border-top: 0px;
+	border-radius: 0px 0px 50px 50px;
+	transition: opacity 0.5s;
+}
+
+debug[hidden]{
+	opacity: 0;
 }
 
 toyframe{
@@ -120,7 +136,7 @@ osgradient{
 	left: 0px;
 	right: 0px;
 	bottom: 0px;
-	background: radial-gradient(transparent, transparent, transparent, rgba(255,255,255,0.1));
+	background: radial-gradient(transparent, transparent, transparent, rgba(255,255,255,0.2));
 }
 
 ospanel{

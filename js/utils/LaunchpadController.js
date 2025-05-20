@@ -230,7 +230,7 @@ window.LaunchpadController = function(){
 
 		for (var output of midiAccess.outputs.values()){
 
-			if(output.name.includes("LP") && output.name.includes("MIDI")){
+			if(output.name.includes("LP") && output.name.includes("MIDIOUT")){
 				launchpads[nOutput%launchpads.length].setOutput(output);
 				nOutput++;
 
@@ -240,7 +240,7 @@ window.LaunchpadController = function(){
 
         for (var input of midiAccess.inputs.values()){
         	
-			if(input.name.includes("LP") && input.name.includes("MIDI")){
+			if(input.name.includes("LP") && input.name.includes("MIDIIN")){
 				launchpads[nInput%launchpads.length].setInput(input);
 				nInput++;
 

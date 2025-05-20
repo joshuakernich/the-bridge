@@ -246,7 +246,7 @@ window.OS = function(){
 
 		let timeNow = new Date().getTime();
 		let timeElapsed = timeNow - timeMove;
-		if(timeElapsed>1000) $debug.attr('hidden','true');
+		if(timeElapsed>2000) $debug.attr('hidden','true');
 	
 	},1000);
 
@@ -358,6 +358,7 @@ window.OS = function(){
 		if(!b && boxes[n].instance.untriggerXY )  boxes[n].instance.untriggerXY(x,y);
 	})
 
+	let timeMove = new Date().getTime();
 	$(document).on('mousemove',function(){
 		timeMove = new Date().getTime();
 		$debug.removeAttr('hidden');

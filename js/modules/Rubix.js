@@ -11,17 +11,16 @@ window.Rubix = function( nLaunchpad, callbackComplete, nPuzzle ){
 	self.$el = $('<rubix>');
 
 	let isComplete = false;
-
+	let isOn = nPuzzle!=undefined;
 	let map = [];
 
-	let grid = 3 + (nPuzzle)%4; 
+	let grid = 3 + (nPuzzle==undefined?1:nPuzzle)%4; 
 	
 	for(var y=0; y<grid+1; y++){
 		let $r = $('<row>').appendTo(self.$el);
 		if(y>0) map[y-1] = [];
 		for(var x=0; x<grid+1; x++){	
 			let $c = $('<cell>').appendTo($r).attr('x',x-1).attr('y',y-1);
-
 			if(y>0&&x>0) map[y-1][x-1] = x-1;
 		}
 	}
@@ -33,11 +32,13 @@ window.Rubix = function( nLaunchpad, callbackComplete, nPuzzle ){
 		let by = true;
 		let bx = true;
 
-		launchpad.clear( nLaunchpad );
+		if(isOn) launchpad.clear( nLaunchpad );
 		for(var y=0; y<map.length; y++){
 
-			launchpad.setXY(nLaunchpad,0,y+1,'blue');
-			launchpad.setXY(nLaunchpad,y+1,0,'blue');
+			if(isOn){
+				launchpad.setXY(nLaunchpad,0,y+1,'blue');
+				launchpad.setXY(nLaunchpad,y+1,0,'blue');
+			}
 
 			for(var x=0; x<map[y].length; x++){
 				let c = colors[map[y][x]%colors.length];
@@ -46,15 +47,16 @@ window.Rubix = function( nLaunchpad, callbackComplete, nPuzzle ){
 				by = by && map[y][x]%colors.length == map[0][x]%colors.length;
 				bx = bx && map[y][x]%colors.length == map[y][0]%colors.length;
 
-				launchpad.setXY(nLaunchpad, x+1,y+1,c);
+				if(isOn) launchpad.setXY(nLaunchpad, x+1,y+1,c);
 			}
 		}
 
-		launchpad.setXY(nLaunchpad,0,0,'white');
+		if(isOn){
+			launchpad.setXY(nLaunchpad,0,0,'white');
+			launchpad.commit(nLaunchpad);
+		}
 
-		launchpad.commit(nLaunchpad);
-
-		if(bx || by){
+		if(bx || by && isOn){
 			isComplete = true;
 			setTimeout(function(){
 				audio.play('correct');
@@ -118,7 +120,7 @@ window.Rubix = function( nLaunchpad, callbackComplete, nPuzzle ){
 		}
 	}
 
-	shuffleRandom(1);
+	if(nPuzzle != undefined ) shuffleRandom(1);
 	let mapReset = [];
 	for(var y=0; y<map.length; y++){
 		mapReset[y] = [];
@@ -151,5 +153,15 @@ window.Rubix = function( nLaunchpad, callbackComplete, nPuzzle ){
 	self.triggerXY = function(x,y){
 		let $c = self.$el.find(`cell[x=${x-1}][y=${y-1}]`);
 		if($c.length) $c.click();
+	}
+
+	self.turnOnOff = function(b,params){
+		isOn = b;
+
+		if(b){
+			
+		} else {
+			
+		}
 	}
 }

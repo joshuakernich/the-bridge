@@ -1,0 +1,102 @@
+debug{
+	position: fixed;
+	display: block;
+	background: black;
+	margin: auto;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	
+	padding: 20px;
+	width: 400px;
+	
+	border: 1px solid white;
+	border-top: 0px;
+	border-radius: 0px 0px 20px 20px;
+	transition: opacity 0.5s;
+	font-family: monospace;
+	font-weight: normal;
+	font-size: 10px;
+	line-height: 20px;
+}
+
+debug[hidden]{
+	opacity: 0;
+}
+
+debug button{
+	background: none;
+	color: white;
+	display: block;
+	border: none;
+	font: inherit;
+	padding: 0px;
+}
+
+debug h1{
+	font: inherit;
+	font-size: inherit;
+	background: none;
+	color: white;
+	padding: 0px;
+	margin: 0px;
+	position: relative;
+}
+
+debuglaunchpads{
+	display: block;
+}
+
+debugevents, debugqueue{
+	display: inline-block;
+	width: 150px;
+}
+
+debugqueue{
+	color: var(--red);
+}
+
+
+debugalert{
+	color: red;
+	display: block;
+}
+
+launchpadsim[dirty="true"] launchpadname:after{
+	content: " *";
+	color: var(--red);
+}
+
+launchpadname{
+	display: block;
+	color: white;
+	text-transform: uppercase;
+	width: 100%;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+launchpadsim{
+	display: inline-block;
+	text-align: left;
+	position: relative;
+	margin-right: 20px;
+}
+
+launchpadsim table{
+	position: relative;
+	border-collapse: collapse;
+	margin: none;
+	transform: rotate(-90deg);
+}
+
+launchpadsim td{
+	border: 1px solid rgba(255,255,255,0.2);
+	width: 15px;
+	height: 15px;
+	position: relative;
+	padding: 0px;
+	box-sizing: border-box;
+	white-space: nowrap;
+	text-align: right;
+}

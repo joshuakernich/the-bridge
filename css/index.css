@@ -50,6 +50,8 @@ body{
 	overflow: hidden;
 }
 
+
+
 bg{
 	position: absolute;
 	top: 0px;
@@ -64,57 +66,7 @@ video{
   object-fit: cover;
 }
 
-launchpadsim[dirty="true"] launchpadname:after{
-	content: " *";
-	color: var(--red);
-}
 
-launchpadname{
-	display: block;
-	color: white;
-	text-transform: uppercase;
-	width: calc( var(--grid) * 4 );
-	overflow: hidden;
-	white-space: nowrap;
-}
-
-launchpadsim{
-	display: inline-block;
-	text-align: left;
-	margin: calc( var(--grid)/2 );
-	position: relative;
-
-}
-
-launchpadsim td{
-	box-shadow: inset 0px 0px 10px rgba(255,255,255,0.2);
-	width: 20px;
-	height: 20px;
-}
-
-
-
-
-
-table{
-	position: relative;
-	border-collapse: collapse;
-
-	margin: none;
-}
-
-td{
-	
-	width: var(--grid);
-	height: var(--grid);
-	position: relative;
-	padding: 0px;
-	box-sizing: border-box;
-	white-space: nowrap;
-	text-align: right;
-
-	
-}
 
 [size=squish] td{ height: calc( var(--grid)/2 ); }
 
@@ -217,31 +169,6 @@ h1:empty{
 	display: none;
 }
 
-toy{
-	display: block;
-	width: calc(var(--grid) * 12);
-	height: calc(var(--grid) * 12);
-	overflow: hidden;
-	border-radius: var(--grid);
-	background: var(--gray);
-}
-
-toy osicon{
-	
-	/*background: url('./birds/flamingo.svg');*/
-	background-position: center;
-	background-size: 90%;
-	background-repeat: no-repeat;
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	right: 0px;
-	bottom: 0px;
-	display: block;
-}
-
-
-
 
 @keyframes throb{
 	0%{
@@ -263,7 +190,7 @@ midi-message{
 	color: var(--blue);
 	text-transform: uppercase;}
 
-button{
+/*button{
 	font: inherit;
 	background: none;
 	color: white;
@@ -280,7 +207,7 @@ button:after{
 	content: "→";
 	position: absolute;
 	right: 0px;
-}
+}*/
 
 chapter{
 	color: white;

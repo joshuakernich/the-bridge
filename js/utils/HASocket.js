@@ -120,7 +120,10 @@ window.HASocket = function(){
 
 	let subscriptions = {};
 	let pendingSubscriptions = [];
-	let id = 100;
+	
+	let nSubscribe = 100;
+	let nSend = 1000;
+
 	self.listen = function(type){
 		subscriptions[type] = true;
 		pendingSubscriptions.push(type);
@@ -130,9 +133,9 @@ window.HASocket = function(){
 	function doPendingSubscriptions(){
 		while(self.ready && pendingSubscriptions.length){
 			let type = pendingSubscriptions.shift();
-			id += 10;
+			nSubscribe += 10;
 			self.send({
-	 			"id": id,
+	 			"id": nSubscribe,
 	 			"type": "subscribe_events",
 	 			"event_type": type,
 	 		})
@@ -141,6 +144,8 @@ window.HASocket = function(){
 	}
 
 	self.send = function(msg){
+		nSend ++;
+		msg.id = nSend;
 		msg = JSON.stringify(msg);
 		console.log("SEND",msg);
 		if(s.send) s.send(msg);

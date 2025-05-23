@@ -43,6 +43,7 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 	self.$el = $('<melodymatch>');
 	let iLevel = nPuzzle%LEVELS.length;
 	let level = LEVELS[iLevel];
+	if(!level) level = [];
 	let $pcs = [];
 	for(var i=0; i<BEATS; i++){
 
@@ -201,7 +202,6 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 	let interval;
 	self.turnOnOff = function(b){
 
-
 		if(b){
 			interval = setInterval(pulse, 1000/FPS);
 		} else {
@@ -209,6 +209,6 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 		}
 	}
 
-	self.turnOnOff(true);
+	if(nPuzzle != undefined) self.turnOnOff(true);
 	
 }

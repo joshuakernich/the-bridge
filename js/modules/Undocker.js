@@ -18,7 +18,6 @@ window.Undocker = function( nLaunchpad, callbackComplete, nPuzzle ){
 		{x:7,y:1},
 		{x:7,y:6},
 		{x:0,y:6},
-		
 	]
 
 	const audio = new AudioContext();
@@ -32,10 +31,10 @@ window.Undocker = function( nLaunchpad, callbackComplete, nPuzzle ){
 			transform: 'rotate('+i*90+'deg)'
 		}).click(onClamp).attr('x',DOCKERS[i].x).attr('y',DOCKERS[i].y);
 
-		launchpad.setXY(nLaunchpad,DOCKERS[i].x,DOCKERS[i].y,'red');
+		if( nPuzzle != undefined ) launchpad.setXY(nLaunchpad,DOCKERS[i].x,DOCKERS[i].y,'red');
 	}
 
-	launchpad.commit(nLaunchpad);
+	if( nPuzzle != undefined ) launchpad.commit(nLaunchpad);
 
 	function onClamp(){
 		$(this).toggleClass('open');
@@ -63,4 +62,5 @@ window.Undocker = function( nLaunchpad, callbackComplete, nPuzzle ){
 		
 		self.$el.find('[x='+x+'][y='+y+']').click();
 	}
+
 }

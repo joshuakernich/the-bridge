@@ -1,4 +1,115 @@
+window.OSPanel = function( c, label ){
+	let self = this;
+	self.$el = $(`
+		<ospanel>
+			<osvert>
+				<ossegment bg=${c}></ossegment>
+				<ossegment bg=${c} style="opacity:0.8; margin: var(--border) 0px var(--border)"></ossegment>
+				<ossegment bg=${c}></ossegment>
+			</osvert>		
+			<osmiddle>
+				<oshorz padded size=${label?'thicc':'thin'} bg=${c}>
+					${label?`<osh color=${c}>${label}</osh>`:``}
+				</oshorz>
+				<osinner>
+					<osframe border=${c}></osframe>
+				</osinner>
+				<oshorz>
+					<ossegment bg=${c}></ossegment>
+					<ossegment></ossegment>
+					<ossegment bg=${c}></ossegment>
+				</oshorz>
+			</osmiddle>	
+			<osvert>
+				<ossegment bg=${c}></ossegment>
+				<ossegment bg=${c} style="opacity:0.8; margin: var(--border) 0px var(--border)"></ossegment>
+				<ossegment bg=${c}></ossegment>
+			</osvert>			
+		</ospanel>
+	`);
 
+	self.$inner = self.$el.find('osinner');
+
+	self.reskin = function(c,label){
+		self.$el.find('[bg]').attr('bg',c);
+		self.$el.find('[border]').attr('border',c);
+		self.$el.find('[color]').attr('color',c);
+		if(label) self.$el.find('osh').text(label);
+	}
+}
+
+window.OSMenu = function(list){
+	let self = this;
+	self.$el = $('<osmenu>');
+
+	for(var i in list){
+		$('<osmenuitem>')
+		.appendTo(self.$el)
+		.text(list[i].name)
+		.attr('bg',list[i].color)
+		.attr('n',i)
+		.click(doSelect);
+	}
+
+	function doSelect() {
+		let n = $(this).attr('n');
+		self.callbackSelect(n);
+	}
+}
+
+window.OSBox = function(nBox,color,header){
+	let self = this;
+	let w = 14;
+	let h = 14;
+
+	let $el = $('<osbox>');
+
+	let panel = new OSPanel(color, header);
+	panel.$el.appendTo($el);
+
+	self.$el = $el;
+
+	let $inner = $('<osboxinner>').appendTo(panel.$inner);
+
+	const MENU = [
+		{type:'docker', 	toy:Undocker,			name:'UNDOCKER', 	color:'yellow'},
+		{type:'circuit', 	toy:PowerDiverter,		name:'REPOWER', 	color:'yellow'},
+		{type:'fire', 		toy:FireSuppression,	name:'UNFLAMER', 	color:'pink'},
+		{type:'fragment', 	toy:Rubix,				name:'DEFRAGGER', 	color:'blue'},
+		{type:'whale', 		toy:MelodyMatch,		name:'UPTONER', 	color:'blue'},
+	]
+
+	let menu = new OSMenu(MENU);
+	menu.$el.appendTo($inner);
+	menu.callbackSelect = function(n){
+		let selection = MENU[n];
+		$inner.attr('mode','toy');
+		self.retoy(
+			selection.type,
+			selection.color,
+			selection.name,
+			selection.toy,
+		)
+
+		panel.reskin(selection.color, selection.name);
+	}
+
+	self.$toy = $('<ostoy>').appendTo($inner);
+
+	self.retoy = function(type,color,header,toy,params){
+
+		//janky way of passing params
+		if(!params) params = [];
+
+		let instance = new toy(nBox,function(){
+			sendEvent(n++,'fix_'+type);
+			onCompleteBox(nBox);
+		},params[0],params[1],params[2]);
+		instance.$el.appendTo(self.$toy);
+
+		self.instance = instance;
+	}
+}
 
 window.OS = function(){
 
@@ -30,45 +141,6 @@ window.OS = function(){
 
 	let boxes = [undefined,undefined];
 
-	function OSPanel( c, label ){
-		let self = this;
-		self.$el = $(`
-			<ospanel>
-				<osvert>
-					<ossegment bg=${c}></ossegment>
-					<ossegment bg=${c} style="opacity:0.8; margin: var(--border) 0px var(--border)"></ossegment>
-					<ossegment bg=${c}></ossegment>
-				</osvert>		
-				<osmiddle>
-					<oshorz padded size=${label?'thicc':'thin'} bg=${c}>
-						${label?`<osh color=${c}>${label}</osh>`:``}
-					</oshorz>
-					<osinner>
-						<osframe border=${c}></osframe>
-					</osinner>
-					<oshorz>
-						<ossegment bg=${c}></ossegment>
-						<ossegment></ossegment>
-						<ossegment bg=${c}></ossegment>
-					</oshorz>
-				</osmiddle>	
-				<osvert>
-					<ossegment bg=${c}></ossegment>
-					<ossegment bg=${c} style="opacity:0.8; margin: var(--border) 0px var(--border)"></ossegment>
-					<ossegment bg=${c}></ossegment>
-				</osvert>			
-			</ospanel>
-		`);
-
-		self.$inner = self.$el.find('osinner');
-
-		self.reskin = function(c){
-			self.$el.find('[bg]').attr('bg',c);
-			self.$el.find('[border]').attr('border',c);
-		}
-
-	}
-
 	let $container = $(`<oscontainer>
 		<osbg>
 			<osgradient></osgradient>
@@ -92,9 +164,15 @@ window.OS = function(){
 	frame.$el.appendTo($bg).css({position:'absolute', top:'0px', left:'0px', right:'0px', bottom: '0px', margin:GRID });
 	
 	
-	let $debug = $('<debug>').appendTo("body");
-	
 
+
+	let $debug = $(`
+		<debug>
+
+
+		</debug>
+	`).appendTo("body");
+	
 	window.launchpad.$el.appendTo($debug);
 
 	let audio = new AudioContext();
@@ -139,8 +217,10 @@ window.OS = function(){
 
 		frame.reskin('red');
 
+
+		doNextQueue();
 		
-		for(var b in boxes) if(!boxes[b]) doNextQueue();
+		//for(var b in boxes) if(!boxes[b]) doNextQueue();
 	}
 
 	function getOpenSlot(){
@@ -154,14 +234,19 @@ window.OS = function(){
 
 		let tiedTo = queue.shift();
 
-		let n = getOpenSlot();
-		
-		console.log(n);
+		//let n = getOpenSlot();
 
-		let box = new OSBox( n, tiedTo.type, tiedTo.color, tiedTo.name, tiedTo.toy, tiedTo.params );
+		let n = 0;
+
+		//let box = new OSBox( n, tiedTo.type, tiedTo.color, tiedTo.name, tiedTo.toy, tiedTo.params );
+		
+		let box = boxes[n];
+		box.retoy( tiedTo.type, tiedTo.color, tiedTo.name, tiedTo.toy, tiedTo.params );
 		box.$el.css({bottom:-800}).animate({bottom:GRID});
 		box.$el.appendTo(n==0?$left:$right);
 		box.warning = tiedTo.warning;
+
+		console.log('heree');
 
 		boxes[n] = box;
 	}
@@ -196,33 +281,13 @@ window.OS = function(){
 	}
 
 	let n = 1000;
-	let OSBox = function(nBox,type,color,header,toy,params){
-		
-		let self = this;
-		let w = 14;
-		let h = 14;
+	
 
-		let $el = $('<osbox>');
-
-		let panel = new OSPanel(color, header);
-		panel.$el.appendTo($el);
-
-		self.$el = $el;
-
-		self.$toy = $('<toy>').appendTo(panel.$inner);
-
-		//janky way of passing params
-		if(!params) params = [];
-
-		let instance = new toy(nBox,function(){
-			sendEvent(n++,'fix_'+type);
-			onCompleteBox(nBox);
-		},params[0],params[1],params[2]);
-		instance.$el.appendTo(self.$toy);
-
-		
-
-		self.instance = instance;
+	for(var i=0; i<2; i++){
+		let box = new OSBox( i, 'purple', i==0?'PORT MATRIX':'STARBOARD MATRIX' );
+		box.$el.appendTo(i==0?$left:$right);
+		boxes[i] = box;
+		box.$el.css({bottom:GRID});
 	}
 
 	function sendEvent(id,evt){
@@ -285,7 +350,6 @@ window.OS = function(){
 	addDebug( 'os_text_message', doSentence );
 	addDebug( 'os_video_transmisson', doTransmission );
 
-
 	addToy( 'circuit', 'CIRCUIT<br>DAMAGE', 'POWER DIVERTER', PowerDiverter, 'yellow' );
 	addToy( 'fire', 'PLASMA<br>FIRE', 'FIRE SUPRESSION', FireSuppression, 'pink' );
 	addToy( 'fragment', 'DATA<br>FRAGMENTATION', 'DEFRAGGLETISER', Rubix, 'blue' );
@@ -300,19 +364,6 @@ window.OS = function(){
 			panel.$el.remove();
 		},false);
 	};
-	
-	/*$('<button>INITIATE WORMHOLE</button>').appendTo($debug).click(function(){
-		
-		audio.add('music','./audio/music-wormhole.mp3',0.5,true);
-
-		$(`<video autoplay loop muted>
-		  <source src="./video/video-wormhole.mp4" type="video/mp4">
-		</video>`).appendTo('bg');
-
-		setTimeout( function(){ audio.play('music') } );
-		setTimeout( function(){ showChapter(2,'THE WORMHOLE'); }, 1000 );
-	})*/
-
 	
 	function reset(){
 		window.location = window.location;
@@ -347,12 +398,7 @@ window.OS = function(){
 	}
 
 	window.launchpad.listen(function(n,x,y,b){
-
-
 		if(!boxes[n]) return;
-
-		//ripples.push({x:x,y:y,size:0,color:[255,255,255]});
-
 
 		if(b) boxes[n].instance.triggerXY(x,y);
 		if(!b && boxes[n].instance.untriggerXY )  boxes[n].instance.untriggerXY(x,y);

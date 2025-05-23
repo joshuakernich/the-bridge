@@ -1,24 +1,4 @@
-debug{
-	position: fixed;
-	display: block;
-	background: black;
-	margin: auto;
-	top: 0px;
-	left: 0px;
-	right: 0px;
-	
-	padding: 0px 20px;
-	width: 500px;
-	height: 500px;
-	border: 1px solid white;
-	border-top: 0px;
-	border-radius: 0px 0px 50px 50px;
-	transition: opacity 0.5s;
-}
 
-debug[hidden]{
-	opacity: 0;
-}
 
 toyframe{
 	display: block;
@@ -130,6 +110,93 @@ osbox{
 	margin: auto;
 }
 
+osboxinner{
+	display: block;
+	width: calc(var(--grid) * 12);
+	height: calc(var(--grid) * 12);
+	
+	border-radius: var(--grid);
+	position: relative;
+	transition: all 0.5s;
+	left: 0px;
+
+	white-space: nowrap;
+}
+
+osboxinner[mode='toy']{
+	left: calc(var(--grid) * -12);
+}
+
+ostoy{
+	display: inline-block;
+	width: calc(var(--grid) * 12);
+	height: calc(var(--grid) * 12);
+	overflow: hidden;
+	border-radius: var(--grid);
+	vertical-align: top;
+}
+
+osmenu{
+	display: inline-block;
+	width: calc(var(--grid) * 8);
+	height: calc(var(--grid) * 8);
+	overflow: hidden;
+	border-radius: var(--grid);
+	
+	padding: calc(var(--grid) * 2);
+	text-align: left;
+	vertical-align: top;
+}
+
+@keyframes throb{
+	0%{
+		opacity: 1;
+	}
+
+	50%{
+		opacity: 0.7;
+	}
+
+	100%{
+		opacity: 1;
+	}
+}
+
+osmenuitem{
+	display: block;
+	font-size: calc( var(--grid) / 2 );
+	line-height: calc( var(--grid) - var(--border));
+	height: calc( var(--grid) - var(--border));
+	margin-bottom: var(--border);
+	color: black;
+	background: var(--pink);
+	width: calc(var(--grid) * 7);
+	border-radius: 0px calc( var(--grid) /2 ) calc( var(--grid) /2 ) 0px;
+	margin-left: calc( var(--grid) );
+	padding-left: calc( var(--grid)/4 );
+	position: relative;
+
+	animation: throb infinite 2s;
+}
+
+osmenuitem:before{
+	content: "";
+	width: calc( var(--grid) - var(--border));
+	height: calc( var(--grid) - var(--border));
+	position: absolute;
+	left: calc( var(--grid)*-1 );
+	top: 0px;
+	background: var(--pink);
+	display: block;
+
+	animation: throb infinite 1s;
+}
+
+osmenuitem[bg='yellow']:before{ background:var(--yellow); }
+osmenuitem[bg='blue']:before{ background:var(--blue); }
+osmenuitem[bg='pink']:before{ background:var(--pink); }
+osmenuitem[bg='orange']:before{ background:var(--orange); }
+
 osgradient{
 	position: absolute;
 	top: 0px;
@@ -137,6 +204,7 @@ osgradient{
 	right: 0px;
 	bottom: 0px;
 	background: radial-gradient(transparent, transparent, transparent, rgba(255,255,255,0.2));
+	
 }
 
 ospanel{
@@ -204,6 +272,10 @@ oshorz{
 	position: relative;
 }
 
+ossegment{
+
+}
+
 osvert ossegment{
 	width: 100%;
 	flex-grow: 1;
@@ -212,6 +284,7 @@ osvert ossegment{
 oshorz ossegment{
 	height: 100%;
 	flex-grow: 1;
+
 }
 
 oshorz ossegment:first-of-type{

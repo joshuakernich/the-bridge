@@ -24,9 +24,10 @@ window.LaunchpadInstance = function(n,callback){
 	let isX = false;
 	let isRotate = true;
 
-	self.$el = $('<launchpadsim>').css({'transform':'rotate(-90deg)'});
-	let $name = $('<launchpadname>').appendTo(self.$el).text('no launchpad');
+	self.$el = $('<launchpadsim>');
+	
 	let $t = $('<table>').appendTo(self.$el);
+	let $name = $('<launchpadname>').appendTo(self.$el).text('no launchpad');
 
 	for(var i=0; i<8; i++){
 		let $tr = $('<tr>').appendTo($t);

@@ -31,9 +31,9 @@ window.OSPanel = function( c, label ){
 	self.$inner = self.$el.find('osinner');
 
 	self.reskin = function(c,label){
-		self.$el.find('[bg]').attr('bg',c);
-		self.$el.find('[border]').attr('border',c);
-		self.$el.find('[color]').attr('color',c);
+		self.$el.find('ossegment[bg],oshorz[bg]').attr('bg',c);
+		self.$el.find('osframe[border]').attr('border',c);
+		self.$el.find('osh[color]').attr('color',c);
 		if(label) self.$el.find('osh').text(label);
 	}
 }
@@ -92,11 +92,15 @@ window.OSBox = function(nBox,color,header){
 		)
 
 		panel.reskin(selection.color, selection.name);
+
+		setTimeout(self.reset,2000);
 	}
 
 	self.$toy = $('<ostoy>').appendTo($inner);
 
 	self.retoy = function(type,color,header,toy,params){
+
+		self.$toy.empty();
 
 		//janky way of passing params
 		if(!params) params = [];
@@ -108,6 +112,11 @@ window.OSBox = function(nBox,color,header){
 		instance.$el.appendTo(self.$toy);
 
 		self.instance = instance;
+	}
+
+	self.reset = function(){
+		$inner.attr('mode','menu');
+		panel.reskin(color, header);
 	}
 }
 

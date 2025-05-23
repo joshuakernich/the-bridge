@@ -164,7 +164,7 @@ window.OS = function(){
 
 	let $bg = $container.find('osbg');
 	let $fg = $container.find('osfg');
-	let $alerts = $container.find('osalerts');
+	
 	let $center = $container.find('[position="center"]');
 	let $left = $container.find('[position="left"]');
 	let $right = $container.find('[position="right"]');
@@ -177,12 +177,13 @@ window.OS = function(){
 
 	let $debug = $(`
 		<debug>
-
-
+			<debuglaunchpads></debuglaunchpads>
+			<debugevents></debugevents>
+			<debugqueue></debugqueue>
 		</debug>
 	`).appendTo("body");
-	
-	window.launchpad.$el.appendTo($debug);
+
+	window.launchpad.$el.appendTo($debug.find('debuglaunchpads'));
 
 	let audio = new AudioContext();
 	audio.add('alert','./audio/sfx-alert.mp3',0.5);
@@ -210,7 +211,7 @@ window.OS = function(){
 		audio.play('alert',true);
 		//audio.play('alarm');
 		let warning = new OSWarning(whatKind);
-		warning.$el.appendTo($alerts);
+		warning.$el.appendTo($debug.find('debugqueue'));
 
 		if(tiedTo){
 			tiedTo.warning = warning;
@@ -224,10 +225,10 @@ window.OS = function(){
 		.animate({bottom:-20,left:-10},20)
 		.animate({bottom:0,left:0},20);
 
-		frame.reskin('red');
+		//frame.reskin('red');
 
 
-		doNextQueue();
+		//doNextQueue();
 		
 		//for(var b in boxes) if(!boxes[b]) doNextQueue();
 	}
@@ -286,7 +287,7 @@ window.OS = function(){
 
 	let OSWarning = function(text){
 		let self = this;
-		self.$el = $('<oswarning>').html(text);
+		self.$el = $('<debugalert>').html(text);
 	}
 
 	let n = 1000;
@@ -328,15 +329,15 @@ window.OS = function(){
 	let N = {};
 
 	function addDebug( type, fn ){
-		$(`<button>${type}</button>`).appendTo($debug).click(fn);
+		$(`<button>${type}</button>`).appendTo($debug.find('debugevents')).click(fn);
 		window.socket.on( type, fn );
 	}
 
 	function addToy( type, nameIssue, nameResolution, typeToy, color ){
 		N[type] = 0;
 		//iterate severity on click
-		$(`<button>warn_${type}</button>`).appendTo($debug).click(function(){
-			doDamage(nameIssue, { 
+		$(`<button>warn_${type}</button>`).appendTo($debug.find('debugevents')).click(function(){
+			doDamage(type, { 
 				type:type, 
 				color:color, 
 				name:nameResolution, 
@@ -345,7 +346,7 @@ window.OS = function(){
 		});
 		//otherwise capture severity from message
 		window.socket.on( 'warn_'+type, function(e){
-			doDamage(nameIssue, { 
+			doDamage(type, { 
 				type:type, 
 				color:color, 
 				name:nameResolution, 
@@ -356,14 +357,16 @@ window.OS = function(){
 
 	addDebug( 'os_reset', reset );
 	addDebug( 'os_init_mic', init );
-	addDebug( 'os_text_message', doSentence );
-	addDebug( 'os_video_transmisson', doTransmission );
+	addDebug( 'os_text', doSentence );
+	addDebug( 'os_video', doTransmission );
 
 	addToy( 'circuit', 'CIRCUIT<br>DAMAGE', 'POWER DIVERTER', PowerDiverter, 'yellow' );
 	addToy( 'fire', 'PLASMA<br>FIRE', 'FIRE SUPRESSION', FireSuppression, 'pink' );
 	addToy( 'fragment', 'DATA<br>FRAGMENTATION', 'DEFRAGGLETISER', Rubix, 'blue' );
 	addToy( 'whale', 'PHONIC<br>TRANSMISSION', 'PHONICULATOR', MelodyMatch, 'blue' );
 	addToy( 'docker', 'DOCK<br>LOCKED', 'UNDOCKER', Undocker, 'yellow' );
+
+	let $alerts = $('<debugalerts>').appendTo($debug);
 
 	function doTransmission(){
 		let panel = new OSPanel('blue', 'INCOMING TRANSMISSION');

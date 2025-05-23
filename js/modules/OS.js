@@ -1,3 +1,13 @@
+
+window.sendEvent = function(evt){
+	window.socket.send({
+		type:'fire_event',
+		event_type:evt
+	});
+}
+
+
+
 window.OSPanel = function( c, label ){
 	let self = this;
 	self.$el = $(`
@@ -38,7 +48,7 @@ window.OSPanel = function( c, label ){
 	}
 }
 
-window.OSMenu = function(list){
+window.OSMenu = function(n,list){
 	let self = this;
 	self.$el = $('<osmenu>');
 
@@ -49,23 +59,37 @@ window.OSMenu = function(list){
 		.attr('bg',list[i].color)
 		.attr('n',i)
 		.click(doSelect);
+
+		
 	}
+
+	
 
 	function doSelect() {
 		let n = $(this).attr('n');
 		self.callbackSelect(n);
 	}
+
+	self.setOnOff = function(b){
+
+		if( b ) for( var i in list ) for(var x=0; x<8; x++) launchpad.setXY(n,x,i,list[i].color);
+		else launchpad.clear(n);
+
+		launchpad.commit(n);
+	}
 }
 
-window.OSBox = function(nBox,color,header){
+window.OSBox = function(nBox,color,header,getNextDamageForType){
 	let self = this;
 	let w = 14;
 	let h = 14;
 
 	let $el = $('<osbox>');
-
+	
 	let panel = new OSPanel(color, header);
 	panel.$el.appendTo($el);
+
+	let instanceToy = undefined;
 
 	self.$el = $el;
 
@@ -79,21 +103,31 @@ window.OSBox = function(nBox,color,header){
 		{type:'whale', 		toy:MelodyMatch,		name:'UPTONER', 	color:'blue'},
 	]
 
-	let menu = new OSMenu(MENU);
+	let menu = new OSMenu(nBox, MENU);
 	menu.$el.appendTo($inner);
+	menu.setOnOff(true);
+
 	menu.callbackSelect = function(n){
+
+		menu.setOnOff(false);
+
 		let selection = MENU[n];
 		$inner.attr('mode','toy');
+
+		let damage = getNextDamageForType(selection.type);
+
 		self.retoy(
 			selection.type,
 			selection.color,
 			selection.name,
 			selection.toy,
+			damage?damage.params:undefined,
 		)
 
 		panel.reskin(selection.color, selection.name);
 
-		setTimeout(self.reset,2000);
+		if(!damage) setTimeout(self.reset,2000);
+
 	}
 
 	self.$toy = $('<ostoy>').appendTo($inner);
@@ -105,18 +139,31 @@ window.OSBox = function(nBox,color,header){
 		//janky way of passing params
 		if(!params) params = [];
 
-		let instance = new toy(nBox,function(){
-			sendEvent(n++,'fix_'+type);
-			onCompleteBox(nBox);
+		instanceToy = new toy(nBox,function(){
+			sendEvent('fix_'+type);
+			self.reset();
 		},params[0],params[1],params[2]);
-		instance.$el.appendTo(self.$toy);
+		instanceToy.$el.appendTo(self.$toy);
 
-		self.instance = instance;
+		if(!params.length){
+			$('<osoverlay>').appendTo(self.$toy).text('ALL SYSTEMS NOMINAL').attr('color',color);
+		}
 	}
 
 	self.reset = function(){
+		if(instanceToy.turnOnOff) instanceToy.turnOnOff(false);
 		$inner.attr('mode','menu');
 		panel.reskin(color, header);
+
+		menu.setOnOff(true);
+	}
+
+	self.triggerXY = function(x,y){
+		if( instanceToy && instanceToy.triggerXY ) instanceToy.triggerXY(x,y);
+	}
+
+	self.untriggerXY = function(x,y){
+		if( instanceToy && instanceToy.untriggerXY ) instanceToy.untriggerXY(x,y);
 	}
 }
 
@@ -172,9 +219,6 @@ window.OS = function(){
 	let frame = new OSPanel('black');
 	frame.$el.appendTo($bg).css({position:'absolute', top:'0px', left:'0px', right:'0px', bottom: '0px', margin:GRID });
 	
-	
-
-
 	let $debug = $(`
 		<debug>
 			<debuglaunchpads></debuglaunchpads>
@@ -205,19 +249,13 @@ window.OS = function(){
 
 	let queue = [];
 
-	function doDamage( whatKind, tiedTo ){
+	function doDamage( damage ){
 
+		//ouch
 		audio.play('boom',true);
 		audio.play('alert',true);
-		//audio.play('alarm');
-		let warning = new OSWarning(whatKind);
-		warning.$el.appendTo($debug.find('debugqueue'));
-
-		if(tiedTo){
-			tiedTo.warning = warning;
-			queue.push(tiedTo);
-		}
 		
+		//screenshake
 		$($container)
 		.animate({bottom:-10,left:-10},20)
 		.animate({bottom:10,left:10},20)
@@ -225,12 +263,27 @@ window.OS = function(){
 		.animate({bottom:-20,left:-10},20)
 		.animate({bottom:0,left:0},20);
 
-		//frame.reskin('red');
+		queue.push(damage);
+		renderQueue();
+	}
 
+	function getNextDamageForType(type){
+		for(var i in queue){
+			console.log(queue[i].type,type);
+			if(queue[i].type == type){
+				let damage = queue.splice(i,1)[0];
+				renderQueue();
+				return damage;
+			}
+		}
+		return undefined;
+	}
 
-		//doNextQueue();
-		
-		//for(var b in boxes) if(!boxes[b]) doNextQueue();
+	function renderQueue(){
+		let text = '';
+		for(var i in queue) text = text + '! '+ queue[i].type + '<br>'
+		console.log(queue,text);
+		$debug.find('debugqueue').html(text);
 	}
 
 	function getOpenSlot(){
@@ -261,30 +314,6 @@ window.OS = function(){
 		boxes[n] = box;
 	}
 
-	function onCompleteBox(n){
-		
-		if(!boxes[n]) return;
-
-		boxes[n].$el.delay(500).animate({top:800},{ duration:500, complete:function(){ 
-			boxes[n].$el.remove(); 
-			boxes[n].warning.$el.remove();
-			boxes[n] = undefined;
-
-			if( queue.length ){
-				doNextQueue();
-			} else {
-				
-				let isCrisisOver = true;
-				for(var b in boxes) if(boxes[b]) isCrisisOver = false;
-				if(isCrisisOver){
-					frame.reskin('black');
-					audio.stop('alarm');
-				}
-			}
-		}});
-		
-	}
-
 	let OSWarning = function(text){
 		let self = this;
 		self.$el = $('<debugalert>').html(text);
@@ -294,20 +323,13 @@ window.OS = function(){
 	
 
 	for(var i=0; i<2; i++){
-		let box = new OSBox( i, 'purple', i==0?'PORT MATRIX':'STARBOARD MATRIX' );
+		let box = new OSBox( i, 'purple', i==0?'PORT MATRIX':'STARBOARD MATRIX', getNextDamageForType );
 		box.$el.appendTo(i==0?$left:$right);
 		boxes[i] = box;
 		box.$el.css({bottom:GRID});
 	}
 
-	function sendEvent(id,evt){
-
-		window.socket.send({
-			"id": id,
-			type:'fire_event',
-			event_type:evt
-		});
-	}
+	
 
 	setInterval(function(){
 
@@ -333,24 +355,18 @@ window.OS = function(){
 		window.socket.on( type, fn );
 	}
 
-	function addToy( type, nameIssue, nameResolution, typeToy, color ){
+	function addToy( type ){
 		N[type] = 0;
 		//iterate severity on click
 		$(`<button>warn_${type}</button>`).appendTo($debug.find('debugevents')).click(function(){
-			doDamage(type, { 
+			doDamage({ 
 				type:type, 
-				color:color, 
-				name:nameResolution, 
-				toy:typeToy, 
 				params:[N[type]++] } );
 		});
 		//otherwise capture severity from message
 		window.socket.on( 'warn_'+type, function(e){
-			doDamage(type, { 
+			doDamage({ 
 				type:type, 
-				color:color, 
-				name:nameResolution, 
-				toy:typeToy, 
 				params:[e.severity] } );
 		} );
 	}
@@ -360,11 +376,11 @@ window.OS = function(){
 	addDebug( 'os_text', doSentence );
 	addDebug( 'os_video', doTransmission );
 
-	addToy( 'circuit', 'CIRCUIT<br>DAMAGE', 'POWER DIVERTER', PowerDiverter, 'yellow' );
-	addToy( 'fire', 'PLASMA<br>FIRE', 'FIRE SUPRESSION', FireSuppression, 'pink' );
-	addToy( 'fragment', 'DATA<br>FRAGMENTATION', 'DEFRAGGLETISER', Rubix, 'blue' );
-	addToy( 'whale', 'PHONIC<br>TRANSMISSION', 'PHONICULATOR', MelodyMatch, 'blue' );
-	addToy( 'docker', 'DOCK<br>LOCKED', 'UNDOCKER', Undocker, 'yellow' );
+	addToy( 'circuit' );
+	addToy( 'fire' );
+	addToy( 'fragment' );
+	addToy( 'whale' );
+	addToy( 'docker' );
 
 	let $alerts = $('<debugalerts>').appendTo($debug);
 
@@ -412,8 +428,8 @@ window.OS = function(){
 	window.launchpad.listen(function(n,x,y,b){
 		if(!boxes[n]) return;
 
-		if(b) boxes[n].instance.triggerXY(x,y);
-		if(!b && boxes[n].instance.untriggerXY )  boxes[n].instance.untriggerXY(x,y);
+		if(b) boxes[n].triggerXY(x,y);
+		if(!b) boxes[n].untriggerXY(x,y);
 	})
 
 	let timeMove = new Date().getTime();

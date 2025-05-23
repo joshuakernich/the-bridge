@@ -790,7 +790,6 @@ window.PowerDiverter = function( nLaunchpad, callbackComplete, nPuzzle, isFirePu
 	let interval = undefined;
 	self.turnOnOff = function(b,params){
 		
-
 		clearInterval(interval)
 		if(b){
 			//if(params && params.severity) doLevel(params.severity-1);
@@ -799,8 +798,6 @@ window.PowerDiverter = function( nLaunchpad, callbackComplete, nPuzzle, isFirePu
 		} else {
 			//window.synth.triggerRelease();
 		}
-
-		
 	}
 
 	if(puzzle){

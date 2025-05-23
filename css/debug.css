@@ -52,6 +52,10 @@ debugevents, debugqueue{
 	width: 150px;
 }
 
+debugqueue{
+	color: var(--red);
+}
+
 
 debugalert{
 	color: red;

@@ -89,6 +89,10 @@ window.OSMenu = function(n,list){
 
 		launchpad.commit(n);
 	}
+
+	self.trigger = function(n) {
+		self.$el.find('osmenuitem').eq(n).click();
+	}
 }
 
 window.OSBox = function(nBox,color,header,getNextDamageForType){
@@ -180,10 +184,13 @@ window.OSBox = function(nBox,color,header,getNextDamageForType){
 		panel.reskin(color, header);
 
 		menu.setOnOff(true);
+
+		instanceToy = undefined;
 	}
 
 	self.triggerXY = function(x,y){
 		if( instanceToy && instanceToy.triggerXY ) instanceToy.triggerXY(x,y);
+		else if(menu) menu.trigger(y);
 	}
 
 	self.untriggerXY = function(x,y){

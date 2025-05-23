@@ -1,4 +1,6 @@
 
+
+
 window.sendEvent = function(evt){
 	window.socket.send({
 		type:'fire_event',
@@ -6,7 +8,21 @@ window.sendEvent = function(evt){
 	});
 }
 
+window.OSType = function(text){
+	const audio = new AudioContext();
+	audio.add('type','./audio/sfx-type.mp3', 1);
 
+	let self = this;
+	self.$el = $('<span>');
+
+	let n = 0;
+	let int = setInterval(function(){
+		n++;
+		self.$el.text(text.substr(0,n));
+		audio.play('type',true);
+		if(n>=text.length) clearInterval(int);
+	},50)
+}
 
 window.OSPanel = function( c, label ){
 	let self = this;
@@ -59,11 +75,7 @@ window.OSMenu = function(n,list){
 		.attr('bg',list[i].color)
 		.attr('n',i)
 		.click(doSelect);
-
-		
 	}
-
-	
 
 	function doSelect() {
 		let n = $(this).attr('n');
@@ -72,7 +84,7 @@ window.OSMenu = function(n,list){
 
 	self.setOnOff = function(b){
 
-		if( b ) for( var i in list ) for(var x=0; x<8; x++) launchpad.setXY(n,x,i,list[i].color);
+		if( b ) for( var i in list ) for(var x=0; x<8; x++) launchpad.setXY(n,x,i,list[i].color,x==0?0.5:1);
 		else launchpad.clear(n);
 
 		launchpad.commit(n);
@@ -80,6 +92,10 @@ window.OSMenu = function(n,list){
 }
 
 window.OSBox = function(nBox,color,header,getNextDamageForType){
+
+	const audio = new AudioContext();
+	audio.add('blip','./audio/sfx-blip.mp3');
+
 	let self = this;
 	let w = 14;
 	let h = 14;
@@ -109,6 +125,7 @@ window.OSBox = function(nBox,color,header,getNextDamageForType){
 
 	menu.callbackSelect = function(n){
 
+		audio.play('blip',true);
 		menu.setOnOff(false);
 
 		let selection = MENU[n];
@@ -126,7 +143,13 @@ window.OSBox = function(nBox,color,header,getNextDamageForType){
 
 		panel.reskin(selection.color, selection.name);
 
-		if(!damage) setTimeout(self.reset,2000);
+		if(!damage){
+			setTimeout(function(){
+				audio.play('blip',true);
+				self.reset();
+			},2000);
+
+		}
 
 	}
 
@@ -146,7 +169,8 @@ window.OSBox = function(nBox,color,header,getNextDamageForType){
 		instanceToy.$el.appendTo(self.$toy);
 
 		if(!params.length){
-			$('<osoverlay>').appendTo(self.$toy).text('ALL SYSTEMS NOMINAL').attr('color',color);
+			let $overlay = $('<osoverlay>').appendTo(self.$toy).attr('color',color);
+			new OSType('ALL SYSTEMS NOMINAL').$el.appendTo($overlay);
 		}
 	}
 

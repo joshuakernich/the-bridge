@@ -11,7 +11,7 @@ window.Rubix = function( nLaunchpad, callbackComplete, nPuzzle ){
 	self.$el = $('<rubix>');
 
 	let isComplete = false;
-	let isOn = false;
+	let isOn = nPuzzle!=undefined;
 	let map = [];
 
 	let grid = 3 + (nPuzzle==undefined?1:nPuzzle)%4; 

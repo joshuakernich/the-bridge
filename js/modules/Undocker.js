@@ -18,7 +18,6 @@ window.Undocker = function( nLaunchpad, callbackComplete, nPuzzle ){
 		{x:7,y:1},
 		{x:7,y:6},
 		{x:0,y:6},
-		
 	]
 
 	const audio = new AudioContext();

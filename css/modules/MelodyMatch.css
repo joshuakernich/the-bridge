@@ -1,65 +1,127 @@
 melodymatch{
-
 	position: relative;
 	display: inline-block;
-	
-	padding: calc( var(--grid) * 2) 0px;
-}
-
-melodymatch.disabled:after{
-	content: "Click to Enable";
-	position: absolute;
-	top:0px;
-	left: 0px;
-	right: 0px;
-	bottom: 0px;
-	color: white;
-	text-align: center;
-	line-height: 200px;
-}
-
-pitch-goal{
-	position: absolute;
-	bottom: 0px;
-	left: 0px;
-	right: 0px;
-	height: var(--border);
-	background: white;
-	box-sizing: border-box;
-	/*background: linear-gradient( to bottom, var(--yellow), transparent );*/
-}
-
-pitch-c{
-	display: inline-block;
-	width: calc( var(--grid));
+	margin: calc( var(--grid) * 2) 0px;
+	width: calc(var(--grid)*8);
 	height: calc(var(--grid)*8);
-	background: rgba(255,255,255,0.05);
-	vertical-align: bottom;
-	box-sizing: border-box;
-	
-	position: relative;
 }
 
 melodymatch toyframe{
-	margin-left: 0px;
-	margin-right: 0px;
+	margin: 0px;
 }
 
-pitch-c.active{
-	background: rgba(255,255,255,0.2);
-}
-
-pitch-fill{
+melodymatch melodytracer{
 	display: block;
 	position: absolute;
-	bottom: 0px;
-	left: 0px;
-	right: 0px;
-	height: 50%;
-	transition: 0.05s all;
-	background: var(--blue);
+	width: calc( var(--border) * 2);
+	height: calc( var(--border) * 2);
+	border: var(--border) solid var(--purple);
+	background: black;
+	transform: translate(-50%, -50%);
+	border-radius: 100%;
 }
 
-pitch-c.live pitch-fill{
-	transition: 0.1s height;
+melodymatch melodytarget{
+	display: block;
+	position: absolute;
+	width: 10%;
+	height: 10%;
+	border: var(--border) solid var(--red);
+	transform: translate(-50%, -50%);
+	border-radius: 100%;
+	box-sizing: border-box;
+	border-color: var(--red);
+	animation: throb infinite 0.5s;
 }
+
+melodymatch melodytarget[complete='true']{
+	border-color: var(--cyan);
+	z-index: 1;
+	animation: none;
+}
+
+melodymatch melodytarget[complete='true']:after{
+	content: "";
+	border-bottom: var(--border) solid black;
+	border-right: var(--border) solid black;
+	width: 30%;
+	height: 50%;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	margin: auto;
+	transform: rotate(45deg);
+	
+}
+
+melodymatch melodytarget:before{
+	content: "";
+	display: block;
+	position: absolute;
+
+	border: var(--border) solid var(--red);
+	left: var(--border);
+	top: var(--border);
+	right: var(--border);
+	bottom: var(--border);
+	box-sizing: border-box;
+	border-radius: 100%;
+}
+
+melodymatch melodyrecording{
+	width: calc(var(--grid)*0.5);
+	height: calc(var(--grid)*0.5);
+	background: var(--red);
+	position: absolute;
+	top: calc(var(--grid)*0.5);
+	right: calc(var(--grid)*0.6);
+	border-radius: 100%;
+	display: block;
+
+	animation: throb infinite 0.5s;
+}
+
+melodymatch melodyrecording:after{
+	content: "REC";
+	display: block;
+	position: absolute;
+	left: calc(var(--grid)*-1);
+	right: calc(var(--grid)*-1);
+	top: calc(var(--grid)*0.6);
+	color: var(--red);
+	text-align: center;
+}
+
+melodymatch melodyfill{
+	background: var(--cyan);
+	display: block;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: auto;
+	transform: translate(-50%, -50%);
+	border-radius: 100%;
+}
+
+melodymatch svg{
+	width: calc(var(--grid)*8);
+	height: calc(var(--grid)*8);
+	position: absolute;
+	display: block;
+	left: 0px;
+	top: 0px;
+	fill: none;
+	stroke: var(--purple);
+	stroke-width: var(--border);
+}
+
+melodymatch[complete='true'] svg{
+	stroke: var(--cyan);
+}
+
+melodymatch[complete='true'] melodytracer{
+	display: none;
+}
+

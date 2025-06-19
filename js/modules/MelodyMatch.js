@@ -2,21 +2,45 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 
 	if( !window.meter ) window.setupTone();
 
-	const OCTAVE = ['A','A#','B','C','C#','D','D#','E','F','F#','G','G#'];
-	const LOW = 'F3';
-	const RANGE = 8;	// how many notes are we supporting
-	const INTERVAL = 2;  // interval between each suppored note
+	function noteToFrequency(note) {
+		const noteRegex = /^([A-Ga-g])(#|b)?(\d+)$/;
+		const match = note.match(noteRegex);
+		if (!match) throw new Error("Invalid note format");
 
+		const noteName = match[1].toUpperCase();
+		const accidental = match[2] || "";
+		const octave = parseInt(match[3], 10);
 
-	function getNoteIndex(name){
-		let note = name.substr(0,name.length-1);
-		let oct = parseInt( name[name.length-1] );
-		return OCTAVE.length*(oct)+OCTAVE.indexOf(note);
+		// Map of note names to semitone offsets from C
+		const semitoneMap = {
+			'C': 0, 'C#': 1, 'Db': 1,
+			'D': 2, 'D#': 3, 'Eb': 3,
+			'E': 4,
+			'F': 5, 'F#': 6, 'Gb': 6,
+			'G': 7, 'G#': 8, 'Ab': 8,
+			'A': 9, 'A#': 10, 'Bb': 10,
+			'B': 11
+		};
+
+		const fullNote = noteName + accidental;
+		const semitone = semitoneMap[fullNote];
+		if (semitone === undefined) throw new Error("Invalid note");
+
+		const midiNumber = (octave + 1) * 12 + semitone;
+		const frequency = 440 * Math.pow(2, (midiNumber - 69) / 12);
+
+		return frequency;
 	}
 
-	const iLow = getNoteIndex(LOW);
-	const iHigh = iLow + RANGE * INTERVAL;
+	function frequencyToLogLinear(f) {
+		if (f <= fLow) return 0;
+		if (f >= fHigh) return 1;
 
+		return (Math.log2(f) - Math.log2(fLow)) / (Math.log2(fHigh) - Math.log2(fLow));
+	}
+
+	let fLow = noteToFrequency('F2');
+	let fHigh = noteToFrequency('F5')
 
 	const audio = new AudioContext();
 	audio.add('blip','./audio/sfx-blip.mp3', 0.2);
@@ -26,37 +50,54 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 	audio.add('good','./audio/sfx-good.mp3', 1);
 
 
+	const SECONDS = 10;
 	const FPS = 20;
-
+	const STEPS = SECONDS*FPS;
+	const THRESHOLD = FPS/2;
 	let self = this;
-	let colors = ['transparent','green','blue','pink','yellow'];
-
-	const BEATS = 8;
 
 	const LEVELS = [
-		[-1,-1,4,4,6,6,-1,-1],
+		[{at:0.4,note:'C4'},{at:0.6,note:'E4'}],
 		[-1,-1,6,6,5,4,-1,-1],
 		[-1,-1,4,6,6,4,-1,-1],
 	]
-	
 
 	self.$el = $('<melodymatch>');
-	let iLevel = nPuzzle%LEVELS.length;
-	let level = LEVELS[iLevel];
-	if(!level) level = [];
-	let $pcs = [];
-	for(var i=0; i<BEATS; i++){
 
-		$pcs[i] = $(`<pitch-c>
-			<pitch-fill></pitch-fill>
-			<pitch-goal></pitch-goal>
-			</pitch-c>`).appendTo(this.$el);
+	
 
 
-		$pcs[i].find('pitch-goal').css('bottom',level[i]/(RANGE)*100+'%');
 
-		if(level[i]==-1) $pcs[i].find('pitch-goal').css('opacity',0);
+	let level = LEVELS[nPuzzle];
+	let targetThresholds = [];
+	let $targets = [];
+	let $fills = [];
+
+	for(var nTarget in level){
+
+		let target = level[nTarget];
+		target.freq = noteToFrequency(target.note);
+		let p = frequencyToLogLinear(target.freq);
+
+		targetThresholds[nTarget] = 0;
+
+		$targets[nTarget] = $('<melodytarget>').appendTo(self.$el).css({
+			'left':target.at * 100 + '%',
+			'top':(1-p) * 100 + '%',
+		})
+
+		$fills[nTarget] = $('<melodyfill>').appendTo($targets[nTarget]);
 	}
+
+	let $svg = $(`
+		<svg viewBox='0 0 1 1'>
+			<path vector-effect='non-scaling-stroke'  d=''>
+		</svg>`
+		).appendTo(self.$el);
+	let $path = $svg.find('path');
+
+	let $tracer = $('<melodytracer>').appendTo(self.$el);
+	let $recording = $('<melodyrecording>').appendTo(self.$el);
 
 	let $frame = $(`<toyframe>
 			<toycorner></toycorner>
@@ -65,137 +106,94 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 			<toycorner></toycorner>
 		</toyframe>`).appendTo(self.$el);
 
-	let nBeat = -2;
-	let nBeatWas = -1;
-	let nPulse = 0;
+	let positionWas = 0;
+	let nStep = -1;
 	let history = [];
-	let corrects = [];
-	let pulses = [];
-	let isGameComplete = false;
 
-	while(history.length<BEATS) history.push(0);
-	while(pulses.length<BEATS*FPS) pulses.push(0);
+	
+
+	function step(){
+
+		nStep = (nStep + 1)%STEPS;
+
+		if(nStep==0){
 
 
-	let iFreqMax = 0;
-
-	function pulse(){
-
-		
-
-		nPulse++;
-
-		nBeat = Math.floor( nPulse/FPS ) % history.length;
-
-		if(nBeat != nBeatWas){ //changed beat
-			
-			audio.play('blip',true);
-
-			//check to see if we finished in the right place
-			if(nBeatWas>-1 && history[nBeatWas] == level[nBeatWas]){
-				corrects[nBeat] = true;
-				let amt = level[nBeatWas]/RANGE;
-				$pcs[nBeatWas].find('pitch-fill').css({ height:amt*100+'%' }).attr('bg','yellow');
-				
+			history.length = 0;
+			for(var i in targetThresholds){
+				if( targetThresholds[i] ) targetThresholds[i]--;
+				$targets[i].attr('complete','false');
 			}
-
-
-			if(nBeat==0){
-				//reset
-				for( var h in history){
-					history[h] = -1;
-					corrects[h] = false;
-					self.$el.find('pitch-fill').css('height',0);
-				}
-			} else if( nBeat == BEATS-1){
-				//cycle complete. test complete.
-
-				isGameComplete = true;
-				for( var h in history){
-					if(level[h] != -1 && history[h] != level[h]) isGameComplete = false;
-				}
-
-
-				self.$el.find('pitch-fill').attr('bg',isGameComplete?'green':'red');
-
-				if(isGameComplete){
-					audio.play('correct',true);
-					self.$el.find('pitch-fill').first().css('height',0);
-					self.$el.find('pitch-fill').last().css('height',0);
-					self.turnOnOff(false);
-
-					setTimeout(function(){
-						window.launchpad.clear( nLaunchpad );
-						window.launchpad.commit( nLaunchpad );
-						if( callbackComplete ) callbackComplete();
-					},500)
-
-					
-				} else {
-					
-				}
-			}
-
-			nCorrect = 0;
-
-			self.$el.find('pitch-c').removeClass('active');
-			$pcs[nBeat%history.length].addClass('active');
-
-			nBeatWas = nBeat;
 		}
-
 
 		let wave = window.waveform.getValue();
 		let freq = yin(wave,window.sampleRate);
 		
-		let nNoteFromA0 = 12 * Math.log2(freq / 440) + 69;
-		let nNote = (nNoteFromA0 - iLow)/INTERVAL;
-		let nNoteRound = Math.round(nNote);
+		let position = isNaN(freq)?0:frequencyToLogLinear(freq);
 
-		if(nNoteRound == level[nBeat]) nCorrect++;
-		let bCorrect = (nCorrect>5);
-		if(bCorrect) nNote = nNoteRound = level[nBeat];
+		let positionLerp =  (positionWas * 5 + position)/6;
 
-		history[nBeat] = nNoteRound;
-		corrects[nBeat] = bCorrect;
-		let amt = nNote/RANGE;
-		$pcs[nBeat].find('pitch-fill').css({ height:amt*100+'%' }).attr('bg',bCorrect?'yellow':'blue');
+		if(positionLerp<0.05) positionLerp = 0.05;
 
-		
-		redrawLaunchpad();
+		for(var nTarget in level){
+
+			if(targetThresholds[nTarget]<THRESHOLD){
+
+				let px = level[nTarget].at - nStep/STEPS;
+				let py = frequencyToLogLinear(level[nTarget].freq) - positionLerp;
+				let d = Math.sqrt(px*px + py*py);
+
+				// 5% of range
+				if(d<0.05){
+					targetThresholds[nTarget]++;
+				} else if(targetThresholds[nTarget] > 0){
+					targetThresholds[nTarget]--;
+				}
+
+				$fills[nTarget].css({ 
+					'width':targetThresholds[nTarget]/THRESHOLD * 100 + '%',
+					'height':targetThresholds[nTarget]/THRESHOLD * 100 + '%',
+				})
+
+				if( targetThresholds[nTarget] == THRESHOLD ) $targets[nTarget].attr('complete','true');
+			}
+		}
+
+		history[nStep] = positionLerp;
+		positionWas = positionLerp;
+
+		redraw();
+	}
+
+	function redraw(){
+
+		$tracer.css({
+			'left':nStep/STEPS*100 + '%',
+			'top':(1-history[nStep]) * 100 + '%',
+		})
+
+		let d = '';
+
+		for(var h in history){
+			d += (h==0?' M':' L') + h/STEPS + ',' + (1-history[h]);
+		}
+
+		$path.attr('d',d);
+
+		//check for completion
+		let isComplete = true;
+		for(var i in targetThresholds) if(targetThresholds[i] < THRESHOLD) isComplete = false;
+
+		if(isComplete){
+			self.turnOnOff(false);
+			audio.play('correct',true);
+			self.$el.attr('complete',true);
+			setTimeout(callbackComplete,1000);
+		}
 	}
 
 	function redrawLaunchpad(){
-
-		// code here is a bit janky because of the double thickness grid
-		// but I'm at peace with that
-
 		window.launchpad.clear( nLaunchpad );
-
-		
-		for(var y=0; y<8; y++){
-			let yTarget = level[nBeat];
-			window.launchpad.setXY( nLaunchpad, nBeat, y, 'white', 0.5);
-		}
-		
-
-		for( var iBeat=0; iBeat<BEATS; iBeat++ ){
-			let x = iBeat;
-			let isBeatCorrect = corrects[iBeat];
-			let yHeight = history[iBeat];
-			for(var iHeight=0; iHeight<yHeight; iHeight++){
-				let y = (8-iHeight-1);
-
-				let color = isBeatCorrect?'yellow':'blue';
-				if(nBeat==BEATS-1) color = isGameComplete?'green':'red';
-
-				window.launchpad.setXY( nLaunchpad, x, y, color, 1);
-			}
-
-			let yTarget = (8-level[iBeat]-1);
-			window.launchpad.setXY( nLaunchpad, x, yTarget, 'white', 1);
-		}
-
 		window.launchpad.commit( nLaunchpad );
 	}
 
@@ -203,7 +201,7 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 	self.turnOnOff = function(b){
 
 		if(b){
-			interval = setInterval(pulse, 1000/FPS);
+			interval = setInterval(step, 1000/FPS);
 		} else {
 			clearInterval(interval);
 		}

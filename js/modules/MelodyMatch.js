@@ -58,8 +58,8 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 
 	const LEVELS = [
 		[{at:0.4,note:'C4'},{at:0.6,note:'E4'}],
-		[-1,-1,6,6,5,4,-1,-1],
-		[-1,-1,4,6,6,4,-1,-1],
+		[{at:0.3,note:'G3'},{at:0.5,note:'E4'},{at:0.7,note:'C4'}],
+		[{at:0.25,note:'G3'},{at:0.4,note:'D4'},{at:0.55,note:'G3'},{at:0.7,note:'D4'}],
 	]
 
 	self.$el = $('<melodymatch>');
@@ -131,9 +131,10 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 		
 		let position = isNaN(freq)?0:frequencyToLogLinear(freq);
 
-		let positionLerp =  (positionWas * 5 + position)/6;
+		let positionLerp =  (positionWas * 10 + position)/11;
 
 		if(positionLerp<0.05) positionLerp = 0.05;
+
 
 		for(var nTarget in level){
 
@@ -143,8 +144,8 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 				let py = frequencyToLogLinear(level[nTarget].freq) - positionLerp;
 				let d = Math.sqrt(px*px + py*py);
 
-				// 5% of range
-				if(d<0.05){
+				// 7% of range
+				if(d<0.07){
 					targetThresholds[nTarget]++;
 				} else if(targetThresholds[nTarget] > 0){
 					targetThresholds[nTarget]--;

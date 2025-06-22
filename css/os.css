@@ -105,6 +105,8 @@ osscreen{
 	white-space: normal;
 	text-align: center;
 	vertical-align: middle;
+
+	perspective: 1000px;
 }
 
 osalerts{
@@ -122,6 +124,8 @@ osbox{
 	left: 0px;
 	right: 0px;
 	margin: auto;
+	transform-origin: bottom center;
+	transform: rotateX(30deg) scale(0.8);
 }
 
 osboxinner{

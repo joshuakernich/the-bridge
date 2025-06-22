@@ -142,7 +142,7 @@ window.OSBox = function(nBox,color,header,getNextDamageForType){
 			selection.color,
 			selection.name,
 			selection.toy,
-			damage?damage.params:undefined,
+			damage?(damage.params?damage.params:[1]):undefined,
 		)
 
 		panel.reskin(selection.color, selection.name);
@@ -339,8 +339,6 @@ window.OS = function(){
 		box.$el.css({bottom:-800}).animate({bottom:GRID});
 		box.$el.appendTo(n==0?$left:$right);
 		box.warning = tiedTo.warning;
-
-		console.log('heree');
 
 		boxes[n] = box;
 	}

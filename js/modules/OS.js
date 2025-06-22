@@ -82,12 +82,18 @@ window.OSMenu = function(n,list){
 		self.callbackSelect(n);
 	}
 
+	let interval = undefined;
+
 	self.setOnOff = function(b){
+
+		clearInterval(interval);
 
 		if( b ) for( var i in list ) for(var x=0; x<8; x++) launchpad.setXY(n,x,i,list[i].color,x==0?0.5:1);
 		else launchpad.clear(n);
 
 		launchpad.commit(n);
+
+		if(b) interval = setInterval(function(){ setOnOff(b) }, 500);
 	}
 
 	self.trigger = function(n) {

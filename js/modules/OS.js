@@ -93,7 +93,7 @@ window.OSMenu = function(n,list){
 
 		launchpad.commit(n);
 
-		if(b) interval = setInterval(function(){ setOnOff(b) }, 500);
+		if(b) interval = setInterval(function(){ self.setOnOff(b) }, 500);
 	}
 
 	self.trigger = function(n) {
@@ -416,6 +416,14 @@ window.OS = function(){
 	addToy( 'fragment' );
 	addToy( 'whale' );
 	addToy( 'docker' );
+
+	const palette = ['red','yellow','green','blue','purple','cyan','white','black'];
+	for(let c in palette) addDebug( 'code_'+palette[c], function(){ doCode(palette[c]) } );
+
+	function doCode(color){
+		frame.reskin(color);
+	}
+	
 
 	let $alerts = $('<debugalerts>').appendTo($debug);
 

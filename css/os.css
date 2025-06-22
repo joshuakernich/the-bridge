@@ -223,6 +223,9 @@ osgradient{
 	right: 0px;
 	bottom: 0px;
 	background: radial-gradient(transparent, transparent, transparent, rgba(255,255,255,0.2));
+	background: url(../img/overlay.png);
+	background-size: 100% 100%;
+
 	
 }
 

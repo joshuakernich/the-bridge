@@ -25,24 +25,30 @@ window.OSType = function(text){
 }
 
 window.OSPanel = function( c, label ){
+
+	const DEFAULTCOLOR = 'yellow';
+
 	let self = this;
 	self.$el = $(`
 		<ospanel>
+			<ospanelglass></ospanelglass>
 			<osvert>
 				<ossegment bg=${c}></ossegment>
 				<ossegment bg=${c} style="opacity:0.8; margin: var(--border) 0px var(--border)"></ossegment>
 				<ossegment bg=${c}></ossegment>
 			</osvert>		
 			<osmiddle>
-				<oshorz padded size=${label?'thicc':'thin'} bg=${c}>
-					${label?`<osh color=${c}>${label}</osh>`:``}
+				<oshorz>
+					<ossegment bg=${c}></ossegment>
+					<ossegment></ossegment>
+					<ossegment bg=${c}></ossegment>
 				</oshorz>
 				<osinner>
 					<osframe border=${c}></osframe>
 				</osinner>
 				<oshorz>
 					<ossegment bg=${c}></ossegment>
-					<ossegment></ossegment>
+					<ossegment>${label?`<osh color=${c=='black'?DEFAULTCOLOR:c}>${label}</osh>`:``}</ossegment>
 					<ossegment bg=${c}></ossegment>
 				</oshorz>
 			</osmiddle>	
@@ -59,7 +65,7 @@ window.OSPanel = function( c, label ){
 	self.reskin = function(c,label){
 		self.$el.find('ossegment[bg],oshorz[bg]').attr('bg',c);
 		self.$el.find('osframe[border]').attr('border',c);
-		self.$el.find('osh[color]').attr('color',c);
+		self.$el.find('osh[color]').attr('color',c=='black'?DEFAULTCOLOR:c);
 		if(label) self.$el.find('osh').text(label);
 	}
 }
@@ -101,6 +107,18 @@ window.OSMenu = function(n,list){
 	}
 }
 
+window.OSToast = function(argument) {
+	let self = this;
+	self.$el = $('<ostoast>');
+	
+	let panel = new OSPanel('red', undefined);
+	panel.$el.appendTo(self.$el);
+
+	let $inner = $('<ostoastinner color=red>').appendTo(panel.$inner);
+
+	$inner.html('TOAST TOAST TOAST TOAST<br>TOAST TOAST TOAST TOAST<br>TOAST TOAST TOAST TOAST');
+}
+
 window.OSBox = function(nBox,color,header,getNextDamageForType){
 
 	const audio = new AudioContext();
@@ -112,6 +130,8 @@ window.OSBox = function(nBox,color,header,getNextDamageForType){
 
 	let $el = $('<osbox>');
 	
+
+
 	let panel = new OSPanel(color, header);
 	panel.$el.appendTo($el);
 
@@ -119,7 +139,10 @@ window.OSBox = function(nBox,color,header,getNextDamageForType){
 
 	self.$el = $el;
 
+	
 	let $inner = $('<osboxinner>').appendTo(panel.$inner);
+
+
 
 	const MENU = [
 		{type:'docker', 	toy:Undocker,			name:'UNDOCKER', 	color:'yellow'},
@@ -225,7 +248,7 @@ window.OS = function(){
 	window.setupTone();
 
 	const GRID = 40;
-	const WIDTH = 4000;
+	const WIDTH = 5000;
 
 	window.launchpad = new LaunchpadController();
 	window.socket = new HASocket();
@@ -255,7 +278,8 @@ window.OS = function(){
 
 	let frame = new OSPanel('black');
 	frame.$el.appendTo($bg).css({position:'absolute', top:'0px', left:'0px', right:'0px', bottom: '0px', margin:GRID });
-	
+	frame.$el.find('ospanelglass').hide();
+
 	let $debug = $(`
 		<debug>
 			<debuglaunchpads></debuglaunchpads>
@@ -358,10 +382,13 @@ window.OS = function(){
 	
 
 	for(var i=0; i<2; i++){
-		let box = new OSBox( i, 'purple', i==0?'PORT MATRIX':'STARBOARD MATRIX', getNextDamageForType );
+		let box = new OSBox( i, 'black', i==0?'PORT MATRIX':'STARBOARD MATRIX', getNextDamageForType );
 		box.$el.appendTo(i==0?$left:$right);
 		boxes[i] = box;
 		box.$el.css({bottom:GRID});
+
+		let toast = new OSToast( i, 'red' );
+		toast.$el.appendTo(i==0?$left:$right);
 	}
 
 	

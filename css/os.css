@@ -49,7 +49,7 @@ oscontainer{
 	top: 0px;
 	bottom: 0px;
 	transform-origin: bottom left;
-	min-width: 4000px;
+	min-width: 5000px;
 	padding-bottom: var(--grid);
 	white-space: nowrap;
 	margin:  auto;
@@ -125,13 +125,27 @@ osbox{
 	right: 0px;
 	margin: auto;
 	transform-origin: bottom center;
-	transform: rotateX(30deg) scale(0.8);
+	transform: rotateX(30deg);
+
+
+}
+
+ospanelglass{
+	background: url(../img/glass.png);
+	background-size: 100% 100%;
+	position: absolute;
+	top: calc(var(--grid) * -0.5);
+	left: calc(var(--grid) * -0.5);
+	right: calc(var(--grid) * -0.5);
+	bottom: calc(var(--grid) * -0.5);
+	opacity: 0.5;
+	z-index: -1;
 }
 
 osboxinner{
 	display: block;
 	width: calc(var(--grid) * 12);
-	height: calc(var(--grid) * 12);
+	height: calc(var(--grid) * 9);
 	
 	border-radius: var(--grid);
 	position: relative;
@@ -139,9 +153,13 @@ osboxinner{
 	left: 0px;
 
 	white-space: nowrap;
+
+
+	
 }
 
 osboxinner[mode='toy']{
+	height: calc(var(--grid) * 12);
 	left: calc(var(--grid) * -12);
 }
 
@@ -153,6 +171,8 @@ ostoy{
 	border-radius: var(--grid);
 	vertical-align: top;
 	position: relative;
+
+
 }
 
 osmenu{
@@ -226,7 +246,7 @@ osgradient{
 	background: url(../img/overlay.png);
 	background-size: 100% 100%;
 
-	
+	opacity: 0.5;
 }
 
 ospanel{
@@ -310,13 +330,13 @@ oshorz ossegment{
 }
 
 oshorz ossegment:first-of-type{
-	width: calc( var(--grid) * 3 );
+	width: calc( var(--grid) * 1.5 );
 	flex-grow: 0;
 	border-radius: 0px calc( var(--grid) / 4) calc( var(--grid) / 4) 0px;
 }
 
 oshorz ossegment:last-of-type{
-	width: calc( var(--grid) * 3 );
+	width: calc( var(--grid) * 1.5 );
 	flex-grow: 0;
 	border-radius: calc( var(--grid) / 4) 0px 0px calc( var(--grid) / 4);
 }
@@ -327,9 +347,32 @@ oshorz[size=thicc]{
 }
 
 osh{
-	text-align: left;
-	background: black;
+	text-align: center;
+	
 	padding: 0px var(--border);
 	font-size: var(--grid);
-	line-height: 35px;
+	line-height: 0px;
+	position: absolute;
+	left: 0px;
+	right: 0px;
 }
+
+ostoastinner{
+	display: block;
+	padding: var(--grid);
+}
+
+ostoast{
+	display: inline-block;
+	position: absolute;
+	bottom: calc( var(--grid) * 1 );
+
+	transform-origin: bottom center;
+	transform: rotateX(30deg);
+
+	opacity: 0;
+}
+
+[position="left"] ostoast{ left: calc( var(--grid) * 4 ); }
+[position="right"] ostoast{ right: calc( var(--grid) * 4 ); }
+

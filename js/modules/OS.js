@@ -283,8 +283,11 @@ window.OS = function(){
 	let $debug = $(`
 		<debug>
 			<debuglaunchpads></debuglaunchpads>
-			<debugevents></debugevents>
-			<debugqueue></debugqueue>
+			<debugevents><h1>OS</h1></debugevents>
+			<debugevents><h1>WARN</h1></debugevents>
+			<debugevents><h1>CODE</h1></debugevents>
+			<debugevents><h1>QUEUE</h1><debugqueue></debugqueue></debugevents>
+			
 		</debug>
 	`).appendTo("body");
 
@@ -412,15 +415,15 @@ window.OS = function(){
 	//for iterating puzzles
 	let N = {};
 
-	function addDebug( type, fn ){
-		$(`<button>${type}</button>`).appendTo($debug.find('debugevents')).click(fn);
+	function addDebug( type, fn, nColumn=0 ){
+		$(`<button>${type}</button>`).appendTo($debug.find('debugevents').eq(nColumn)).click(fn);
 		window.socket.on( type, fn );
 	}
 
-	function addToy( type ){
+	function addToy( type, nColumn=1 ){
 		N[type] = 0;
 		//iterate severity on click
-		$(`<button>warn_${type}</button>`).appendTo($debug.find('debugevents')).click(function(){
+		$(`<button>warn_${type}</button>`).appendTo($debug.find('debugevents').eq(nColumn)).click(function(){
 			doDamage({ 
 				type:type, 
 				params:[N[type]++] } );
@@ -432,6 +435,8 @@ window.OS = function(){
 				params:[e.severity] } );
 		} );
 	}
+
+
 
 	addDebug( 'os_reset', reset );
 	addDebug( 'os_init_mic', init );
@@ -445,7 +450,7 @@ window.OS = function(){
 	addToy( 'docker' );
 
 	const palette = ['red','yellow','green','blue','purple','cyan','white','black'];
-	for(let c in palette) addDebug( 'code_'+palette[c], function(){ doCode(palette[c]) } );
+	for(let c in palette) addDebug( 'code_'+palette[c], function(){ doCode(palette[c]) }, 2 );
 
 	function doCode(color){
 		frame.reskin(color);

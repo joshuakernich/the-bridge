@@ -134,9 +134,9 @@ ospanelglass{
 	background: url(../img/glass.png);
 	background-size: 100% 100%;
 	position: absolute;
-	top: calc(var(--grid) * -0.5);
-	left: calc(var(--grid) * -0.5);
-	right: calc(var(--grid) * -0.5);
+	top: calc(var(--grid) * -1);
+	left: calc(var(--grid) * -0.7);
+	right: calc(var(--grid) * -0.7);
 	bottom: calc(var(--grid) * -0.5);
 	opacity: 0.5;
 	z-index: -1;

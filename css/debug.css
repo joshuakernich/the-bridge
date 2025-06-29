@@ -37,10 +37,11 @@ debug h1{
 	font: inherit;
 	font-size: inherit;
 	background: none;
-	color: white;
+	color: gray;
 	padding: 0px;
 	margin: 0px;
 	position: relative;
+
 }
 
 debuglaunchpads{
@@ -49,7 +50,8 @@ debuglaunchpads{
 
 debugevents, debugqueue{
 	display: inline-block;
-	width: 150px;
+	width: 90px;
+	vertical-align: top;
 }
 
 debugqueue{

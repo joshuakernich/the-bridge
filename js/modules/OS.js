@@ -31,7 +31,6 @@ window.OSPanel = function( c, label ){
 	let self = this;
 	self.$el = $(`
 		<ospanel>
-			<ospanelglass></ospanelglass>
 			<osvert>
 				<ossegment bg=${c}></ossegment>
 				<ossegment bg=${c} style="opacity:0.8; margin: var(--border) 0px var(--border)"></ossegment>
@@ -40,7 +39,7 @@ window.OSPanel = function( c, label ){
 			<osmiddle>
 				<oshorz>
 					<ossegment bg=${c}></ossegment>
-					<ossegment></ossegment>
+					<ossegment bg=${c} style="opacity:0.8; margin: 0px var(--border)"></ossegment>
 					<ossegment bg=${c}></ossegment>
 				</oshorz>
 				<osinner>
@@ -60,12 +59,17 @@ window.OSPanel = function( c, label ){
 		</ospanel>
 	`);
 
+	let $bgs = self.$el.find('[bg]');
+	let $colors = self.$el.find('[color]');
+
 	self.$inner = self.$el.find('osinner');
 
 	self.reskin = function(c,label){
-		self.$el.find('ossegment[bg],oshorz[bg]').attr('bg',c);
-		self.$el.find('osframe[border]').attr('border',c);
-		self.$el.find('osh[color]').attr('color',c=='black'?DEFAULTCOLOR:c);
+		//self.$el.find('ossegment[bg],oshorz[bg]').attr('bg',c);
+		//self.$el.find('osframe[border]').attr('border',c);
+		//self.$el.find('osh[color]').attr('color',c=='black'?DEFAULTCOLOR:c);
+		$bgs.attr('bg',c);
+		$colors.attr('color',c=='black'?DEFAULTCOLOR:c);
 		if(label) self.$el.find('osh').text(label);
 	}
 }
@@ -117,6 +121,8 @@ window.OSToast = function(argument) {
 	let $inner = $('<ostoastinner color=red>').appendTo(panel.$inner);
 
 	$inner.html('TOAST TOAST TOAST TOAST<br>TOAST TOAST TOAST TOAST<br>TOAST TOAST TOAST TOAST');
+
+	self.$el.hide();
 }
 
 window.OSBox = function(nBox,color,header,getNextDamageForType){
@@ -125,15 +131,24 @@ window.OSBox = function(nBox,color,header,getNextDamageForType){
 	audio.add('blip','./audio/sfx-blip.mp3');
 
 	let self = this;
-	let w = 14;
-	let h = 14;
-
 	let $el = $('<osbox>');
 	
-
-
 	let panel = new OSPanel(color, header);
 	panel.$el.appendTo($el);
+
+	let panelGlow = new OSPanel('cyan', undefined);
+	panelGlow.$el.prependTo(panel.$el);
+	panelGlow.$el.css({
+		'position':'absolute',
+		'inset':'0px',
+		'filter':'blur(20px)',
+		'opacity':'0.4',
+	})
+
+	panelGlow.$inner.css({
+		'background-color':'var(--cyan)',
+		'opacity':'0.25',
+	});
 
 	let instanceToy = undefined;
 
@@ -141,8 +156,6 @@ window.OSBox = function(nBox,color,header,getNextDamageForType){
 
 	
 	let $inner = $('<osboxinner>').appendTo(panel.$inner);
-
-
 
 	const MENU = [
 		{type:'docker', 	toy:Undocker,			name:'UNDOCKER', 	color:'yellow'},
@@ -225,6 +238,10 @@ window.OSBox = function(nBox,color,header,getNextDamageForType){
 	self.untriggerXY = function(x,y){
 		if( instanceToy && instanceToy.untriggerXY ) instanceToy.untriggerXY(x,y);
 	}
+
+	self.cancel = function(){
+		self.reset();
+	}
 }
 
 window.OS = function(){
@@ -256,6 +273,7 @@ window.OS = function(){
 	let colors = ['yellow','cyan','purple','pink'];
 
 	let boxes = [undefined,undefined];
+	let toasts = [undefined,undefined];
 
 	let $container = $(`<oscontainer>
 		<osbg>
@@ -277,8 +295,16 @@ window.OS = function(){
 	let $right = $container.find('[position="right"]');
 
 	let frame = new OSPanel('black');
-	frame.$el.appendTo($bg).css({position:'absolute', top:'0px', left:'0px', right:'0px', bottom: '0px', margin:GRID });
-	frame.$el.find('ospanelglass').hide();
+	frame.$el.appendTo($bg).css({position:'absolute', inset: '0px', margin:GRID });
+
+	let panelGlow = new OSPanel('cyan', undefined);
+	panelGlow.$el.prependTo(frame.$el);
+	panelGlow.$el.css({
+		'position':'absolute',
+		'inset':'0px',
+		'filter':'blur(90px)',
+		'opacity':'1',
+	})
 
 	let $debug = $(`
 		<debug>
@@ -313,12 +339,8 @@ window.OS = function(){
 
 	let queue = [];
 
-	function doDamage( damage ){
-
-		//ouch
+	function doScreenShake(){
 		audio.play('boom',true);
-		audio.play('alert',true);
-		
 		//screenshake
 		$($container)
 		.animate({bottom:-10,left:-10},20)
@@ -326,7 +348,15 @@ window.OS = function(){
 		.animate({bottom:-20,left:-50},20)
 		.animate({bottom:-20,left:-10},20)
 		.animate({bottom:0,left:0},20);
+	}
 
+	function doDamage( damage ){
+
+		//ouch
+		audio.play('alert',true);
+
+		doScreenShake();
+		
 		queue.push(damage);
 		renderQueue();
 	}
@@ -392,9 +422,8 @@ window.OS = function(){
 
 		let toast = new OSToast( i, 'red' );
 		toast.$el.appendTo(i==0?$left:$right);
+		toasts[i] = toast;
 	}
-
-	
 
 	setInterval(function(){
 
@@ -416,7 +445,9 @@ window.OS = function(){
 	let N = {};
 
 	function addDebug( type, fn, nColumn=0 ){
-		$(`<button>${type}</button>`).appendTo($debug.find('debugevents').eq(nColumn)).click(fn);
+		$(`<button>${type}</button>`).appendTo($debug.find('debugevents').eq(nColumn)).click(function(){
+			fn();
+		});
 		window.socket.on( type, fn );
 	}
 
@@ -436,12 +467,17 @@ window.OS = function(){
 		} );
 	}
 
-
+	function doToast(){
+		frame.$el.find('osvert').eq(0).css({width:'calc( 5 * var(--grid))'}); 
+		toasts[0].$el.show();
+	}
 
 	addDebug( 'os_reset', reset );
 	addDebug( 'os_init_mic', init );
 	addDebug( 'os_text', doSentence );
 	addDebug( 'os_video', doTransmission );
+	addDebug( 'os_toast', doToast );
+	addDebug( 'os_cancel', doCancel );
 
 	addToy( 'circuit' );
 	addToy( 'fire' );
@@ -453,9 +489,9 @@ window.OS = function(){
 	for(let c in palette) addDebug( 'code_'+palette[c], function(){ doCode(palette[c]) }, 2 );
 
 	function doCode(color){
+		doScreenShake();
 		frame.reskin(color);
 	}
-	
 
 	let $alerts = $('<debugalerts>').appendTo($debug);
 
@@ -467,7 +503,12 @@ window.OS = function(){
 			panel.$el.remove();
 		},false);
 	};
-	
+
+	function doCancel(n=0){
+		console.log(n,boxes,boxes[n]);
+		boxes[n].cancel();
+	}
+
 	function reset(){
 		window.location = window.location;
 	}

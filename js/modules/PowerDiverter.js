@@ -791,13 +791,15 @@ window.PowerDiverter = function( nLaunchpad, callbackComplete, nPuzzle, isFirePu
 	let interval = undefined;
 	self.turnOnOff = function(b,params){
 		
-		clearInterval(interval)
+		clearInterval(interval);
 		if(b){
 			//if(params && params.severity) doLevel(params.severity-1);
 			interval = setInterval(step,100);
 			redraw();
 		} else {
 			//window.synth.triggerRelease();
+			window.launchpad.clear( nLaunchpad );
+			window.launchpad.commit( nLaunchpad );
 		}
 	}
 

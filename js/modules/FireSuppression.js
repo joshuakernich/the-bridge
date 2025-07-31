@@ -6,4 +6,8 @@ window.FireSuppression = function( nLaunchpad, callbackComplete, nPuzzle ){
 
 	self.triggerXY = slave.triggerXY;
 	self.untriggerXY = slave.untriggerXY;
+
+	self.turnOnOff = function(b,params){
+		slave.turnOnOff(b,params);
+	}
 }

@@ -63,4 +63,11 @@ window.Undocker = function( nLaunchpad, callbackComplete, nPuzzle ){
 		self.$el.find('[x='+x+'][y='+y+']').click();
 	}
 
+	self.turnOnOff = function(b){
+		if(!b){
+			window.launchpad.clear(nLaunchpad);
+			window.launchpad.commit(nLaunchpad);
+		}
+	}
+
 }

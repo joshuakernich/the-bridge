@@ -135,6 +135,7 @@ window.OSBox = function(MENU,nBox,color,header,getNextDamageForType){
 	audio.add('blip','./audio/sfx-blip.mp3');
 
 	let self = this;
+	self.type = undefined;
 	let $el = $('<osbox>');
 	
 	let panel = new OSPanel(color, header);
@@ -161,7 +162,6 @@ window.OSBox = function(MENU,nBox,color,header,getNextDamageForType){
 	
 	let $inner = $('<osboxinner>').appendTo(panel.$inner);
 
-	
 
 	let menu = new OSMenu(nBox, MENU);
 	menu.$el.appendTo($inner);
@@ -192,9 +192,7 @@ window.OSBox = function(MENU,nBox,color,header,getNextDamageForType){
 				audio.play('blip',true);
 				self.reset();
 			},2000);
-
 		}
-
 	}
 
 	self.$toy = $('<ostoy>').appendTo($inner);
@@ -216,6 +214,8 @@ window.OSBox = function(MENU,nBox,color,header,getNextDamageForType){
 			let $overlay = $('<osoverlay>').appendTo(self.$toy).attr('color',color);
 			new OSType('ALL SYSTEMS NOMINAL').$el.appendTo($overlay);
 		}
+
+		self.type = type;
 	}
 
 	self.reset = function(){
@@ -226,6 +226,8 @@ window.OSBox = function(MENU,nBox,color,header,getNextDamageForType){
 		menu.setOnOff(true);
 
 		instanceToy = undefined;
+
+		self.type = undefined;
 	}
 
 	self.triggerXY = function(x,y){
@@ -475,12 +477,21 @@ window.OS = function(){
 				type:type, 
 				params:[N[type]++] } );
 		});
+
+		$(`<button>fix_${type}</button>`).appendTo($debug.find('debugevents').eq(nColumn)).click(function(){
+			doFixType({ type:type } );
+		});
+
 		//otherwise capture severity from message
 		window.socket.on( 'warn_'+type, function(e){
 			doDamage({ 
 				type:type, 
 				params:[e.severity] } );
 		} );
+
+		window.socket.on( 'fix_'+type, function(e){
+			doFixType({ type:type });
+		});
 	}
 
 	function doShake(){
@@ -499,7 +510,6 @@ window.OS = function(){
 	addDebug( 'os_video', doTransmission );
 	addDebug( 'os_shake', doShake );
 	addDebug( 'os_toast', doToast );
-	addDebug( 'os_cancel', doCancel );
 
 	addToy( 'circuit' );
 	addToy( 'fire' );
@@ -526,9 +536,21 @@ window.OS = function(){
 		},false);
 	};
 
-	function doCancel(n=0){
-		console.log(n,boxes,boxes[n]);
-		boxes[n].cancel();
+
+	function doFixType(params){
+
+		let type = params.type;
+		
+		for(var b in boxes) if( boxes[b].type ) boxes[b].cancel();
+
+		for(var q=0; q<queue.length; q++){
+			if(queue[q].type){
+				queue.splice(q,1);
+				q--;
+			}
+		}
+
+		renderQueue();
 	}
 
 	function reset(){

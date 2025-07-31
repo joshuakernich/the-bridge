@@ -161,7 +161,8 @@ window.Rubix = function( nLaunchpad, callbackComplete, nPuzzle ){
 		if(b){
 			
 		} else {
-			
+			window.launchpad.clear( nLaunchpad );
+			window.launchpad.commit( nLaunchpad );
 		}
 	}
 }

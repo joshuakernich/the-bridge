@@ -47,10 +47,9 @@ oscontainer{
 	left: 0px;
 	right: 0px;
 	top: 0px;
-	bottom: 100px;
+	bottom: calc( var(--grid) * 0.5 );
 	transform-origin: bottom left;
 	min-width: 5000px;
-	padding-bottom: var(--grid);
 	white-space: nowrap;
 	margin:  auto;
 	overflow: hidden;

@@ -362,16 +362,16 @@ window.OS = function(){
 		.animate({bottom:-10,left:-10},20)
 		.animate({bottom:10,left:10},20)
 		.animate({bottom:-20,left:-50},20)
-		.animate({bottom:-20,left:-10},20)
-		.animate({bottom:0,left:0},20);
+		.animate({bottom:0,left:-10},20)
+		.animate({bottom:20,left:0},20);
 	}
 
 	function doDamage( damage ){
 
 		//ouch
-		audio.play('alert',true);
+		//audio.play('alert',true);
 
-		doScreenShake();
+		//doScreenShake();
 		
 		queue.push(damage);
 		renderQueue();
@@ -483,6 +483,11 @@ window.OS = function(){
 		} );
 	}
 
+	function doShake(){
+		doScreenShake();
+		audio.play('boom',true);
+	}
+
 	function doToast(){
 		frame.$el.find('osvert').eq(0).css({width:'calc( 5 * var(--grid))'}); 
 		toasts[0].$el.show();
@@ -492,6 +497,7 @@ window.OS = function(){
 	addDebug( 'os_init_mic', init );
 	addDebug( 'os_text', doSentence );
 	addDebug( 'os_video', doTransmission );
+	addDebug( 'os_shake', doShake );
 	addDebug( 'os_toast', doToast );
 	addDebug( 'os_cancel', doCancel );
 

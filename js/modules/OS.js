@@ -39,7 +39,7 @@ window.OSPanel = function( c, label ){
 			<osmiddle>
 				<oshorz>
 					<ossegment bg=${c}></ossegment>
-					<ossegment bg=${c} style="opacity:0.8; margin: 0px var(--border)"></ossegment>
+					<ossegment bg=${c} style="border-radius:calc( var(--grid) / 4);opacity:0.8; margin: 0px var(--border)"></ossegment>
 					<ossegment bg=${c}></ossegment>
 				</oshorz>
 				<osinner>

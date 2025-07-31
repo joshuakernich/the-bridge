@@ -329,7 +329,6 @@ osvert ossegment{
 oshorz ossegment{
 	height: 100%;
 	flex-grow: 1;
-
 }
 
 oshorz ossegment:first-of-type{
@@ -346,18 +345,18 @@ oshorz ossegment:last-of-type{
 
 oshorz[size=thicc]{
 	height: var(--grid);
-
 }
 
 osh{
 	text-align: center;
-	
 	padding: 0px var(--border);
 	font-size: var(--grid);
 	line-height: 0px;
 	position: absolute;
 	left: 0px;
 	right: 0px;
+	bottom: calc( var(--grid) / 2);
+	text-shadow: 0px 0px 20px black, 0px 0px 50px black;
 }
 
 ostoastinner{

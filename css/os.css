@@ -140,6 +140,7 @@ ospanelglass{
 	bottom: calc(var(--grid) * -0.5);
 	opacity: 0.5;
 	z-index: -1;
+	display: none;
 }
 
 osboxinner{
@@ -247,6 +248,7 @@ osgradient{
 	background-size: 100% 100%;
 
 	opacity: 0.5;
+	display: none;
 }
 
 ospanel{
@@ -259,6 +261,7 @@ osvert{
 	flex-direction: column;
 	width: var( --grid );
 	overflow: hidden;
+	position: relative;
 }
 
 osvert:first-of-type{
@@ -370,7 +373,7 @@ ostoast{
 	transform-origin: bottom center;
 	transform: rotateX(30deg);
 
-	opacity: 0;
+	
 }
 
 [position="left"] ostoast{ left: calc( var(--grid) * 4 ); }

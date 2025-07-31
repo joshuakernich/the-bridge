@@ -8,7 +8,8 @@ window.HASocket = function(){
 	//const URL = 'http://192.168.1.180:8123/api/websocket';
 	//const URL = 'https://localhost:8123/api/websocket';
 	const protocols = 'nothingHere';
-	const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJmMzRjZWI1OTNlOTY0OTJhYThjYzNlNmMwNGUyYjY1MiIsImlhdCI6MTcyNjg5NjE3NCwiZXhwIjoyMDQyMjU2MTc0fQ.ru0S-BHJCClCRKkpMNbNfwRvi8QUfVy8NznFT-80L_c';
+	//const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJmMzRjZWI1OTNlOTY0OTJhYThjYzNlNmMwNGUyYjY1MiIsImlhdCI6MTcyNjg5NjE3NCwiZXhwIjoyMDQyMjU2MTc0fQ.ru0S-BHJCClCRKkpMNbNfwRvi8QUfVy8NznFT-80L_c';
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiMjU3YjAxOTk0NzU0ZjhkYjNhNWEwOGNlZWQ4YmM3ZSIsImlhdCI6MTc0OTUzMDE3NiwiZXhwIjoyMDY0ODkwMTc2fQ.j4mEk-Ksv00tsavOkHwB3CGF4kJWhFKqgQGZR1rLML4';
 
 	let s = new WebSocket(URL);
 	//let s = {};
@@ -34,7 +35,7 @@ window.HASocket = function(){
 		
 
 	 	if(data.type=='auth_required'){
-	 		self.send({
+	 		self.connect({
 	 			"type": "auth",
   				"access_token": token,
 	 		})
@@ -143,9 +144,16 @@ window.HASocket = function(){
 		
 	}
 
+	self.connect = function(msg){
+		msg = JSON.stringify(msg);
+		console.log("SEND",msg);
+		if(s.send) s.send(msg);
+	}
+
 	self.send = function(msg){
 		nSend ++;
 		msg.id = nSend;
+		//this^^
 		msg = JSON.stringify(msg);
 		console.log("SEND",msg);
 		if(s.send) s.send(msg);

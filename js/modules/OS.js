@@ -297,7 +297,11 @@ window.OS = function(){
 	let $right = $container.find('[position="right"]');
 
 	let frame = new OSPanel('black');
-	frame.$el.appendTo($bg).css({position:'absolute', inset: '0px', margin:GRID });
+	frame.$el.appendTo($bg).css({
+		position:'absolute', 
+		inset: '0px',
+		margin:GRID,
+	});
 
 	let panelGlow = new OSPanel('cyan', undefined);
 	panelGlow.$el.prependTo(frame.$el);

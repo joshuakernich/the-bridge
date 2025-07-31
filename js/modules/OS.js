@@ -61,6 +61,7 @@ window.OSPanel = function( c, label ){
 
 	let $bgs = self.$el.find('[bg]');
 	let $colors = self.$el.find('[color]');
+	let $borders = self.$el.find('[border]');
 
 	self.$inner = self.$el.find('osinner');
 
@@ -69,6 +70,7 @@ window.OSPanel = function( c, label ){
 		//self.$el.find('osframe[border]').attr('border',c);
 		//self.$el.find('osh[color]').attr('color',c=='black'?DEFAULTCOLOR:c);
 		$bgs.attr('bg',c);
+		$borders.attr('border',c);
 		$colors.attr('color',c=='black'?DEFAULTCOLOR:c);
 		if(label) self.$el.find('osh').text(label);
 	}

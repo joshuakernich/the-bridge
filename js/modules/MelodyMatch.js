@@ -68,7 +68,7 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 
 
 
-	let level = LEVELS[nPuzzle];
+	let level = LEVELS[nPuzzle%LEVELS.length];
 	let targetThresholds = [];
 	let $targets = [];
 	let $fills = [];

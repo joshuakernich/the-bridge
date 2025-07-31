@@ -640,7 +640,8 @@ window.PowerDiverter = function( nLaunchpad, callbackComplete, nPuzzle, isFirePu
 			}
 
 			if(actor.type=='fire'){
-				actor.intensity -= 30;
+				//sadly you can't tap on a fire to put it out any more
+				//actor.intensity -= 30;
 			}
 
 			redraw();

@@ -8,6 +8,8 @@ window.sendEvent = function(evt){
 	});
 }
 
+
+
 window.OSType = function(text){
 	const audio = new AudioContext();
 	audio.add('type','./audio/sfx-type.mp3', 1);
@@ -127,7 +129,7 @@ window.OSToast = function(argument) {
 	self.$el.hide();
 }
 
-window.OSBox = function(nBox,color,header,getNextDamageForType){
+window.OSBox = function(MENU,nBox,color,header,getNextDamageForType){
 
 	const audio = new AudioContext();
 	audio.add('blip','./audio/sfx-blip.mp3');
@@ -159,13 +161,7 @@ window.OSBox = function(nBox,color,header,getNextDamageForType){
 	
 	let $inner = $('<osboxinner>').appendTo(panel.$inner);
 
-	const MENU = [
-		{type:'docker', 	toy:Undocker,			name:'UNDOCKER', 	color:'yellow'},
-		{type:'circuit', 	toy:PowerDiverter,		name:'REPOWER', 	color:'yellow'},
-		{type:'fire', 		toy:FireSuppression,	name:'UNFLAMER', 	color:'pink'},
-		{type:'fragment', 	toy:Rubix,				name:'DEFRAGGER', 	color:'blue'},
-		{type:'whale', 		toy:MelodyMatch,		name:'UPTONER', 	color:'blue'},
-	]
+	
 
 	let menu = new OSMenu(nBox, MENU);
 	menu.$el.appendTo($inner);
@@ -247,6 +243,20 @@ window.OSBox = function(nBox,color,header,getNextDamageForType){
 }
 
 window.OS = function(){
+
+	const MENU = [
+	[
+		{type:'circuit', 	toy:PowerDiverter,		name:'REPOWER', 	color:'yellow'},
+		{type:'fire', 		toy:FireSuppression,	name:'UNFLAMER', 	color:'pink'},
+		{type:'fragment', 	toy:Rubix,				name:'DEFRAGGER', 	color:'blue'},
+		{type:'whale', 		toy:MelodyMatch,		name:'UPTONER', 	color:'purple'},
+		], [
+		{type:'docker', 	toy:Undocker,			name:'UNDOCKER', 	color:'green'},
+		{type:'circuit', 	toy:PowerDiverter,		name:'REPOWER', 	color:'yellow'},
+		{type:'fire', 		toy:FireSuppression,	name:'UNFLAMER', 	color:'pink'},
+		{type:'fragment', 	toy:Rubix,				name:'DEFRAGGER', 	color:'blue'},
+		]
+	]
 
 	window.setupTone = async function(){
 		await Tone.start()
@@ -421,7 +431,7 @@ window.OS = function(){
 	
 
 	for(var i=0; i<2; i++){
-		let box = new OSBox( i, 'black', i==0?'PORT MATRIX':'STARBOARD MATRIX', getNextDamageForType );
+		let box = new OSBox( MENU[i], i, 'black', i==0?'PORT MATRIX':'STARBOARD MATRIX', getNextDamageForType );
 		box.$el.appendTo(i==0?$left:$right);
 		boxes[i] = box;
 		box.$el.css({bottom:GRID});

@@ -235,6 +235,8 @@ osmenuitem[bg='yellow']:before{ background:var(--yellow); }
 osmenuitem[bg='blue']:before{ background:var(--blue); }
 osmenuitem[bg='pink']:before{ background:var(--pink); }
 osmenuitem[bg='orange']:before{ background:var(--orange); }
+osmenuitem[bg='green']:before{ background:var(--green); }
+osmenuitem[bg='purple']:before{ background:var(--purple); }
 
 osgradient{
 	position: absolute;

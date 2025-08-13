@@ -49,7 +49,6 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 	audio.add('powerup','./audio/sfx-powerup.mp3', 1);
 	audio.add('good','./audio/sfx-good.mp3', 1);
 
-
 	const SECONDS = 10;
 	const FPS = 20;
 	const STEPS = SECONDS*FPS;
@@ -63,10 +62,6 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 	]
 
 	self.$el = $('<melodymatch>');
-
-	
-
-
 
 	let level = LEVELS[nPuzzle%LEVELS.length];
 	let targetThresholds = [];
@@ -109,8 +104,6 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 	let positionWas = 0;
 	let nStep = -1;
 	let history = [];
-
-	
 
 	function step(){
 

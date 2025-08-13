@@ -147,12 +147,12 @@ window.HASocket = function(){
 	self.connect = function(msg){
 		msg = JSON.stringify(msg);
 		console.log("SEND",msg);
-		if(s.send) s.send(msg);
+		if(s.send) s.send(msg,false);
 	}
 
-	self.send = function(msg){
+	self.send = function(msg,hasID=true){
 		nSend ++;
-		msg.id = nSend;
+		if(hasID) msg.id = nSend;
 		//this^^
 		msg = JSON.stringify(msg);
 		console.log("SEND",msg);

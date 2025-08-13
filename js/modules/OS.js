@@ -1,10 +1,11 @@
 
 
 
-window.sendEvent = function(evt){
+window.sendEvent = function(evt,data){
 	window.socket.send({
 		type:'fire_event',
-		event_type:evt
+		event_type:evt,
+		event_data:data,
 	});
 }
 
@@ -205,7 +206,7 @@ window.OSBox = function(MENU,nBox,color,header,getNextDamageForType){
 		if(!params) params = [];
 
 		instanceToy = new toy(nBox,function(){
-			sendEvent('fix_'+type);
+			sendEvent('fix_problem',{warning_id:type});
 			self.reset();
 		},params[0],params[1],params[2]);
 		instanceToy.$el.appendTo(self.$toy);
@@ -248,15 +249,15 @@ window.OS = function(){
 
 	const MENU = [
 	[
-		{type:'circuit', 	toy:PowerDiverter,		name:'REPOWER', 	color:'yellow'},
-		{type:'fire', 		toy:FireSuppression,	name:'UNFLAMER', 	color:'pink'},
-		{type:'fragment', 	toy:Rubix,				name:'DEFRAGGER', 	color:'blue'},
-		{type:'whale', 		toy:MelodyMatch,		name:'UPTONER', 	color:'purple'},
+		{type:'circuit_damage', 	toy:PowerDiverter,		name:'REPOWER', 	color:'yellow'},
+		{type:'plasma_fire', 		toy:FireSuppression,	name:'UNFLAMER', 	color:'pink'},
+		{type:'data_corruption', 	toy:Rubix,				name:'DEFRAGGER', 	color:'blue'},
+		{type:'whale_song', 		toy:MelodyMatch,		name:'UPTONER', 	color:'purple'},
 		], [
-		{type:'docker', 	toy:Undocker,			name:'UNDOCKER', 	color:'green'},
-		{type:'circuit', 	toy:PowerDiverter,		name:'REPOWER', 	color:'yellow'},
-		{type:'fire', 		toy:FireSuppression,	name:'UNFLAMER', 	color:'pink'},
-		{type:'fragment', 	toy:Rubix,				name:'DEFRAGGER', 	color:'blue'},
+		{type:'ship_docked', 		toy:Undocker,			name:'UNDOCKER', 	color:'green'},
+		{type:'circuit_damage', 	toy:PowerDiverter,		name:'REPOWER', 	color:'yellow'},
+		{type:'plasma_fire', 		toy:FireSuppression,	name:'UNFLAMER', 	color:'pink'},
+		{type:'data_corruption', 	toy:Rubix,				name:'DEFRAGGER', 	color:'blue'},
 		]
 	]
 
@@ -328,8 +329,7 @@ window.OS = function(){
 		<debug>
 			<debuglaunchpads></debuglaunchpads>
 			<debugevents><h1>OS</h1></debugevents>
-			<debugevents><h1>WARN</h1></debugevents>
-			<debugevents><h1>CODE</h1></debugevents>
+			<debugevents><h1>PROBLEM</h1></debugevents>
 			<debugevents><h1>QUEUE</h1><debugqueue></debugqueue></debugevents>
 			
 		</debug>
@@ -472,18 +472,18 @@ window.OS = function(){
 	function addToy( type, nColumn=1 ){
 		N[type] = 0;
 		//iterate severity on click
-		$(`<button>warn_${type}</button>`).appendTo($debug.find('debugevents').eq(nColumn)).click(function(){
-			doDamage({ 
-				type:type, 
-				params:[N[type]++] } );
+		$(`<button>start ${type}</button>`).appendTo($debug.find('debugevents').eq(nColumn)).click(function(){
+			doStartProblem({ 
+				warning_id:type, 
+				severity:N[type]++ });
 		});
 
-		$(`<button>fix_${type}</button>`).appendTo($debug.find('debugevents').eq(nColumn)).click(function(){
-			doFixType({ type:type } );
+		$(`<button>fix ${type}</button>`).appendTo($debug.find('debugevents').eq(nColumn)).click(function(){
+			doFixProblem({ warning_id:type } );
 		});
 
 		//otherwise capture severity from message
-		window.socket.on( 'warn_'+type, function(e){
+		/*window.socket.on( 'warn_'+type, function(e){
 			doDamage({ 
 				type:type, 
 				params:[e.severity] } );
@@ -491,7 +491,7 @@ window.OS = function(){
 
 		window.socket.on( 'fix_'+type, function(e){
 			doFixType({ type:type });
-		});
+		});*/
 	}
 
 	function doShake(){
@@ -509,19 +509,23 @@ window.OS = function(){
 	addDebug( 'os_text', doSentence );
 	addDebug( 'os_video', doTransmission );
 	addDebug( 'os_shake', doShake );
+	addDebug( 'os_code', doCode );
 	addDebug( 'os_toast', doToast );
 
-	addToy( 'circuit' );
-	addToy( 'fire' );
-	addToy( 'fragment' );
-	addToy( 'whale' );
-	addToy( 'docker' );
+	addDebug( 'start_problem', doStartProblem );
+	addDebug( 'fix_problem', doFixProblem );
+
+	addToy( 'circuit_damage' );
+	addToy( 'plasma_fire' );
+	addToy( 'data_corruption' );
+	addToy( 'whale_song' );
+	addToy( 'ship_docked' );
 
 	const palette = ['red','yellow','green','blue','purple','cyan','white','black'];
-	for(let c in palette) addDebug( 'code_'+palette[c], function(){ doCode(palette[c]) }, 2 );
+	//for(let c in palette) addDebug( 'code_'+palette[c], function(){ doCode(palette[c]) }, 2 );
 
-	function doCode(color){
-		doScreenShake();
+	function doCode(params){
+		let color = params.color;
 		frame.reskin(color);
 	}
 
@@ -536,10 +540,16 @@ window.OS = function(){
 		},false);
 	};
 
+	function doStartProblem(params){
+		console.log('doStartProblem',params);
+		let type = params.warning_id;
+		let severity = params.severity;
+		doDamage({type:type,params:[severity]});
+	}
 
-	function doFixType(params){
-
-		let type = params.type;
+	function doFixProblem(params){
+		console.log('doFixProblem',params);
+		let type = params.warning_id;
 		
 		for(var b in boxes) if( boxes[b].type ) boxes[b].cancel();
 

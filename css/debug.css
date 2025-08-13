@@ -8,7 +8,7 @@ debug{
 	right: 0px;
 	
 	padding: 20px;
-	width: 400px;
+	width: 470px;
 	
 	border: 1px solid white;
 	border-top: 0px;
@@ -41,7 +41,6 @@ debug h1{
 	padding: 0px;
 	margin: 0px;
 	position: relative;
-
 }
 
 debuglaunchpads{
@@ -50,14 +49,13 @@ debuglaunchpads{
 
 debugevents, debugqueue{
 	display: inline-block;
-	width: 90px;
+	width: 150px;
 	vertical-align: top;
 }
 
 debugqueue{
 	color: var(--red);
 }
-
 
 debugalert{
 	color: red;

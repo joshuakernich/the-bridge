@@ -1,6 +1,4 @@
 
-
-
 window.sendEvent = function(evt,data){
 	window.socket.send({
 		type:'fire_event',
@@ -163,7 +161,6 @@ window.OSBox = function(MENU,nBox,color,header,getNextDamageForType){
 	
 	let $inner = $('<osboxinner>').appendTo(panel.$inner);
 
-
 	let menu = new OSMenu(nBox, MENU);
 	menu.$el.appendTo($inner);
 	menu.setOnOff(true);
@@ -242,6 +239,14 @@ window.OSBox = function(MENU,nBox,color,header,getNextDamageForType){
 
 	self.cancel = function(){
 		self.reset();
+	}
+
+	self.setOnOff = function(b){
+		menu.setOnOff(b);
+		
+		if(b) $el.animate({bottom:'0px'});
+		else $el.animate({bottom:'-500px'});
+
 	}
 }
 
@@ -506,6 +511,8 @@ window.OS = function(){
 
 	addDebug( 'os_reset', reset );
 	addDebug( 'os_init_mic', init );
+	addDebug( 'os_on', doOn );
+	addDebug( 'os_off', doOff );
 	addDebug( 'os_text', doSentence );
 	addDebug( 'os_video', doTransmission );
 	addDebug( 'os_shake', doShake );
@@ -593,6 +600,14 @@ window.OS = function(){
 
 	function doSentence(){
 		msg({text:'Song friend home burned. Metal friend flee metal hunter.'})
+	}
+
+	function doOn(){
+		for(var b in boxes) boxes[b].setOnOff(true);
+	}
+
+	function doOff(){
+		for(var b in boxes) boxes[b].setOnOff(false);
 	}
 
 	window.launchpad.listen(function(n,x,y,b){

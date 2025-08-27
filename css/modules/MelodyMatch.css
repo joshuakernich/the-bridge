@@ -10,6 +10,7 @@ melodymatch toyframe{
 	margin: 0px;
 }
 
+
 melodymatch melodytracer{
 	display: block;
 	position: absolute;
@@ -19,6 +20,16 @@ melodymatch melodytracer{
 	background: black;
 	transform: translate(-50%, -50%);
 	border-radius: 100%;
+}
+
+melodymatch melodyline{
+	display: block;
+	position: absolute;
+	border-top: var(--border) dashed var(--purple);
+	opacity: 0.5;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
 }
 
 melodymatch melodytarget{

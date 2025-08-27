@@ -91,6 +91,7 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 		).appendTo(self.$el);
 	let $path = $svg.find('path');
 
+	let $line = $('<melodyline>').appendTo(self.$el);
 	let $tracer = $('<melodytracer>').appendTo(self.$el);
 	let $recording = $('<melodyrecording>').appendTo(self.$el);
 
@@ -163,6 +164,10 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 
 		$tracer.css({
 			'left':nStep/STEPS*100 + '%',
+			'top':(1-history[nStep]) * 100 + '%',
+		});
+
+		$line.css({
 			'top':(1-history[nStep]) * 100 + '%',
 		})
 

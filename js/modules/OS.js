@@ -258,7 +258,7 @@ window.OS = function(){
 	[
 		{type:'circuit_damage', 	toy:PowerDiverter,		name:'REPOWER', 	color:'yellow'},
 		{type:'plasma_fire', 		toy:FireSuppression,	name:'UNFLAMER', 	color:'pink'},
-		{type:'whale_song', 		toy:MelodyMatch,		name:'TRASMITTER', 	color:'purple'},
+		{type:'whale_song', 		toy:MelodyMatch,		name:'TRANSMITTER', color:'purple'},
 		], [
 		{type:'ship_docked', 		toy:Undocker,			name:'UNDOCKER', 	color:'green'},
 		{type:'circuit_damage', 	toy:PowerDiverter,		name:'REPOWER', 	color:'yellow'},

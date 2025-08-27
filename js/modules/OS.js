@@ -256,13 +256,12 @@ window.OS = function(){
 	[
 		{type:'circuit_damage', 	toy:PowerDiverter,		name:'REPOWER', 	color:'yellow'},
 		{type:'plasma_fire', 		toy:FireSuppression,	name:'UNFLAMER', 	color:'pink'},
-		{type:'data_corruption', 	toy:Rubix,				name:'DEFRAGGER', 	color:'blue'},
-		{type:'whale_song', 		toy:MelodyMatch,		name:'UPTONER', 	color:'purple'},
+		{type:'whale_song', 		toy:MelodyMatch,		name:'TRASMITTER', 	color:'purple'},
 		], [
 		{type:'ship_docked', 		toy:Undocker,			name:'UNDOCKER', 	color:'green'},
 		{type:'circuit_damage', 	toy:PowerDiverter,		name:'REPOWER', 	color:'yellow'},
 		{type:'plasma_fire', 		toy:FireSuppression,	name:'UNFLAMER', 	color:'pink'},
-		{type:'data_corruption', 	toy:Rubix,				name:'DEFRAGGER', 	color:'blue'},
+		{type:'data_corruption', 	toy:Rubix,				name:'UNSCRAMBLER', color:'blue'},
 		]
 	]
 

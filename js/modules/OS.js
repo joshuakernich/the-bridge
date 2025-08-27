@@ -244,10 +244,12 @@ window.OSBox = function(MENU,nBox,color,header,getNextDamageForType){
 	self.setOnOff = function(b){
 		menu.setOnOff(b);
 		
-		if(b) $el.animate({bottom:'0px'});
+		if(b) $el.animate({bottom:'40px'});
 		else $el.animate({bottom:'-500px'});
 
 	}
+
+	self.setOnOff(true);
 }
 
 window.OS = function(){
@@ -421,7 +423,7 @@ window.OS = function(){
 		
 		let box = boxes[n];
 		box.retoy( tiedTo.type, tiedTo.color, tiedTo.name, tiedTo.toy, tiedTo.params );
-		box.$el.css({bottom:-800}).animate({bottom:GRID});
+		box.$el.css({bottom:-800});
 		box.$el.appendTo(n==0?$left:$right);
 		box.warning = tiedTo.warning;
 
@@ -440,7 +442,6 @@ window.OS = function(){
 		let box = new OSBox( MENU[i], i, 'black', i==0?'PORT MATRIX':'STARBOARD MATRIX', getNextDamageForType );
 		box.$el.appendTo(i==0?$left:$right);
 		boxes[i] = box;
-		box.$el.css({bottom:GRID});
 
 		let toast = new OSToast( i, 'red' );
 		toast.$el.appendTo(i==0?$left:$right);

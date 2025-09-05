@@ -81,6 +81,8 @@ window.OSMenu = function(n,list){
 	let self = this;
 	self.$el = $('<osmenu>');
 
+	let bOn = false;
+
 	for(var i in list){
 		$('<osmenuitem>')
 		.appendTo(self.$el)
@@ -99,6 +101,7 @@ window.OSMenu = function(n,list){
 
 	self.setOnOff = function(b){
 
+		bOn = b;
 		clearInterval(interval);
 
 		if( b ) for( var i in list ) for(var x=0; x<8; x++) launchpad.setXY(n,x,i,list[i].color,x==0?0.5:1);
@@ -110,7 +113,7 @@ window.OSMenu = function(n,list){
 	}
 
 	self.trigger = function(n) {
-		self.$el.find('osmenuitem').eq(n).click();
+		if(bOn) self.$el.find('osmenuitem').eq(n).click();
 	}
 }
 
@@ -246,7 +249,6 @@ window.OSBox = function(MENU,nBox,color,header,getNextDamageForType){
 		
 		if(b) $el.animate({bottom:'40px'});
 		else $el.animate({bottom:'-500px'});
-
 	}
 
 	self.setOnOff(true);

@@ -389,7 +389,6 @@ window.OS = function(){
 
 	function getNextDamageForType(type){
 		for(var i in queue){
-			console.log(queue[i].type,type);
 			if(queue[i].type == type){
 				let damage = queue.splice(i,1)[0];
 				renderQueue();
@@ -402,7 +401,6 @@ window.OS = function(){
 	function renderQueue(){
 		let text = '';
 		for(var i in queue) text = text + '! '+ queue[i].type + '<br>'
-		console.log(queue,text);
 		$debug.find('debugqueue').html(text);
 	}
 
@@ -563,7 +561,7 @@ window.OS = function(){
 		for(var b in boxes) if( boxes[b].type ) boxes[b].cancel();
 
 		for(var q=0; q<queue.length; q++){
-			if(queue[q].type){
+			if(queue[q].type == type){
 				queue.splice(q,1);
 				q--;
 			}

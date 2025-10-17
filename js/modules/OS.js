@@ -84,12 +84,22 @@ window.OSMenu = function(n,list){
 	let bOn = false;
 
 	for(var i in list){
-		$('<osmenuitem>')
+		let $item = $('<osmenuitem>')
 		.appendTo(self.$el)
-		.text(list[i].name)
+		//.text(list[i].name)
 		.attr('bg',list[i].color)
 		.attr('n',i)
 		.click(doSelect);
+
+		$('<osmenuicon>').appendTo($item).css({
+			'background-size':`100%`,
+			'background-image':`url(./img/icon/icon-${list[i].name}.png)`,
+			'display':'block',
+			'position':'absolute',
+			'inset':'0px',
+			'height':'var(--grid)',
+			'top':'calc( -1 * var(--grid))',
+		})
 	}
 
 	function doSelect() {
@@ -104,7 +114,7 @@ window.OSMenu = function(n,list){
 		bOn = b;
 		clearInterval(interval);
 
-		if( b ) for( var i in list ) for(var x=0; x<8; x++) launchpad.setXY(n,x,i,list[i].color,x==0?0.5:1);
+		if( b ) for( var i in list ) for(var y=0; y<8; y++) launchpad.setXY(n,i,y,list[i].color,x==0?0.5:1);
 		else launchpad.clear(n);
 
 		launchpad.commit(n);
@@ -233,7 +243,7 @@ window.OSBox = function(MENU,nBox,color,header,getNextDamageForType){
 
 	self.triggerXY = function(x,y){
 		if( instanceToy && instanceToy.triggerXY ) instanceToy.triggerXY(x,y);
-		else if(menu) menu.trigger(y);
+		else if(menu) menu.trigger(x);
 	}
 
 	self.untriggerXY = function(x,y){

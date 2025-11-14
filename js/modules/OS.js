@@ -558,7 +558,7 @@ window.OS = function(){
 		console.log('doFixProblem',params);
 		let type = params.warning_id;
 		
-		for(var b in boxes) if( boxes[b].type ) boxes[b].cancel();
+		for(var b in boxes) if( boxes[b].type == type) boxes[b].cancel();
 
 		for(var q=0; q<queue.length; q++){
 			if(queue[q].type == type){

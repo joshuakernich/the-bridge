@@ -200,18 +200,21 @@ osmenu{
 }
 
 osmenuitem{
-	display: block;
+	display: inline-block;
 	font-size: calc( var(--grid) / 2 );
 	line-height: calc( var(--grid) - var(--border));
-	height: calc( var(--grid) - var(--border));
+	
 	margin-bottom: var(--border);
 	color: black;
 	background: var(--pink);
-	width: calc(var(--grid) * 7);
-	border-radius: 0px calc( var(--grid) /2 ) calc( var(--grid) /2 ) 0px;
-	margin-left: calc( var(--grid) );
-	padding-left: calc( var(--grid)/4 );
+	
+	
+	margin-right: calc( var(--border) );
+	
 	position: relative;
+
+	width: calc( var(--grid) - var(--border));
+	height: calc(var(--grid) * 7);
 
 	animation: throb infinite 2s;
 }
@@ -221,8 +224,8 @@ osmenuitem:before{
 	width: calc( var(--grid) - var(--border));
 	height: calc( var(--grid) - var(--border));
 	position: absolute;
-	left: calc( var(--grid)*-1 );
-	top: 0px;
+	left: 0px;
+	top: calc( var(--grid)*-1 );
 	background: var(--pink);
 	display: block;
 

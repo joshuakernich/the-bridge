@@ -52,7 +52,7 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 	const SECONDS = 10;
 	const FPS = 20;
 	const STEPS = SECONDS*FPS;
-	const THRESHOLD = FPS/2;
+	const THRESHOLD = FPS/4;
 	let self = this;
 
 	const LEVELS = [
@@ -125,9 +125,16 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 		
 		let position = isNaN(freq)?0:frequencyToLogLinear(freq);
 
-		let positionLerp =  (positionWas * 10 + position)/11;
+		let speed = 0.025;
+		positionLerp = positionWas;
 
-		if(positionLerp<0.05) positionLerp = 0.05;
+		if( Math.abs(position - positionLerp) < 0.1 ) positionLerp = (position+positionLerp)/2;
+		else if(position>positionLerp) positionLerp += speed;
+		else if(position<positionLerp) positionLerp -= speed;
+
+
+		//let positionLerp =  (positionWas * 20 + position)/21;
+		//if(positionLerp<0.05) positionLerp = 0.05;
 
 
 		for(var nTarget in level){
@@ -139,7 +146,7 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 				let d = Math.sqrt(px*px + py*py);
 
 				// 7% of range
-				if(d<0.07){
+				if(d<0.08){
 					targetThresholds[nTarget]++;
 				} else if(targetThresholds[nTarget] > 0){
 					targetThresholds[nTarget]--;

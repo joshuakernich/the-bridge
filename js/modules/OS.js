@@ -438,7 +438,7 @@ window.OS = function(){
 	let n = 1000;
 	
 
-	for(var i=0; i<2; i++){
+	for(var i=0; i<MENU.length; i++){
 		let box = new OSBox( MENU[i], i, 'black', i==0?'PORT MATRIX':'STARBOARD MATRIX', getNextDamageForType );
 		box.$el.appendTo(i==0?$left:$right);
 		boxes[i] = box;

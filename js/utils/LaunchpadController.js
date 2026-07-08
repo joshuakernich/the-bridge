@@ -222,30 +222,34 @@ window.LaunchpadController = function(){
 
 		console.log('reviseMidi',e);
 
-		for(var l in launchpads) launchpads[l].reset();
+
+		//for(var l in launchpads) launchpads[l].reset();
 		
 		//TODO check if something has been removed
 
 		let nOutput = 0;
 		let nInput = 0;
-
+		console.log("OUTPUTS");
 		for (var output of midiAccess.outputs.values()){
-
-			if(output.name.includes("LP") && output.name.includes("MIDIOUT")){
+			console.log('output',output.name, output.id)
+			if(output.name.includes("LPX") && output.name.includes("Port 2")){
 				launchpads[nOutput%launchpads.length].setOutput(output);
 				nOutput++;
-
-				console.log('output',output.name, output.id);
-			}
+				console.log('	use',output.name);
+				
+				}
 		}
+		
 
+
+		console.log("INPUTS");
         for (var input of midiAccess.inputs.values()){
-        	
-			if(input.name.includes("LP") && input.name.includes("MIDIIN")){
+        					console.log('input',input.name, input.id);
+
+			if(input.name.includes("LPX") && input.name.includes("Port 2")){
 				launchpads[nInput%launchpads.length].setInput(input);
 				nInput++;
-
-				console.log('input',input.name, input.id);
+				console.log('	use',input.name)
 			}
         }
 
@@ -292,7 +296,7 @@ window.LaunchpadController = function(){
   }
 
   self.commit = function(n){
-  	launchpads[n].commit();
+  	if(launchpads[n]) launchpads[n].commit();
   }
 
   /*self.set = function(coord,color){

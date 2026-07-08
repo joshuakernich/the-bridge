@@ -52,7 +52,7 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 	const SECONDS = 10;
 	const FPS = 20;
 	const STEPS = SECONDS*FPS;
-	const THRESHOLD = FPS/4;
+	const THRESHOLD = FPS/3; //change from FPS/4 8/7/26
 	let self = this;
 
 	const LEVELS = [
@@ -146,7 +146,8 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 				let d = Math.sqrt(px*px + py*py);
 
 				// 7% of range
-				if(d<0.08){
+				// changed from 8% of range 8/7/26
+				if(d<0.07){
 					targetThresholds[nTarget]++;
 				} else if(targetThresholds[nTarget] > 0){
 					targetThresholds[nTarget]--;
@@ -156,8 +157,10 @@ window.MelodyMatch = function( nLaunchpad, callbackComplete, nPuzzle ){
 					'width':targetThresholds[nTarget]/THRESHOLD * 100 + '%',
 					'height':targetThresholds[nTarget]/THRESHOLD * 100 + '%',
 				})
+				console.log(targetThresholds[nTarget]/THRESHOLD * 100);
 
-				if( targetThresholds[nTarget] == THRESHOLD ) $targets[nTarget].attr('complete','true');
+
+				if( targetThresholds[nTarget] >= THRESHOLD ) $targets[nTarget].attr('complete','true');
 			}
 		}
 
